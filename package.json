@@ -8,7 +8,17 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "postinstall": "node scripts/setup-git-hooks.cjs"
+    "postinstall": "node scripts/setup-git-hooks.cjs",
+    "prepare": "husky && husky install"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,html,css}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -28,6 +38,8 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.4.3",
     "prettier": "^3.5.3",
     "vite": "^6.2.0"
   }
