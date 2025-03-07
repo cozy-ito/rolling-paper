@@ -3,9 +3,18 @@ import globals from "globals";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import eslintPluginPrettier from "eslint-plugin-prettier";
 
 export default [
   { ignores: ["dist"] },
+  {
+    plugins: {
+      prettier: eslintPluginPrettier,
+    },
+    rules: {
+      "prettier/prettier": "error",
+    },
+  },
   {
     files: ["**/*.{js,jsx}"],
     languageOptions: {
@@ -17,19 +26,16 @@ export default [
         sourceType: "module",
       },
     },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
     plugins: {
       react,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-      "prettier": "eslint-plugin-prettier",
     },
-    extends: [
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:react-hooks/recommended",
-      "prettier",
-      "plugin:prettier/recommended",
-    ],
     rules: {
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
@@ -54,7 +60,6 @@ export default [
         },
       ],
       "react/destructuring-assignment": ["error", "always"],
-      "prettier/prettier": "error",
     },
   },
 ];
