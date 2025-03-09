@@ -5,14 +5,11 @@ module.exports = async ({ github, context, core }) => {
   const { joJHUser, jiJHUser, jinSJUser, choiKJUser } = JSON.parse(
     process.env.COLLABORATORS,
   );
-
   // 모든 사용자명이 제대로 설정되었는지 확인
   if (!joJHUser || !jiJHUser || !jinSJUser || !choiKJUser) {
     core.setFailed("필요한 환경 변수가 설정되지 않았습니다.");
-    return;
+    return { reviewers: [] };
   }
-
-  console.log(`PR 생성자: ${creator}`);
 
   // 리뷰어 매핑 정의
   const reviewerMap = {
@@ -47,10 +44,15 @@ module.exports = async ({ github, context, core }) => {
       console.log(
         `리뷰어 ${reviewers.join(", ")}와(과) 담당자 ${creator}가 성공적으로 할당되었습니다.`,
       );
+
+      // 리뷰어 정보 반환
+      return { reviewers };
     } catch (error) {
       core.setFailed(`리뷰어 할당 중 오류가 발생했습니다: ${error.message}`);
+      return { reviewers: [] };
     }
   } else {
     console.log(`${creator}에 대한 리뷰어 매핑을 찾을 수 없습니다.`);
+    return { reviewers: [] };
   }
 };
