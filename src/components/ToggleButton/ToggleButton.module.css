@@ -1,0 +1,20 @@
+.button {
+  border: none;
+  padding: 0.5rem 1rem;
+  width: 7.625rem;
+  height: 2.5rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 2.5rem;
+}
+
+.active {
+  border: 2px solid #9935ff;
+  background-color: #ffffff;
+}
+
+.unabled {
+  background-color: #f6f6f6;
+}
