@@ -2,7 +2,7 @@ import styles from "./ToggleButton.module.css";
 
 const ToggleButton = ({ isActive, onClick, component }) => {
   return (
-    <>
+    <div>
       <div>
         <button
           className={`${styles.button} ${isActive ? styles.active : ""} `}
@@ -16,7 +16,7 @@ const ToggleButton = ({ isActive, onClick, component }) => {
         </button>
       </div>
       {component}
-    </>
+    </div>
   );
 };
 
