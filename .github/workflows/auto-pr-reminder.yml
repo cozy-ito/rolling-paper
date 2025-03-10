@@ -2,6 +2,7 @@ name: Sechduling Send Discord Reminder
 
 on:
   schedule:
+    - cron: "0 12 * * *" # 매일 정오
     - cron: "0 17 * * *" # 매일 오후 5시
   workflow_dispatch:
 
