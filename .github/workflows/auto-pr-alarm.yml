@@ -1,0 +1,75 @@
+name: Auto Send PR Discord Alarm
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    branches: ["*"]
+  workflow_dispatch:
+
+jobs:
+  auto_assigning:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    outputs:
+      assigned_reviewers: ${{ steps.assign-reviewers.outputs.reviewers }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run assign reviewers script
+        id: assign-reviewers
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'ready_for_review')
+        env:
+          # {
+          #   "자바스크립트_코드_변수": "github_사용자_이름"
+          # }
+          COLLABORATORS: ${{ secrets.COLLABORATORS }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const script = require('.github/scripts/assign-reviewer.cjs');
+            const reviewersInfo = await script({ github, context, core });
+
+            // 다음 job에서 사용할 수 있도록 output 설정
+            if (reviewersInfo?.reviewers) {
+              core.setOutput('reviewers', JSON.stringify(reviewersInfo.reviewers));
+            } else {
+              core.setOutput('reviewers', '[]');
+            }
+
+  send-pr-alarm:
+    runs-on: ubuntu-latest
+    needs: auto_assigning
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Send PR Alarm to Discord
+        uses: actions/github-script@v7
+        env:
+          # {
+          #   "github_사용자_이름": {
+          #     "id": "디스코드 사용자 ID (개발자용)",
+          #     "displayName": "메시지에서 보여질 이름"
+          #   }
+          # }[]}
+          DISCORD_MENTION: ${{ secrets.DISCORD_MENTION }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          ASSIGNED_REVIEWERS: ${{ needs.auto_assigning.outputs.assigned_reviewers }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const script = require('.github/scripts/auto-pr-alarm.cjs');
+            await script({ github, context, core });
