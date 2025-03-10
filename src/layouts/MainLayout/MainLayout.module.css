@@ -1,0 +1,28 @@
+.container {
+  flex: 1;
+  width: 75rem;
+  margin: 0 auto;
+}
+
+.header {
+  width: 100%;
+  background-color: var(--color-white);
+}
+
+/* ========================================
+Responsive Styles
+======================================== */
+/* Tablet (768px ~ 1024px) */
+@media (max-width: 1024px) {
+  .container {
+    width: 100%;
+    padding: 0 1.5rem;
+  }
+}
+
+/* Mobile (Max 767px) */
+@media (max-width: 767px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+}
