@@ -33,5 +33,4 @@ const Header = ({ visibleOn }) => {
   );
 };
 
-// 사용 예시
-<Header visibleOn={["tablet", "desktop"]} />;
+export default Header;
