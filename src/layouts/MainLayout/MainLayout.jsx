@@ -1,13 +1,10 @@
 import { Outlet } from "react-router-dom";
 import styles from "./MainLayout.module.css";
 
-const MainLayout = ({ header, subHeader }) => {
+const MainLayout = ({ header }) => {
   return (
     <>
-      <header className={styles.header}>
-        {header}
-        {subHeader}
-      </header>
+      <header className={styles.header}>{header}</header>
       <main className={styles.container}>
         <Outlet />
       </main>

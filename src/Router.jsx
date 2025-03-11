@@ -23,8 +23,12 @@ const Router = () => {
         <Route
           element={
             <MainLayout
-              header={<Header mobileHidden />}
-              subHeader={<SubHeader />}
+              header={
+                <>
+                  <Header hideOnMobile />
+                  <SubHeader />
+                </>
+              }
             />
           }
         >
@@ -32,7 +36,7 @@ const Router = () => {
           <Route path="/post/:id/edit" element={<EditPage />} />
         </Route>
 
-        <Route element={<MainLayout header={<Header mobileHidden />} />}>
+        <Route element={<MainLayout header={<Header hideOnMobile />} />}>
           <Route path="/post" element={<PostPage />} />
           <Route path="/post/:id/message" element={<MessagePage />} />
         </Route>
