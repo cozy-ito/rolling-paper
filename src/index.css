@@ -85,7 +85,7 @@
 }
 
 /* ========================================
-   Responsive Styles
+Responsive Styles
 ======================================== */
 /* Tablet (768px ~ 1024px) */
 @media (max-width: 1024px) {
@@ -261,4 +261,10 @@ table {
 
 * {
   box-sizing: border-box;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
