@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Header from "./layouts/Header/Header";
+import MainLayout from "./layouts/MainLayout/MainLayout";
+import SubHeader from "./layouts/SubHeader/SubHeader";
+import EditPage from "./pages/EditPage";
 import HomePage from "./pages/HomePage";
 import ListPage from "./pages/ListPage";
-import PostPage from "./pages/PostPage";
-import PostItemPage from "./pages/PostItemPage";
-import EditPage from "./pages/EditPage";
 import MessagePage from "./pages/MessagePage";
 import NotFoundPage from "./pages/NotFoundPage";
-
-import MainLayout from "./layouts/MainLayout/MainLayout";
-import Header from "./layouts/Header/Header";
-import SubHeader from "./layouts/SubHeader/SubHeader";
+import PostItemPage from "./pages/PostItemPage";
+import PostPage from "./pages/PostPage";
 
 const Router = () => {
   return (
@@ -25,7 +25,7 @@ const Router = () => {
             <MainLayout
               header={
                 <>
-                  <Header hideOnMobile />
+                  <Header visibleOn={["desktop", "tablet"]} />
                   <SubHeader />
                 </>
               }
@@ -36,7 +36,11 @@ const Router = () => {
           <Route path="/post/:id/edit" element={<EditPage />} />
         </Route>
 
-        <Route element={<MainLayout header={<Header hideOnMobile />} />}>
+        <Route
+          element={
+            <MainLayout header={<Header visibleOn={["desktop", "tablet"]} />} />
+          }
+        >
           <Route path="/post" element={<PostPage />} />
           <Route path="/post/:id/message" element={<MessagePage />} />
         </Route>
