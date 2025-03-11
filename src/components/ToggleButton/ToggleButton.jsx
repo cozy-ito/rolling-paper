@@ -1,23 +1,20 @@
-import styles from "./ToggleButton.module.css";
+import styles from "./ToggleButtons.module.css";
 
-const ToggleButton = ({ isActive, onClick, component }) => {
+const ToggleButtons = ({ isSelected, onClick, textArray }) => {
   return (
     <div>
-      <div>
-        <button
-          className={`${styles.button} ${isActive ? styles.active : ""} `}
-          onClick={() => onClick(true)}>
-          컬러
-        </button>
-        <button
-          className={`${styles.button} ${!isActive ? styles.active : ""} `}
-          onClick={() => onClick(false)}>
-          이미지
-        </button>
-      </div>
-      {component}
+      <button
+        className={`${styles.button} ${isSelected === "COLOR" ? styles.active : ""}`}
+        onClick={() => onClick("COLOR")}>
+        {textArray[0]}
+      </button>
+      <button
+        className={`${styles.button} ${isSelected === "IMAGE" ? styles.active : ""}`}
+        onClick={() => onClick("IMAGE")}>
+        {textArray[1]}
+      </button>
     </div>
   );
 };
 
-export default ToggleButton;
+export default ToggleButtons;
