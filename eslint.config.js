@@ -86,6 +86,32 @@ export default [
               group: "builtin",
               position: "before",
             },
+            {
+              pattern: "./pages/**",
+              group: "internal",
+              position: "before",
+            },
+            {
+              pattern: "./layouts/**",
+              group: "internal",
+            },
+            {
+              pattern: "./apis/**",
+              group: "internal",
+            },
+            {
+              pattern: "./components/**",
+              group: "internal",
+            },
+            {
+              pattern: "./hooks/**",
+              group: "internal",
+            },
+            {
+              pattern: "./assets/**",
+              group: "internal",
+              position: "after",
+            },
           ],
           "pathGroupsExcludedImportTypes": ["react"], // external로 간주되어 alias 적용안되는 문제 해결
           "alphabetize": {

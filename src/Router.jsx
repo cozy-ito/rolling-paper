@@ -1,8 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Header from "./layouts/Header/Header";
-import MainLayout from "./layouts/MainLayout/MainLayout";
-import SubHeader from "./layouts/SubHeader/SubHeader";
 import EditPage from "./pages/EditPage";
 import HomePage from "./pages/HomePage";
 import ListPage from "./pages/ListPage";
@@ -10,6 +7,10 @@ import MessagePage from "./pages/MessagePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import PostItemPage from "./pages/PostItemPage";
 import PostPage from "./pages/PostPage";
+
+import Header from "./layouts/Header/Header";
+import MainLayout from "./layouts/MainLayout/MainLayout";
+import SubHeader from "./layouts/SubHeader/SubHeader";
 
 const Router = () => {
   return (
