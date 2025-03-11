@@ -6,12 +6,14 @@ const ToggleButton = ({ isActive, onClick, component }) => {
       <div>
         <button
           className={`${styles.button} ${isActive ? styles.active : ""} `}
-          onClick={() => onClick(true)}>
+          onClick={() => onClick(true)}
+        >
           컬러
         </button>
         <button
           className={`${styles.button} ${!isActive ? styles.active : ""} `}
-          onClick={() => onClick(false)}>
+          onClick={() => onClick(false)}
+        >
           이미지
         </button>
       </div>

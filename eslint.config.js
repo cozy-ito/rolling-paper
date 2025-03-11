@@ -1,9 +1,10 @@
 import js from "@eslint/js";
-import globals from "globals";
+import eslintPluginImport from "eslint-plugin-import";
+import eslintPluginPrettier from "eslint-plugin-prettier";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
-import eslintPluginPrettier from "eslint-plugin-prettier";
+import globals from "globals";
 
 export default [
   { ignores: ["dist"] },
@@ -60,6 +61,40 @@ export default [
         },
       ],
       "react/destructuring-assignment": ["error", "always"],
+    },
+  },
+  {
+    plugins: {
+      import: eslintPluginImport,
+    },
+
+    rules: {
+      "import/order": [
+        "error",
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "object",
+          ], // 그룹핑 순서
+          "pathGroups": [
+            {
+              pattern: "react",
+              group: "builtin",
+              position: "before",
+            },
+          ],
+          "pathGroupsExcludedImportTypes": ["react"], // external로 간주되어 alias 적용안되는 문제 해결
+          "alphabetize": {
+            order: "asc",
+            caseInsensitive: true, // 대문자 우선
+          },
+          "newlines-between": "always",
+        },
+      ],
     },
   },
 ];
