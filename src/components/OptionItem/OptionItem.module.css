@@ -1,0 +1,56 @@
+.optionItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  width: 168px;
+  height: 168px;
+  border-radius: 1rem;
+  overflow: visible;
+  cursor: pointer;
+}
+
+.optionImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.checkRound {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 100px;
+  background-color: var(--color-gray-500);
+  cursor: pointer;
+}
+
+.checkIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.beige {
+  background-color: var(--color-beige-200);
+}
+
+.purple {
+  background-color: var(--color-purple-200);
+}
+
+.blue {
+  background-color: var(--color-blue-200);
+}
+
+.green {
+  background-color: var(--color-green-200);
+}
