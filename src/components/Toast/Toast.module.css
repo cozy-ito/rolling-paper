@@ -3,8 +3,9 @@
   position: fixed;
   bottom: 3.123rem;
   margin: auto;
-  right: 0;
-  left: 0;
+  top: 70;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
   width: 32.75rem;
   height: 4rem;
   background-color: rgba(24, 24, 24, 0.7);
@@ -12,16 +13,14 @@
   border-radius: 0.5rem;
   padding: 1.25rem;
   align-items: center;
-  animation: slideUp 1s ease-in-out;
+  opacity: 0;
+  animation:
+    fadeIn 0.5s forwards,
+    fadeOut 0.5s 4.5s forwards;
 }
 
-@keyframes slideUp {
-  0% {
-    transform: translateY(100%);
-  }
-  100% {
-    transform: translateY(0);
-  }
+.hidden {
+  display: none;
 }
 
 .message {
@@ -52,4 +51,26 @@
   left: 29.375rem;
   width: 0.9375rem;
   height: 0.9375rem;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  0% {
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+  }
 }

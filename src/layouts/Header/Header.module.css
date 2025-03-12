@@ -9,11 +9,27 @@
   margin: 0 auto;
 }
 
+.hidden_on_desktop {
+  display: hidden;
+}
+
 /* Tablet (768px ~ 1024px) */
 @media (max-width: 1024px) {
   .inner_container {
     width: 100%;
     padding: 0 1.5rem;
+  }
+
+  .hidden_on_desktop {
+    display: block;
+  }
+
+  .hidden_on_tablet {
+    display: none;
+  }
+
+  .hidden_on_mobile {
+    display: block;
   }
 }
 
@@ -23,7 +39,11 @@
     padding: 0 1.25rem;
   }
 
-  .mobile_hidden {
+  .hidden_on_tablet {
+    display: block;
+  }
+
+  .hidden_on_mobile {
     display: none;
   }
 }
