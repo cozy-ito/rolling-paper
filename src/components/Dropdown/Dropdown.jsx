@@ -1,5 +1,5 @@
-import arrowTop from "../../assets/icons/arrow-top.svg";
 import arrowDown from "../../assets/icons/arrow-down.svg";
+import arrowTop from "../../assets/icons/arrow-top.svg";
 import styles from "./Dropdown.module.css";
 
 const Dropdown = ({ text, isOpen, setIsOpen }) => {
