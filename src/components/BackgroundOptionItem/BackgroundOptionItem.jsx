@@ -1,8 +1,8 @@
 import checkIcon from "../../assets/icons/check.svg";
 
-import styles from "./OptionItem.module.css";
+import styles from "./BackgroundOptionItem.module.css";
 
-const OptionItem = ({ children, isSelected, className, onClick }) => {
+const BackgroundOptionItem = ({ children, isSelected, className, onClick }) => {
   return (
     <div className={className} onClick={onClick}>
       {isSelected && (
@@ -13,4 +13,4 @@ const OptionItem = ({ children, isSelected, className, onClick }) => {
   );
 };
 
-export default OptionItem;
+export default BackgroundOptionItem;
