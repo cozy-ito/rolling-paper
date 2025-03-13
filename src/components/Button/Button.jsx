@@ -10,7 +10,7 @@ const Button = ({
   className,
   children,
   onClick,
-  iconSrc,
+  iconSrc = [],
 }) => {
   return (
     <button
@@ -24,7 +24,15 @@ const Button = ({
       onClick={onClick}
       disabled={disabled || state === "disabled"}
     >
-      {iconSrc && <img src={iconSrc} alt="아이콘" className={styles.icon} />}
+      {Array.isArray(iconSrc) &&
+        iconSrc.map((src, index) => (
+          <img
+            key={index}
+            src={src}
+            alt={`아이콘 ${index}`}
+            className={styles.icon}
+          />
+        ))}
       {children}
     </button>
   );
