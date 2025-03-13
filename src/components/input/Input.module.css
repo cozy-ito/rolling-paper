@@ -39,7 +39,7 @@
   padding-left: 0.5rem;
 }
 
-.input.disabled {
+input:disabled {
   background-color: var(--color-gray-100);
   color: var(--color-gray-400);
   cursor: not-allowed;
