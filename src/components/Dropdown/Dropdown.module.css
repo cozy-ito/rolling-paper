@@ -2,12 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 320px;
-  height: 50px;
-  border: 1px solid var(--color-gray-300);
-  border-radius: 8px;
-  padding: 0px 16px;
-  margin-bottom: 8px;
+  width: 20rem;
+  height: 3.125rem;
+  border: 0.0625rem solid var(--color-gray-300);
+  border-radius: 0.5rem;
+  padding: 0 1rem;
+  margin-bottom: 0.5rem;
   cursor: pointer;
 }
 
@@ -15,51 +15,68 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 320px;
-  height: 50px;
-  border: 1px solid var(--color-gray-300);
-  border-radius: 8px;
-  padding: 0px 16px;
-  margin-bottom: 8px;
+  width: 20rem;
+  height: 3.125rem;
+  border: 0.0625rem solid var(--color-gray-300);
+  border-radius: 0.5rem;
+  padding: 0 1rem;
+  margin-bottom: 5rem;
   cursor: pointer;
-  background-color: #f6f6f6;
+  background-color: var(--color-gray-100);
 }
 
 .dropdownError {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 320px;
-  height: 50px;
+  width: 20rem;
+  height: 3.125rem;
   border: 1px solid var(--color-gray-300);
-  border-radius: 8px;
-  padding: 0px 16px;
-  margin-bottom: 8px;
+  border: 0.0625rem solid var(--color-gray-300);
+  border-radius: 0.5rem;
+  padding: 0 1rem;
+  margin-bottom: 5rem;
   cursor: pointer;
-  border: 1px solid #dc3a3a;
+  border: 0.0625rem solid var(--color-error);
 }
 
 .dropdown:focus {
-  border: 2px solid #555555;
+  border: 0.125rem solid var(--color-gray-500);
 }
 
 .dropdown:active {
-  border: 2px solid #555555;
+  border: 0.125rem solid var(--color-gray-500);
 }
 
 .dropdown:hover {
-  border: 1px solid #555555;
+  border: 0.0625rem solid var(--color-gray-500);
 }
 
 .iconDiv {
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .iconDiv svg {
-  width: 16px;
-  height: 16px;
+  width: 1rem;
+  height: 1rem;
+}
+
+.dropdownMenu {
+  width: 20rem;
+  border: 0.0625rem solid var(--color-gray-300);
+  border-radius: 0.5rem;
+}
+
+.dropdownList {
+  margin: 0.625rem 0;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+.dropdownList:hover {
+  background-color: var(--color-gray-100);
 }
