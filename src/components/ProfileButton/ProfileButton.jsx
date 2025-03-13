@@ -5,26 +5,34 @@ import defaultIcon from "../../assets/icons/person.svg";
 import styles from "./ProfileButton.module.css";
 
 const ProfileButton = ({
-  children,
-  onClick,
-  className,
-  disabled = false,
+  size = "small",
   src = defaultIcon,
+  className,
+  onClick,
+  children,
+  disabled = false,
 }) => (
   <button
-    className={clsx(styles.profileButton, className)}
-    disabled={disabled}
+    className={clsx(
+      styles.profileButton,
+      size === "large" ? styles.large : styles.small,
+      className,
+    )}
     onClick={onClick}
+    disabled={disabled}
   >
     <img
       src={src}
       alt="프로필 사진"
       className={clsx(
         styles.profileImage,
-        src === defaultIcon && styles.defaultIconSmall,
+        src === defaultIcon &&
+          (size === "large"
+            ? styles.defaultIconLarge
+            : styles.defaultIconSmall),
       )}
     />
-    {children}
+    {size === "small" && children}
   </button>
 );
 
