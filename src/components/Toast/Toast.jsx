@@ -5,16 +5,16 @@ import closeIcon from "../../assets/icons/close.svg";
 
 import styles from "./Toast.module.css";
 
-const Toast = ({ isVisible, setIsVisible }) => {
+const Toast = ({ isVisible, setIsVisible, message, duration = 5000 }) => {
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
         setIsVisible(false);
-      }, 5000);
+      }, duration);
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible, setIsVisible]);
+  }, [isVisible, setIsVisible, duration]);
 
   if (!isVisible) return null;
 
@@ -23,7 +23,7 @@ const Toast = ({ isVisible, setIsVisible }) => {
       <div className={styles.iconWrapper}>
         <img src={checkIcon} alt="체크 아이콘" className={styles.checkIcon} />
       </div>
-      <span className={styles.message}>URL이 복사 되었습니다.</span>
+      <span className={styles.message}>{message}</span>
       <img
         src={closeIcon}
         alt="닫기 아이콘"

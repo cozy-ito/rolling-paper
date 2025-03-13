@@ -1,26 +1,20 @@
 .toast {
-  display: flex;
   position: fixed;
   bottom: 3.123rem;
-  margin: auto;
-  top: 70;
   left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  display: flex;
   width: 32.75rem;
   height: 4rem;
   background-color: rgba(24, 24, 24, 0.7);
   border: none;
   border-radius: 0.5rem;
-  padding: 1.25rem;
   align-items: center;
-  opacity: 0;
+  transform: translateX(-50%) translateY(-50%);
+  padding: 1.25rem;
+  margin: auto;
   animation:
     fadeIn 0.5s forwards,
     fadeOut 0.5s 4.5s forwards;
-}
-
-.hidden {
-  display: none;
 }
 
 .message {
@@ -30,7 +24,7 @@
 .iconWrapper {
   width: 1.5rem;
   height: 1.5rem;
-  border-radius: 100px;
+  border-radius: 6.25rem;
   background-color: var(--color-green-500);
   position: relative;
   margin-right: 0.75rem;
@@ -38,10 +32,10 @@
 
 .checkIcon {
   position: absolute;
-  top: 0.45625rem;
-  left: 0.3475rem;
-  width: 0.794375rem;
-  height: 0.61875rem;
+  top: 0.4375rem;
+  left: 0.375rem;
+  width: 0.75rem;
+  height: 0.625rem;
   filter: invert(62%) sepia(60%) saturate(379%) hue-rotate(189deg)
     brightness(90%) contrast(83%);
 }
@@ -49,8 +43,8 @@
 .closeIcon {
   position: absolute;
   left: 29.375rem;
-  width: 0.9375rem;
-  height: 0.9375rem;
+  width: 1.5rem;
+  height: 1.5rem;
   cursor: pointer;
 }
 
