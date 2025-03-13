@@ -39,12 +39,11 @@
   height: 1.5rem;
 }
 
-.beige {
-  background-color: var(--color-beige-200);
-}
-
 .purple {
   background-color: var(--color-purple-200);
+}
+.beige {
+  background-color: var(--color-beige-200);
 }
 
 .blue {
