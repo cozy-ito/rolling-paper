@@ -1,12 +1,22 @@
 .profileButton {
-  width: 3.3rem;
-  height: 3.3rem;
   border-radius: 50%;
   border: none;
   overflow: hidden;
-  cursor: pointer;
   background-color: var(--color-gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+}
+
+.profileButton.small {
+  width: 3.3rem;
+  height: 3.3rem;
+}
+
+.profileButton.large {
+  width: 6rem;
+  height: 6rem;
 }
 
 .profileImage {
@@ -18,8 +28,11 @@
 .defaultIconSmall {
   width: 1.3rem;
   height: 1.3rem;
-  align-items: center;
-  justify-content: center;
+}
+
+.defaultIconLarge {
+  width: 2.6rem;
+  height: 2.6rem;
 }
 
 .profileButton:hover:not(:disabled) {
