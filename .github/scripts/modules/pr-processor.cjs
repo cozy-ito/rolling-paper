@@ -2,11 +2,11 @@
 //* PR 처리 모듈
 //* =====================================
 
+const { getReviews } = require("./github-service.cjs");
 const {
   GITHUB_REVIEW_STATES,
   STATE_ABBREVIATIONS,
 } = require("./constants.cjs");
-const { getReviews } = require("./github-service.cjs");
 
 /**
  * PR 정보를 처리하여 메시지 배열을 생성합니다.

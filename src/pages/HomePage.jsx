@@ -1,11 +1,5 @@
-import ArrowButton from "../components/ArrowButton/ArrowButton";
-
 const HomePage = () => {
-  return (
-    <div>
-      <ArrowButton direction="top" />
-    </div>
-  );
+  return <div>HomePage</div>;
 };
 
 export default HomePage;

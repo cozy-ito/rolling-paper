@@ -1,5 +1,4 @@
 import clsx from "clsx";
-
 import styles from "./SubHeader.module.css";
 
 const SubHeader = ({ mobileHidden }) => {

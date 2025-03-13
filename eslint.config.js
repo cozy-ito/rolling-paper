@@ -1,10 +1,9 @@
 import js from "@eslint/js";
-import eslintPluginImport from "eslint-plugin-import";
-import eslintPluginPrettier from "eslint-plugin-prettier";
+import globals from "globals";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
-import globals from "globals";
+import eslintPluginPrettier from "eslint-plugin-prettier";
 
 export default [
   { ignores: ["dist"] },
@@ -61,66 +60,6 @@ export default [
         },
       ],
       "react/destructuring-assignment": ["error", "always"],
-    },
-  },
-  {
-    plugins: {
-      import: eslintPluginImport,
-    },
-
-    rules: {
-      "import/order": [
-        "error",
-        {
-          "groups": [
-            "builtin",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "object",
-          ], // 그룹핑 순서
-          "pathGroups": [
-            {
-              pattern: "react",
-              group: "builtin",
-              position: "before",
-            },
-            {
-              pattern: "./pages/**",
-              group: "internal",
-              position: "before",
-            },
-            {
-              pattern: "./layouts/**",
-              group: "internal",
-            },
-            {
-              pattern: "./apis/**",
-              group: "internal",
-            },
-            {
-              pattern: "./components/**",
-              group: "internal",
-            },
-            {
-              pattern: "./hooks/**",
-              group: "internal",
-            },
-            {
-              pattern: "./assets/**",
-              group: "internal",
-              position: "after",
-            },
-          ],
-          "pathGroupsExcludedImportTypes": ["react"], // external로 간주되어 alias 적용안되는 문제 해결
-          "alphabetize": {
-            order: "asc",
-            caseInsensitive: true, // 대문자 우선
-          },
-          "newlines-between": "always",
-        },
-      ],
     },
   },
 ];

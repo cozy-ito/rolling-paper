@@ -1,8 +1,8 @@
 //* =====================================
 //* PR 알림 스크립트
 //* =====================================
-const { sendDiscordMessage } = require("./modules/discord-service.cjs");
 const { generatePRMessages } = require("./modules/pr-processor.cjs");
+const { sendDiscordMessage } = require("./modules/discord-service.cjs");
 const { safeJsonParse } = require("./modules/utils.cjs");
 
 module.exports = async ({ github, context, core }) => {

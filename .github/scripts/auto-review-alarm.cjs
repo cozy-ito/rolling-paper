@@ -2,8 +2,8 @@
 //* 디스코드 리뷰 리마인더
 //* =====================================
 
-const { ReviewAlarmService } = require("./modules/review-processor.cjs");
 const { safeJsonParse } = require("./modules/utils.cjs");
+const { ReviewAlarmService } = require("./modules/review-processor.cjs");
 
 module.exports = async ({ github, context, core }) => {
   // 설정 생성

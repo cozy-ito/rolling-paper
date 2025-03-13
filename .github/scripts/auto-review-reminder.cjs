@@ -2,9 +2,9 @@
 //* 디스코드 커스텀 메시지 보내기 - 메인 모듈
 //* =====================================
 
-const { sendDiscordMessage } = require("./modules/discord-service.cjs");
 const { fetchOpenPullRequests } = require("./modules/github-service.cjs");
 const { generatePRMessages } = require("./modules/pr-processor.cjs");
+const { sendDiscordMessage } = require("./modules/discord-service.cjs");
 const { isAfterEndDate, safeJsonParse } = require("./modules/utils.cjs");
 
 module.exports = async ({ github, context }) => {
