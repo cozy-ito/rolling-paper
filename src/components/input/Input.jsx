@@ -1,34 +1,32 @@
 import styles from "./Input.module.css";
+import clsx from "clsx";
 
 const Input = ({
   placeholder = "placeholder",
   disabled = false,
-  error = false,
+  isError = false,
   errorMessage = "",
   value,
   onChange,
+  ...props
 }) => {
-  const inputClassName = [
-    styles.input,
-    error && styles.error,
-    disabled && styles.disabled,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <div className="styles.inputContainer">
+    <>
       <input
-        className={inputClassName}
+        className={clsx(styles.input, {
+          [styles.isError]: isError,
+          [styles.disabled]: disabled,
+        })}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         disabled={disabled}
+        {...props}
       />
-      {error && errorMessage && (
+      {isError && errorMessage && (
         <p className={styles.errorMessage}>{errorMessage}</p>
       )}
-    </div>
+    </>
   );
 };
 
