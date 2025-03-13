@@ -11,7 +11,7 @@ const Input = ({
   ...props
 }) => {
   return (
-    <>
+    <div>
       <input
         className={clsx(styles.input, {
           [styles.isError]: isError,
@@ -26,7 +26,7 @@ const Input = ({
       {isError && errorMessage && (
         <p className={styles.errorMessage}>{errorMessage}</p>
       )}
-    </>
+    </div>
   );
 };
 
