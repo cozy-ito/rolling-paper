@@ -3,14 +3,14 @@ import clsx from "clsx";
 import styles from "./Button.module.css";
 
 const Button = ({
-  variant = "primary",
+  variant = "primary", //primary, secondary, outlined -> 버튼 스타일 종류
   disabled = false,
-  size = "size56",
-  state = "enabled",
+  size = "size56", //size56, size40, size36, size28 -> 폰트 크기
+  state = "enabled", //enabled, disabled -> 버튼 상태
   className,
   children,
-  onClick,
-  iconSrc = [],
+  iconSrc,
+  ...rest
 }) => {
   return (
     <button
@@ -21,8 +21,8 @@ const Button = ({
         state,
         className,
       )}
-      onClick={onClick}
       disabled={disabled || state === "disabled"}
+      {...rest}
     >
       {Array.isArray(iconSrc) &&
         iconSrc.map((src, index) => (
