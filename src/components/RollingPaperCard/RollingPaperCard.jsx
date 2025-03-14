@@ -1,12 +1,15 @@
-import styles from "./card.module.css";
-import Badge from "../Badge/Badge";
 import clsx from "clsx";
-import DeleteIcon from "../../assets/icons/delete.svg";
 import { useNavigate } from "react-router-dom";
+
+import DeleteIcon from "../../assets/icons/delete.svg";
+import defaultProfileImg from "../../assets/icons/person.svg";
+import Badge from "../Badge/Badge";
+
+import styles from "./card.module.css";
 
 const Card = ({
   type = "default",
-  image = "default",
+  image = defaultProfileImg,
   id,
   author,
   content,
@@ -36,7 +39,8 @@ const Card = ({
     <div
       className={clsx(styles.card, { [styles.addCard]: type === "add" })}
       onClick={handleClick}
-      {...props}>
+      {...props}
+    >
       {type === "add" ? (
         // <Button/>
         // 임시 코드, Button 공통 컴포넌트가 병합되면 제거 될 코드
@@ -45,9 +49,7 @@ const Card = ({
         <>
           <div className={styles.cardHeader}>
             <img
-              src={
-                image === "default" ? "../../assets/icons/person.svg" : image
-              }
+              src={image}
               alt="profileImage"
               className={styles.profileImage}
             />
