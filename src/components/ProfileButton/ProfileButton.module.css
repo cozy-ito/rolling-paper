@@ -1,0 +1,40 @@
+.profileButton {
+  border-radius: 50%;
+  border: none;
+  overflow: hidden;
+  background-color: var(--color-gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.profileButton.small {
+  width: 3.3rem;
+  height: 3.3rem;
+}
+
+.profileButton.large {
+  width: 6rem;
+  height: 6rem;
+}
+
+.profileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.defaultIconSmall {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.defaultIconLarge {
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+.profileButton:hover:not(:disabled) {
+  opacity: 0.7;
+}
