@@ -1,5 +1,6 @@
-import styles from "./Input.module.css";
 import clsx from "clsx";
+
+import styles from "./Input.module.css";
 
 const Input = ({ isError = false, errorMessage = "", ...props }) => {
   return (
