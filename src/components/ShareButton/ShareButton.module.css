@@ -1,0 +1,21 @@
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 1rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+/* Tablet (768px ~ 1024px) */
+@media (max-width: 1024px) {
+}
+
+/* Mobile (Max 767px) */
+@media (max-width: 767px) {
+  .button {
+    padding: 0.375rem 0.5rem;
+  }
+}
