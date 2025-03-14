@@ -1,0 +1,35 @@
+.buttonWrapper {
+  position: relative;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 1rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.emojiBox {
+  position: absolute;
+  top: 2.75rem;
+  right: 1rem;
+}
+
+/* Tablet (768px ~ 1024px) */
+@media (max-width: 1024px) {
+}
+
+/* Mobile (Max 767px) */
+@media (max-width: 767px) {
+  .button {
+    padding: 0.375rem 0.5rem;
+  }
+
+  .button .buttonText {
+    display: none;
+  }
+}
