@@ -1,5 +1,6 @@
 .card {
   width: 17.188rem;
+  max-width: 100%;
   height: 16.25rem;
   padding: 16px;
   border-radius: 1rem;
@@ -12,34 +13,87 @@
   overflow: hidden;
 }
 
+.shadow {
+  position: absolute;
+  width: 8.875rem;
+  height: 8.875rem;
+  bottom: 0;
+  right: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  opacity: 0.6;
+  z-index: 0;
+}
+
+.cardMessage {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-900);
+  margin-bottom: 0.7rem;
+}
+
 .profileContainer {
-  width: 14.188rem;
-  height: auto;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.profileWrapper {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.userCount {
+  font-size: 1rem;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-gray-700);
+  margin-top: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.userCountNumber {
+  font-weight: var(--font-weight-bold);
 }
 
 .profileImage {
   display: flex;
-  margin-top: 0.5rem;
+  align-items: center;
+  position: relative;
+  justify-content: flex-start;
 }
 
 .profileImages {
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 50%;
-  display: flex;
-  flex-direction: row;
   border: 1.5px solid var(--color-white);
   object-fit: cover;
-  margin-bottom: 0.8rem;
+  flex-shrink: 0;
+  position: relative;
+  margin-left: -0.8rem;
 }
 
-.userCountText {
-  margin-top: 0.375rem;
-  font-size: 1rem;
+.profileImages:first-child {
+  margin-left: 0;
+}
+
+.extraCount {
+  width: 2.063rem;
+  height: 1.75rem;
+  border-radius: 1.875rem;
+  background-color: var(--color-white);
   color: var(--color-gray-700);
+  font-size: 0.75rem;
   font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -0.8rem;
+  position: relative;
+  flex-shrink: 0;
 }
 
 .badgeContainer {
@@ -48,13 +102,69 @@
   margin-top: 12px;
 }
 
-.profileContainer img:not(:first-child) {
-  margin-left: -0.5rem;
+.reactionsWrapper {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 0.5rem;
+  margin-top: 2rem;
 }
 
-.cardMessage {
-  font-size: 1.5rem;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-gray-900);
-  margin-bottom: 0.7rem;
+.reactionsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.reactionBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  background-color: rgba(0, 0, 0, 0.54);
+  width: 3.938rem;
+  height: 2.25rem;
+  border-radius: 2rem;
+  color: var(--color-white);
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  min-width: 3rem;
+  margin-top: 0.8rem;
+  z-index: 3;
+}
+
+.reactionBadge span.count {
+  font-size: 1rem;
+  min-width: 1.25rem;
+  text-align: center;
+}
+
+.reactionBadge span.emoji {
+  min-width: 1.25rem;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .profileImage {
+    flex-wrap: nowrap;
+    gap: 0.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .profileImages {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: -0.4rem;
+  }
+
+  .extraCount {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: -0.6rem;
+  }
 }
