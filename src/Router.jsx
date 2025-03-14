@@ -1,40 +1,51 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import EditPage from "./pages/EditPage";
 import HomePage from "./pages/HomePage";
 import ListPage from "./pages/ListPage";
-import PostPage from "./pages/PostPage";
-import PostItemPage from "./pages/PostItemPage";
-import EditPage from "./pages/EditPage";
 import MessagePage from "./pages/MessagePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import PostItemPage from "./pages/PostItemPage";
+import PostPage from "./pages/PostPage";
 
-import MainLayout from "./layouts/MainLayout/MainLayout";
 import Header from "./layouts/Header/Header";
-import SubHeader from "./layouts/SubHeader/SubHeader";
+import MainLayout from "./layouts/MainLayout/MainLayout";
+import PostItemPageHeader from "./layouts/PostItemPageHeader/PostItemPageHeader";
+
+import { ROUTES } from "./constants/routes";
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<MainLayout header={<Header />} />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/list" element={<ListPage />} />
+          <Route path={ROUTES.HOME} element={<HomePage />} />
+          <Route path={ROUTES.LIST} element={<ListPage />} />
         </Route>
 
         <Route
           element={
             <MainLayout
-              header={<Header mobileHidden />}
-              subHeader={<SubHeader />}
+              header={
+                <>
+                  <Header visibleOn={["desktop", "tablet"]} />
+                  <PostItemPageHeader />
+                </>
+              }
             />
           }
         >
-          <Route path="/post/:id" element={<PostItemPage />} />
-          <Route path="/post/:id/edit" element={<EditPage />} />
+          <Route path={ROUTES.POST_ITEM} element={<PostItemPage />} />
+          <Route path={ROUTES.EDIT_POST_ITEM} element={<EditPage />} />
         </Route>
 
-        <Route element={<MainLayout header={<Header mobileHidden />} />}>
-          <Route path="/post" element={<PostPage />} />
-          <Route path="/post/:id/message" element={<MessagePage />} />
+        <Route
+          element={
+            <MainLayout header={<Header visibleOn={["desktop", "tablet"]} />} />
+          }
+        >
+          <Route path={ROUTES.POST} element={<PostPage />} />
+          <Route path={ROUTES.POST_MESSAGE} element={<MessagePage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
