@@ -1,0 +1,50 @@
+.profileChipsContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.column {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.chips {
+  display: flex;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-white);
+  border-radius: 9999px;
+}
+
+.chip:not(:first-child) {
+  margin-left: -0.75rem;
+}
+
+.chip img {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 2px solid var(--color-white);
+  border-radius: 9999px;
+}
+
+.count {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid #e3e3e3;
+  font-size: 0.75rem;
+  color: #484848;
+}
+
+.info {
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+}
