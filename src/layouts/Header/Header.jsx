@@ -21,15 +21,15 @@ const ResponsiveElement = ({ children, visibleOn = ALL_BREAKPOINTS }) => {
   const hiddenOnMobile = !visibleOn.includes(BREAKPOINTS.MOBILE);
 
   return (
-    <React.Fragment
-      className={clsx({
+    <div
+      className={clsx(styles.container, {
         [styles.hiddenOnDesktop]: hiddenOnDesktop,
         [styles.hiddenOnTablet]: hiddenOnTablet,
         [styles.hiddenOnMobile]: hiddenOnMobile,
       })}
     >
       {children}
-    </React.Fragment>
+    </div>
   );
 };
 
@@ -41,17 +41,15 @@ const Header = ({ visibleOn = ALL_BREAKPOINTS }) => {
 
   return (
     <ResponsiveElement visibleOn={visibleOn}>
-      <div className={styles.container}>
-        <div className={styles.innerContainer}>
-          <Link to="/">
-            <img src={Logo} alt="로고" />
+      <div className={styles.innerContainer}>
+        <Link to="/">
+          <img src={Logo} alt="로고" />
+        </Link>
+        {isShow && (
+          <Link to="/post">
+            <button className={styles.button}>롤링 페이퍼 만들기</button>
           </Link>
-          {isShow && (
-            <Link to="/post">
-              <button className={styles.button}>롤링 페이퍼 만들기</button>
-            </Link>
-          )}
-        </div>
+        )}
       </div>
     </ResponsiveElement>
   );

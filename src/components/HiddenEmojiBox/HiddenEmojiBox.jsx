@@ -1,5 +1,5 @@
-import ArrowDownIcon from "../../../../assets/icons/arrow-down.svg";
-import PopoverWrapper from "../../../../components/PopoverWrapper/PopoverWrapper";
+import ArrowDownIcon from "../../assets/icons/arrow-down.svg";
+import PopoverWrapper from "../PopoverWrapper/PopoverWrapper";
 
 import styles from "./HiddenEmojiBox.module.css";
 

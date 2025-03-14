@@ -10,7 +10,7 @@ import PostPage from "./pages/PostPage";
 
 import Header from "./layouts/Header/Header";
 import MainLayout from "./layouts/MainLayout/MainLayout";
-import SubHeader from "./layouts/SubHeader/SubHeader";
+import PostItemHeader from "./layouts/PostItemHeader/PostItemHeader";
 
 const Router = () => {
   return (
@@ -27,7 +27,7 @@ const Router = () => {
               header={
                 <>
                   <Header visibleOn={["desktop", "tablet"]} />
-                  <SubHeader />
+                  <PostItemHeader />
                 </>
               }
             />
