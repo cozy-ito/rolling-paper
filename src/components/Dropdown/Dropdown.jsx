@@ -18,9 +18,9 @@ const Dropdown = ({ selectedText, isOpen, setIsOpen, items, onSelect }) => {
       </div>
       {isOpen && (
         <ul className={styles.dropdownMenu}>
-          {items.map((item) => (
+          {items.map((item, index) => (
             <li
-              key={item}
+              key={index}
               className={styles.dropdownList}
               onClick={() => onSelect(item)}
             >
