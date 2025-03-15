@@ -1,9 +1,8 @@
-//import Badge from "../Badge/Badge";
-
 import blue from "../../assets/imgs/blue.png";
 import green from "../../assets/imgs/green.png";
 import orange from "../../assets/imgs/orange.png";
 import purple from "../../assets/imgs/purple.png";
+import Badge from "../Badge/Badge";
 
 import styles from "./CardList.module.css";
 
