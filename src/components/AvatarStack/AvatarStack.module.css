@@ -1,4 +1,4 @@
-.profileChipsContainer {
+.avatarContainer {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -13,11 +13,11 @@
   flex-direction: column;
 }
 
-.chips {
+.avatars {
   display: flex;
 }
 
-.chip {
+.avatar {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,11 +25,11 @@
   border-radius: 9999px;
 }
 
-.chip:not(:first-child) {
+.avatar:not(:first-child) {
   margin-left: -0.75rem;
 }
 
-.chip img {
+.avatar img {
   width: 1.75rem;
   height: 1.75rem;
   border: 2px solid var(--color-white);
