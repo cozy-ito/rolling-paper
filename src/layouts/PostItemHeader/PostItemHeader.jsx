@@ -2,8 +2,8 @@ import clsx from "clsx";
 // import { useParams } from "react-router-dom";
 
 import AvatarStack from "../../components/AvatarStack/AvatarStack";
+import EmojiBox from "../../components/EmojiBox/EmojiBox";
 import EmojiPickerButton from "../../components/EmojiPickerButton/EmojiPickerButton";
-import HiddenEmojiBox from "../../components/HiddenEmojiBox/HiddenEmojiBox";
 import ShareButton from "../../components/ShareButton/ShareButton";
 
 import styles from "./PostItemHeader.module.css";
@@ -51,7 +51,7 @@ const PostItemHeader = () => {
                   ),
                 )}
               </ul>
-              <HiddenEmojiBox recepientId={1} emojiList={emojiList} />
+              <EmojiBox recepientId={1} emojiList={emojiList} />
             </div>
             <EmojiPickerButton />
           </div>
