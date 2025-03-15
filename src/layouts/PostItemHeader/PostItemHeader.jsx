@@ -1,9 +1,9 @@
 import clsx from "clsx";
 // import { useParams } from "react-router-dom";
 
+import AvatarStack from "../../components/AvatarStack/AvatarStack";
 import EmojiPickerButton from "../../components/EmojiPickerButton/EmojiPickerButton";
 import HiddenEmojiBox from "../../components/HiddenEmojiBox/HiddenEmojiBox";
-import ProfileChips from "../../components/ProfileChips/ProfileChips";
 import ShareButton from "../../components/ShareButton/ShareButton";
 
 import styles from "./PostItemHeader.module.css";
@@ -28,9 +28,8 @@ const PostItemHeader = () => {
         <p className={styles.rollingPaperToName}>To. Ashley Kim</p>
         <div className={styles.rollingPaperInfo}>
           <div className={styles.profileChipWrapper}>
-            <ProfileChips
-              totalProfileCount={TOTAL_MESSAGE_COUNT}
-              profileUrls={recentMessages.slice(0, SHOW_PROFILE_CHIP_COUNT)}
+            <AvatarStack
+              avatarUrls={recentMessages}
               message={
                 <>
                   <strong>{TOTAL_MESSAGE_COUNT}</strong>
