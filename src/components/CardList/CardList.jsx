@@ -8,7 +8,7 @@ import styles from "./CardList.module.css";
 
 const CardList = ({
   backgroundColor,
-  profileSection,
+  profileSection = [],
   totalUsers = 0,
   message,
   userMessage,
@@ -31,7 +31,7 @@ const CardList = ({
     >
       <div className={styles.cardMessage}>{message}</div>
 
-      {profileSection}
+      <div className={styles.sprofileWrapper}>{profileSection}</div>
 
       <div className={styles.userCount}>
         <span className={styles.userCountNumber}>{totalUsers}</span>
