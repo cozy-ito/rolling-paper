@@ -5,10 +5,10 @@ import PopoverWrapper from "../PopoverWrapper/PopoverWrapper";
 
 import styles from "./EmojiPickerButton.module.css";
 
-const EmojiPickerButton = ({ onClick = () => {} }) => {
+const EmojiPickerButton = ({ onClick }) => {
   const clickHandler = (target) => {
     // target.emoji: 선택한 이모지, ex) "😁"
-    onClick(target.emoji);
+    onClick?.(target.emoji);
   };
 
   return (
