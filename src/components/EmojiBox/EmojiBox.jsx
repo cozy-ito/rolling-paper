@@ -1,18 +1,18 @@
-import ArrowDownIcon from "../../assets/icons/arrow-down.svg";
+import DropdownIcon from "../../assets/icons/arrow-down.svg";
 import PopoverWrapper from "../PopoverWrapper/PopoverWrapper";
 
-import styles from "./HiddenEmojiBox.module.css";
+import styles from "./EmojiBox.module.css";
 
-const HiddenEmojiBox = ({ emojiList }) => {
+const EmojiBox = ({ emojiList }) => {
   return (
     <PopoverWrapper>
       {({ popoverRef, isOpen, setIsOpen }) => (
         <>
           <button type="button" onClick={() => setIsOpen((prev) => !prev)}>
-            <img src={ArrowDownIcon} alt="아래방향 화살표" />
+            <img src={DropdownIcon} alt="이미지 목록 토글" />
           </button>
           {isOpen && (
-            <ul ref={popoverRef} className={styles.emojiHiddenList}>
+            <ul ref={popoverRef} className={styles.emojiDropdown}>
               {emojiList.map(({ emoji, count }, index) => (
                 <li key={index} className={styles.badge}>
                   <span>{emoji}</span>
@@ -27,4 +27,4 @@ const HiddenEmojiBox = ({ emojiList }) => {
   );
 };
 
-export default HiddenEmojiBox;
+export default EmojiBox;
