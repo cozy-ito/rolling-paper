@@ -14,8 +14,6 @@ import PostItemPageHeader from "./layouts/PostItemPageHeader/PostItemPageHeader"
 
 import { ROUTES } from "./constants/routes";
 
-import { ROUTES } from "./constants/routes";
-
 const Router = () => {
   return (
     <BrowserRouter>

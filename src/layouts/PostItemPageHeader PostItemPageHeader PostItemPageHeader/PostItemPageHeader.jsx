@@ -6,12 +6,12 @@ import EmojiBox from "../../components/EmojiBox/EmojiBox";
 import EmojiPickerButton from "../../components/EmojiPickerButton/EmojiPickerButton";
 import ShareButton from "../../components/ShareButton/ShareButton";
 
-import styles from "./PostItemHeader.module.css";
+import styles from "./PostItemPageHeader.module.css";
 
 const TOTAL_MESSAGE_COUNT = 10;
-const SHOW_REACTION_BADGE_COUNT = 3;
+const VISIBLE_EMOJI_COUNT = 3;
 
-const PostItemHeader = () => {
+const PostItemPageHeader = () => {
   //* 페이지 구현 시, API 연동 예정
   // const { id } = useParams();
   const recentMessages = Array.from({ length: TOTAL_MESSAGE_COUNT });
@@ -41,16 +41,14 @@ const PostItemHeader = () => {
           <div className={styles.emojiWrapper}>
             <div className={styles.emojiBox}>
               <ul className={styles.emojiList}>
-                {Array.from({ length: SHOW_REACTION_BADGE_COUNT }).map(
-                  (_, index) => (
-                    <li key={index} className={styles.badge}>
-                      <span>😊</span>
-                      <span>24</span>
-                    </li>
-                  ),
-                )}
+                {Array.from({ length: VISIBLE_EMOJI_COUNT }).map((_, index) => (
+                  <li key={index} className={styles.badge}>
+                    <span>😊</span>
+                    <span>24</span>
+                  </li>
+                ))}
               </ul>
-              <EmojiBox recepientId={1} emojiList={emojiList} />
+              <EmojiBox recipientId={1} emojiList={emojiList} />
             </div>
             <EmojiPickerButton />
           </div>
@@ -62,4 +60,4 @@ const PostItemHeader = () => {
   );
 };
 
-export default PostItemHeader;
+export default PostItemPageHeader;
