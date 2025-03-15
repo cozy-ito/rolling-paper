@@ -9,7 +9,6 @@ import ShareButton from "../../components/ShareButton/ShareButton";
 import styles from "./PostItemHeader.module.css";
 
 const TOTAL_MESSAGE_COUNT = 10;
-const SHOW_PROFILE_CHIP_COUNT = 3;
 const SHOW_REACTION_BADGE_COUNT = 3;
 
 const PostItemHeader = () => {
