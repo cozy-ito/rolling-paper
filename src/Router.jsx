@@ -10,15 +10,17 @@ import PostPage from "./pages/PostPage";
 
 import Header from "./layouts/Header/Header";
 import MainLayout from "./layouts/MainLayout/MainLayout";
-import SubHeader from "./layouts/SubHeader/SubHeader";
+import PostItemPageHeader from "./layouts/PostItemPageHeader/PostItemPageHeader";
+
+import { ROUTES } from "./constants/routes";
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<MainLayout header={<Header />} />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/list" element={<ListPage />} />
+          <Route path={ROUTES.HOME} element={<HomePage />} />
+          <Route path={ROUTES.LIST} element={<ListPage />} />
         </Route>
 
         <Route
@@ -27,14 +29,14 @@ const Router = () => {
               header={
                 <>
                   <Header visibleOn={["desktop", "tablet"]} />
-                  <SubHeader />
+                  <PostItemPageHeader />
                 </>
               }
             />
           }
         >
-          <Route path="/post/:id" element={<PostItemPage />} />
-          <Route path="/post/:id/edit" element={<EditPage />} />
+          <Route path={ROUTES.POST_ITEM} element={<PostItemPage />} />
+          <Route path={ROUTES.EDIT_POST_ITEM} element={<EditPage />} />
         </Route>
 
         <Route
@@ -42,8 +44,8 @@ const Router = () => {
             <MainLayout header={<Header visibleOn={["desktop", "tablet"]} />} />
           }
         >
-          <Route path="/post" element={<PostPage />} />
-          <Route path="/post/:id/message" element={<MessagePage />} />
+          <Route path={ROUTES.POST} element={<PostPage />} />
+          <Route path={ROUTES.POST_MESSAGE} element={<MessagePage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
