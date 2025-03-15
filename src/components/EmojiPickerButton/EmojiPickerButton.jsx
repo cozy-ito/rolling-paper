@@ -7,35 +7,24 @@ import styles from "./EmojiPickerButton.module.css";
 
 const EmojiPickerButton = ({ onClick = () => {} }) => {
   const clickHandler = (target) => {
-    //   {
-    //     "activeSkinTone": "neutral",
-    //     "emoji": "🙂",
-    //     "imageUrl": "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f642.png",
-    //     "isCustom": false,
-    //     "names": [
-    //         "slightly smiling face"
-    //     ],
-    //     "unified": "1f642",
-    //     "unifiedWithoutSkinTone": "1f642"
-    // }
-    console.dir(target);
+    // target.emoji: 선택한 이모지, ex) "😁"
     onClick(target.emoji);
   };
 
   return (
     <PopoverWrapper>
-      {({ targetRef, isToggle, setIsToggle }) => (
+      {({ popoverRef, isOpen, setIsOpen }) => (
         <div className={styles.buttonWrapper}>
           <button
             type="button"
             className={styles.button}
-            onClick={() => setIsToggle((prev) => !prev)}
+            onClick={() => setIsOpen((prev) => !prev)}
           >
             <img src={EmojiPlusIcon} alt="이모지 플러스 아이콘" />
             <span className={styles.buttonText}>추가</span>
           </button>
-          {isToggle && (
-            <ul ref={targetRef} className={styles.emojiBox}>
+          {isOpen && (
+            <ul ref={popoverRef} className={styles.emojiBox}>
               <EmojiPicker onEmojiClick={clickHandler} />
             </ul>
           )}
