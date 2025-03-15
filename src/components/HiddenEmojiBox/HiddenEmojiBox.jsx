@@ -6,13 +6,13 @@ import styles from "./HiddenEmojiBox.module.css";
 const HiddenEmojiBox = ({ emojiList }) => {
   return (
     <PopoverWrapper>
-      {({ targetRef, isToggle, setIsToggle }) => (
+      {({ popoverRef, isOpen, setIsOpen }) => (
         <>
-          <button type="button" onClick={() => setIsToggle((prev) => !prev)}>
+          <button type="button" onClick={() => setIsOpen((prev) => !prev)}>
             <img src={ArrowDownIcon} alt="아래방향 화살표" />
           </button>
-          {isToggle && (
-            <ul ref={targetRef} className={styles.emojiHiddenList}>
+          {isOpen && (
+            <ul ref={popoverRef} className={styles.emojiHiddenList}>
               {emojiList.map(({ emoji, count }, index) => (
                 <li key={index} className={styles.badge}>
                   <span>{emoji}</span>
