@@ -31,15 +31,43 @@
 .profileWrapper {
   display: flex;
   justify-content: flex-start;
+  margin-left: 1rem;
+}
+
+.profileImage {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-white);
+  object-fit: cover;
+  flex-shrink: 0;
+  position: relative;
+  margin-left: -0.8rem;
+}
+
+.cardMessage {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-900);
+}
+
+.userCount {
+  font-size: 1rem;
+  color: var(--color-gray-700);
+  margin-top: 0.25rem;
+}
+
+.userCountNumber {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-900);
 }
 
 .reactionsWrapper {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
-  padding-top: 1.3rem;
+  padding-top: 2.3rem;
   margin-top: 0.75rem;
   display: flex;
   justify-content: flex-start;
-  margin-top: 0.5rem;
 }
 
 .reactionsContainer {
@@ -47,6 +75,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  position: relative;
+  top: -0.7rem;
 }
 
 @media (max-width: 1024px) {

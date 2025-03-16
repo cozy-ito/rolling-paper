@@ -31,7 +31,18 @@ const CardList = ({
     >
       <div className={styles.cardMessage}>{message}</div>
 
-      <div className={styles.sprofileWrapper}>{profileSection}</div>
+      {Array.isArray(profileSection) && profileSection.length > 0 && (
+        <div className={styles.profileWrapper}>
+          {profileSection.map(({ src }, index) => (
+            <img
+              key={index}
+              src={src}
+              alt="프로필 이미지"
+              className={styles.profileImage}
+            />
+          ))}
+        </div>
+      )}
 
       <div className={styles.userCount}>
         <span className={styles.userCountNumber}>{totalUsers}</span>
@@ -41,7 +52,7 @@ const CardList = ({
       <div className={styles.reactionsWrapper}>
         <div className={styles.reactionsContainer}>
           {badges.map((badge, index) => (
-            <div key={index} {...badge} />
+            <Badge key={index} {...badge} />
           ))}
         </div>
       </div>
