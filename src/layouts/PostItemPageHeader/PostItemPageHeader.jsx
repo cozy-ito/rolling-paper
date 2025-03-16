@@ -1,5 +1,5 @@
 import clsx from "clsx";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import AvatarStack from "../../components/AvatarStack/AvatarStack";
 import EmojiBox from "../../components/EmojiBox/EmojiBox";
@@ -13,13 +13,8 @@ const VISIBLE_EMOJI_COUNT = 3;
 
 const PostItemPageHeader = () => {
   //* 페이지 구현 시, API 연동 예정
-  // const { id } = useParams();
+  const { id: recipientId } = useParams();
   const recentMessages = Array.from({ length: TOTAL_MESSAGE_COUNT });
-
-  const emojiList = Array.from({ length: 20 }, () => ({
-    emoji: "🤗",
-    count: 34,
-  }));
 
   return (
     <div className={styles.container}>
@@ -48,7 +43,7 @@ const PostItemPageHeader = () => {
                   </li>
                 ))}
               </ul>
-              <EmojiBox recipientId={1} emojiList={emojiList} />
+              <EmojiBox recipientId={recipientId} />
             </div>
             <EmojiPickerButton />
           </div>

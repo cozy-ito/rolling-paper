@@ -64,6 +64,20 @@ const useFetchData = (callback) => {
     }
   }, []);
 
+  const updateState = (nextState) => {
+    if (isMounted.current) {
+      if (typeof nextState === "function") {
+        dispatch({ type: ACTIONS.FETCH_SUCCESS, payload: nextState(state) });
+        return;
+      }
+      dispatch({ type: ACTIONS.FETCH_SUCCESS, payload: nextState });
+    }
+  };
+
+  const resetState = useCallback(() => {
+    dispatch({ type: ACTIONS.RESET });
+  }, []);
+
   useEffect(() => {
     isMounted.current = true;
 
@@ -74,12 +88,16 @@ const useFetchData = (callback) => {
     };
   }, [requestData]);
 
-  const resetState = useCallback(() => {
-    dispatch({ type: ACTIONS.RESET });
-  }, []);
-
   const { isLoading, isError, error, data } = state;
-  return { isLoading, isError, error, data, requestData, resetState };
+  return {
+    isLoading,
+    isError,
+    error,
+    data,
+    requestData,
+    resetState,
+    updateState,
+  };
 };
 
 export default useFetchData;
