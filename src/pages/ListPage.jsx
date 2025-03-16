@@ -1,10 +1,12 @@
-import Input from "../components/input/Input";
-import ToggleButtonGroup from "../components/ToggleButtonGroup/ToggleButtonGroup";
+import { useState } from "react";
+
+import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
+
 import BackgroundOptionItem from "../components/BackgroundOptionItem/BackgroundOptionItem";
 import Button from "../components/Button/Button";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import clsx from "clsx";
+import Input from "../components/input/Input";
+import ToggleButtonGroup from "../components/ToggleButtonGroup/ToggleButtonGroup";
 
 import styles from "./ListPage.module.css";
 
@@ -114,7 +116,11 @@ const ListPage = () => {
         )}
       </div>
 
-      <div className={styles.buttonContainer}></div>
+      <div className={styles.buttonContainer}>
+        <Button onClick={handleSubmit} disabled={toName.trim() === ""}>
+          생성하기
+        </Button>
+      </div>
     </div>
   );
 };
