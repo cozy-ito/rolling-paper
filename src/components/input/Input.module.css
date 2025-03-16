@@ -1,0 +1,55 @@
+/* PC & Tablet */
+.input {
+  width: 100%;
+  max-width: 45rem;
+  height: 3.125rem;
+  border: 1px solid #cccccc;
+  border-width: 0.0625rem;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-gray-900);
+}
+
+.input::placeholder {
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-16);
+  letter-spacing: -0.01rem;
+  color: var(--color-gray-500);
+}
+
+.input:focus {
+  border-color: var(--color-gray-700);
+}
+
+.input.isError {
+  border-color: var(--color-error);
+}
+
+.errorMessage {
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-18);
+  letter-spacing: -0.00375rem;
+  color: var(--color-error);
+  padding-left: 0.5rem;
+}
+
+input:disabled {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-400);
+  cursor: not-allowed;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .input {
+    max-width: 20rem;
+    font-size: var(--font-size-20);
+    line-height: var(--line-height-20);
+  }
+}
