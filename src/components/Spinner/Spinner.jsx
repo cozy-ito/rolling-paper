@@ -14,14 +14,14 @@ const Spinner = ({ text = "Loading", size = "sm", responsive = false }) => {
         version="1.1"
         baseProfile="tiny"
         xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
         x="0px"
         y="0px"
         width="28px"
         height="28px"
         viewBox="0 0 28 28"
         overflow="auto"
-        xml:space="preserve"
+        xmlSpace="preserve"
         className={styles.loader}
       >
         <path
@@ -32,7 +32,7 @@ const Spinner = ({ text = "Loading", size = "sm", responsive = false }) => {
 	c0.137,2,1.162,4.694,2.913,6.444c1.951,1.951,4.515,2.891,7.079,2.891s5.128-0.993,7.08-2.944
 	C24.731,17.299,24.731,10.929,20.827,7.024z"
         />
-        <g class="plane">
+        <g>
           <polygon
             className={styles.planeInnerBody}
             points="5.253,7.828 3.692,15.821 5.253,18.461 6.812,15.821 	"

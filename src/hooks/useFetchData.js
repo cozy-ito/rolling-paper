@@ -17,7 +17,7 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.FETCH_START:
-      return { ...initialState, isLoading: true };
+      return { ...state, isLoading: true };
     case ACTIONS.FETCH_SUCCESS:
       return { ...state, isLoading: false, data: action.payload };
     case ACTIONS.FETCH_ERROR:
@@ -67,7 +67,10 @@ const useFetchData = (callback) => {
   const updateState = (nextState) => {
     if (isMounted.current) {
       if (typeof nextState === "function") {
-        dispatch({ type: ACTIONS.FETCH_SUCCESS, payload: nextState(state) });
+        dispatch({
+          type: ACTIONS.FETCH_SUCCESS,
+          payload: nextState(state.data),
+        });
         return;
       }
       dispatch({ type: ACTIONS.FETCH_SUCCESS, payload: nextState });

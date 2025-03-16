@@ -15,9 +15,12 @@ export const getReactionsById = async ({
   const query = makeQueryString({ next, limit, offset });
   const requestUrl = removeBaseUrl(next);
   const url = requestUrl ?? `/recipients/${recipientId}/reactions/?${query}`;
-  const result = await fetcher.get(url);
-
-  return result;
+  try {
+    const result = await fetcher.get(url);
+    return result;
+  } catch (error) {
+    console.error("Failed to fetch reactions:", error);
+  }
 };
 
 /**
@@ -29,10 +32,14 @@ export const postReactionById = async ({
   type = "increase",
   emoji,
 }) => {
-  const result = await fetcher.post(`/recipients/${recipientId}/reactions/`, {
-    type,
-    emoji,
-  });
+  try {
+    const result = await fetcher.post(`/recipients/${recipientId}/reactions/`, {
+      type,
+      emoji,
+    });
 
-  return result;
+    return result;
+  } catch (error) {
+    console.error("Failed to post reaction:", error);
+  }
 };
