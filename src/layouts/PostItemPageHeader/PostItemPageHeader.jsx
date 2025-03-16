@@ -53,7 +53,8 @@ const PostItemPageHeader = () => {
             <EmojiPickerButton />
           </div>
           <div className={clsx(styles.divider, styles.marginX12)} />
-          <ShareButton />
+          {/* API 연동 후 타이틀 및 관련 정보 수정 예정입니다. */}
+          <ShareButton kakaoSharetitle="테스트 타이틀" />
         </div>
       </div>
     </div>
