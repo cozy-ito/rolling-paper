@@ -9,7 +9,9 @@ const Button = ({
   state = "enabled", //enabled, disabled -> 버튼 상태
   className,
   children,
-  iconSrc,
+  icon,
+  iconPosition = "left",
+  onClick,
   ...rest
 }) => {
   return (
@@ -21,19 +23,17 @@ const Button = ({
         state,
         className,
       )}
-      disabled={disabled || state === "disabled"}
+      disabled={disabled}
+      onClick={onClick}
       {...rest}
     >
-      {Array.isArray(iconSrc) &&
-        iconSrc.map((src, index) => (
-          <img
-            key={index}
-            src={src}
-            alt={`아이콘 ${index}`}
-            className={styles.icon}
-          />
-        ))}
+      {icon && iconPosition === "left" && (
+        <span className={styles.icon}>{icon}</span>
+      )}
       {children}
+      {icon && iconPosition === "right" && (
+        <span className={styles.icon}>{icon}</span>
+      )}
     </button>
   );
 };
