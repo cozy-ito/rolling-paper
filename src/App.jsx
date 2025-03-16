@@ -20,9 +20,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ListPage from "./pages/ListPage";
 import PostPage from "./pages/PostPage";
 
+import Header from "./layouts/Header/Header";
+
 const App = () => {
   return (
     <Router>
+      <Header />
       <Routes>
         <Route path="/" element={<ListPage />} />
         <Route path="/post/:id" element={<PostPage />} />
