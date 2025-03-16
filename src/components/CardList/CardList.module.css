@@ -1,0 +1,76 @@
+.card {
+  width: 17.188rem;
+  max-width: 100%;
+  height: 16.25rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: space-between;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}
+
+.cardBackground {
+  position: absolute;
+  width: 8.875rem;
+  height: 8.875rem;
+  bottom: 0;
+  right: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  opacity: 0.6;
+  z-index: 0;
+}
+
+.profileWrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.reactionsWrapper {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 1.3rem;
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0.5rem;
+}
+
+.reactionsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-container {
+    display: grid;
+    flex-direction: column;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+}
