@@ -1,40 +1,35 @@
-.profileButton {
-  border-radius: 50%;
-  border: none;
-  overflow: hidden;
-  background-color: var(--color-gray-300);
+.container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  width: 90%;
+  max-width: 64rem;
+  margin: auto;
+  padding: 2rem;
 }
 
-.profileButton.small {
-  width: 3.3rem;
-  height: 3.3rem;
+.inputWrapper {
+  width: 45rem;
+  height: 6.5rem;
+  gap: 0.75rem;
 }
 
-.profileButton.large {
-  width: 6rem;
-  height: 6rem;
+.label {
+  color: var(--color-gray-900);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.5rem;
 }
 
-.profileImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.intro {
+  font-size: 1rem;
+  color: var(--color-gray-500);
+  font-size: 1rem;
 }
 
-.defaultIconSmall {
-  width: 1.3rem;
-  height: 1.3rem;
-}
-
-.defaultIconLarge {
-  width: 2.6rem;
-  height: 2.6rem;
-}
-
-.profileButton:hover:not(:disabled) {
-  opacity: 0.7;
+@media (max-width: 767px) {
+  .container {
+    max-width: 90%;
+    padding: 1rem;
+  }
 }
