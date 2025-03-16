@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
+import Logo from "../../assets/icons/logo.svg";
 import ShareIcon from "../../assets/icons/share.svg";
+import useKakaoShare from "../../hooks/useKakaoShare";
 import PopoverWrapper from "../PopoverWrapper/PopoverWrapper";
 import Toast from "../Toast/Toast";
 
 import styles from "./ShareButton.module.css";
 
-const ShareButton = () => {
+const ShareButton = ({ kakaoSharetitle, description, imageUrl }) => {
   const [isError, setIsError] = useState(false);
   const [isToastVisible, setIsToastVisible] = useState(false);
+  const shareKakao = useKakaoShare();
 
   const handleClickCopyUrl = async () => {
     try {
@@ -20,6 +23,15 @@ const ShareButton = () => {
     } finally {
       setIsToastVisible(true);
     }
+  };
+
+  const handleClickShareKakao = () => {
+    shareKakao({
+      title: kakaoSharetitle,
+      description: description || `${kakaoSharetitle} 롤링페이퍼를 공유합니다.`,
+      imageUrl,
+      webUrl: location.href,
+    });
   };
 
   return (
@@ -36,7 +48,9 @@ const ShareButton = () => {
           {isOpen && (
             <ul ref={popoverRef} className={styles.dropdown}>
               <li>
-                <button type="button">카카오톡 공유</button>
+                <button type="button" onClick={handleClickShareKakao}>
+                  카카오톡 공유
+                </button>
               </li>
               <li>
                 <button type="button" onClick={handleClickCopyUrl}>
