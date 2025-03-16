@@ -15,8 +15,8 @@
 }
 
 .profileButton.large {
-  width: 6rem;
-  height: 6rem;
+  width: 5rem;
+  height: 5rem;
 }
 
 .profileImage {
@@ -31,8 +31,8 @@
 }
 
 .defaultIconLarge {
-  width: 2.6rem !important;
-  height: 2.6rem !important;
+  width: 2rem !important;
+  height: 2rem !important;
 }
 
 .profileButton:hover:not(:disabled) {
