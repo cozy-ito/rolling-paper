@@ -8,7 +8,11 @@ import Toast from "../Toast/Toast";
 
 import styles from "./ShareButton.module.css";
 
-const ShareButton = ({ kakaoSharetitle, description, imageUrl }) => {
+const ShareButton = ({
+  kakaoSharetitle,
+  kakaoShareDescription,
+  kakaoShareImageUrl,
+}) => {
   const [isError, setIsError] = useState(false);
   const [isToastVisible, setIsToastVisible] = useState(false);
   const shareKakao = useKakaoShare();
@@ -28,8 +32,9 @@ const ShareButton = ({ kakaoSharetitle, description, imageUrl }) => {
   const handleClickShareKakao = () => {
     shareKakao({
       title: kakaoSharetitle,
-      description: description || `${kakaoSharetitle} 롤링페이퍼를 공유합니다.`,
-      imageUrl,
+      description:
+        kakaoShareDescription || `${kakaoSharetitle} 롤링페이퍼를 공유합니다.`,
+      imageUrl: kakaoShareImageUrl,
       webUrl: location.href,
     });
   };
