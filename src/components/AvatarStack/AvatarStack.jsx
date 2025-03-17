@@ -13,17 +13,19 @@ const AvatarStack = ({
   totalMessageCount,
   maxVisibleAvatars = 3,
 }) => {
+  const invisibleAvatarCount = totalMessageCount - maxVisibleAvatars;
+
   return (
     <div className={clsx(styles.avatarContainer, styles[direction])}>
       <div className={styles.avatars}>
         {avatarUrls.slice(0, maxVisibleAvatars).map((url, index) => (
           <span key={index} className={styles.avatar}>
-            <img src={url || DefaultProfile} alt={`프로필${index}`} />
+            <img src={url || DefaultProfile} alt={`프로필${index + 1}`} />
           </span>
         ))}
         {totalMessageCount > maxVisibleAvatars && (
           <span className={clsx(styles.avatar, styles.count)}>
-            +{totalMessageCount - maxVisibleAvatars}
+            +{invisibleAvatarCount}
           </span>
         )}
       </div>
