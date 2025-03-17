@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 
 const ACTIONS = {
-  FETCH_START: "FETCH_START",
-  FETCH_SUCCESS: "FETCH_SUCCESS",
-  FETCH_ERROR: "FETCH_ERROR",
+  PENDING: "PENDING",
+  SUCCESS: "SUCCESS",
+  ERROR: "ERROR",
   RESET: "RESET",
 };
 
@@ -16,11 +16,11 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case ACTIONS.FETCH_START:
+    case ACTIONS.PENDING:
       return { ...state, isLoading: true };
-    case ACTIONS.FETCH_SUCCESS:
+    case ACTIONS.SUCCESS:
       return { ...state, isLoading: false, data: action.payload };
-    case ACTIONS.FETCH_ERROR:
+    case ACTIONS.ERROR:
       return {
         ...state,
         isLoading: false,
@@ -30,7 +30,7 @@ const reducer = (state, action) => {
     case ACTIONS.RESET:
       return initialState;
     default:
-      return state;
+      throw new Error("reducer의 action.type을 지정해야 합니다.");
   }
 };
 
@@ -38,44 +38,55 @@ const reducer = (state, action) => {
  * 비동기 데이터 요청 및 상태 관리를 위한 커스텀 훅
  * 컴포넌트 마운트 시 자동으로 데이터를 요청하며, 요청 상태를 관리합니다.
  *
- * @param {Function} callback - 비동기 데이터를 가져오는 콜백 함수
+ * @param {Function} fetchFn - 비동기 데이터를 가져오는 콜백 함수
  * @returns {{isLoading: boolean, isError: boolean, error: Error | null, data: any, requestData: Function, resetState: Function}} 요청 상태 및 제어 함수
  */
 
-const useFetchData = (callback) => {
+/*
+  TODO: fetchFn이 변경되더라도 requestData가 자동적으로 호출되지 않습니다.
+ * 동일 페이지 내 fetcnFn이 변동되는 곳에서 사용 시 버그가 발생할 수 있습니다. 🥲
+ */
+const useFetchData = (fetchFn) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const isMounted = useRef(true);
-  const callbackRef = useRef(callback);
+  const fetchFunctionRef = useRef(fetchFn);
+
+  useEffect(() => {
+    fetchFunctionRef.current = fetchFn;
+  }, [fetchFn]);
 
   const requestData = useCallback(async (...args) => {
     try {
-      dispatch({ type: ACTIONS.FETCH_START });
+      dispatch({ type: ACTIONS.PENDING });
 
-      const result = await callbackRef.current(...args);
+      const result = await fetchFunctionRef.current(...args);
 
       if (isMounted.current) {
-        dispatch({ type: ACTIONS.FETCH_SUCCESS, payload: result });
+        dispatch({ type: ACTIONS.SUCCESS, payload: result });
       }
     } catch (err) {
       if (isMounted.current) {
-        dispatch({ type: ACTIONS.FETCH_ERROR, payload: err });
+        dispatch({ type: ACTIONS.ERROR, payload: err });
       }
       throw err;
     }
   }, []);
 
-  const updateState = (nextState) => {
-    if (isMounted.current) {
-      if (typeof nextState === "function") {
-        dispatch({
-          type: ACTIONS.FETCH_SUCCESS,
-          payload: nextState(state.data),
-        });
-        return;
+  const updateState = useCallback(
+    (nextState) => {
+      if (isMounted.current) {
+        if (typeof nextState === "function") {
+          dispatch({
+            type: ACTIONS.SUCCESS,
+            payload: nextState(state.data),
+          });
+          return;
+        }
+        dispatch({ type: ACTIONS.SUCCESS, payload: nextState });
       }
-      dispatch({ type: ACTIONS.FETCH_SUCCESS, payload: nextState });
-    }
-  };
+    },
+    [state.data],
+  );
 
   const resetState = useCallback(() => {
     dispatch({ type: ACTIONS.RESET });
@@ -97,7 +108,7 @@ const useFetchData = (callback) => {
     isError,
     error,
     data,
-    requestData,
+    refetch: requestData,
     resetState,
     updateState,
   };

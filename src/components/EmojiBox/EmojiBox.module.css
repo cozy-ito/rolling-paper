@@ -5,6 +5,11 @@
   gap: 0.125rem;
 }
 
+.emojiBoxLoading {
+  width: 13.5rem;
+  justify-content: flex-end;
+}
+
 .emojiBox .emojiList {
   display: flex;
   gap: 0.5rem;

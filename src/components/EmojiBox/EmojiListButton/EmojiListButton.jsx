@@ -29,7 +29,7 @@ const EmojiListButton = ({
     !isError &&
     (!invisibleReactionList || invisibleReactionList.length === 0);
 
-  const clickHandler = () => {
+  const handleClickToggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
@@ -56,18 +56,17 @@ const EmojiListButton = ({
   }, [isOpen, invisibleReactionList, observerHandler]);
 
   return (
-    <div className={styles.container}>
+    <div ref={popoverRef} className={styles.container}>
       <button
         type="button"
         className={styles.openButton}
-        onClick={clickHandler}
+        onClick={handleClickToggleDropdown}
       >
         <img src={DropdownIcon} alt="이미지 목록 토글" />
       </button>
 
       {isOpen && (
         <ul
-          ref={popoverRef}
           className={clsx(styles.emojiDropdown, {
             [styles.success]: !isLoading && !isError && !isEmpty,
           })}
