@@ -27,11 +27,12 @@ const PostItemPageHeader = () => {
     const rootElement = document.querySelector("#root");
     if (data) {
       const { backgroundImageURL, backgroundColor } = data;
-      const backgroundValue = backgroundImageURL
-        ? `center/cover no-repeat url(${backgroundImageURL})`
-        : `var(--color-${backgroundColor}-200)`;
+      const backgroundStyle =
+        backgroundImageURL === null
+          ? `var(--color-${backgroundColor}-200)`
+          : `center/cover no-repeat url(${backgroundImageURL})`;
 
-      rootElement.style.background = backgroundValue;
+      rootElement.style.background = backgroundStyle;
     }
 
     return () => {
