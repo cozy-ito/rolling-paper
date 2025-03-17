@@ -16,9 +16,8 @@
   position: absolute;
   top: 2.75rem;
   right: -0.375rem;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
+  display: flex;
   min-width: 20rem;
   min-height: 8.375rem;
   max-height: 20rem;
@@ -27,6 +26,11 @@
   border: 1px solid #b6b6b6;
   border-radius: 0.5rem;
   overflow: scroll;
+}
+
+.success {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .badge {
@@ -78,6 +82,7 @@
     min-height: 6.125rem;
     max-height: 9.375rem;
     padding: 1rem;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .badge {

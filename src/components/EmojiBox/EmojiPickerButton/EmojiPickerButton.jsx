@@ -4,7 +4,6 @@ import EmojiPicker from "emoji-picker-react";
 
 import EmojiPlusIcon from "../../../assets/icons/person-plus.svg";
 import useOutsideClick from "../../../hooks/useOutsideClick";
-import PopoverWrapper from "../../PopoverWrapper/PopoverWrapper";
 
 import styles from "./EmojiPickerButton.module.css";
 
@@ -13,8 +12,7 @@ const EmojiPickerButton = ({ onClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   useOutsideClick(popoverRef, () => setIsOpen(false));
 
-  const handleClickOpen = (e) => {
-    e.stopPropagation();
+  const handleClickOpen = () => {
     setIsOpen((prev) => !prev);
   };
 
@@ -29,11 +27,9 @@ const EmojiPickerButton = ({ onClick }) => {
         <img src={EmojiPlusIcon} alt="이모지 플러스 아이콘" />
         <span className={styles.buttonText}>추가</span>
       </button>
-      {isOpen && (
-        <div ref={popoverRef} className={styles.emojiBox}>
-          <EmojiPicker onEmojiClick={handleClickPickEmoji} />
-        </div>
-      )}
+      <div ref={popoverRef} className={styles.emojiBox}>
+        {isOpen && <EmojiPicker onEmojiClick={handleClickPickEmoji} />}
+      </div>
     </div>
   );
 };

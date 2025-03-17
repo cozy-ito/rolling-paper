@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import clsx from "clsx";
+
 import DropdownIcon from "../../../assets/icons/arrow-down.svg";
 import PurplePaperPlane from "../../../assets/imgs/paperplane.png";
 import useOutsideClick from "../../../hooks/useOutsideClick";
@@ -27,8 +29,7 @@ const EmojiListButton = ({
     !isError &&
     (!invisibleReactionList || invisibleReactionList.length === 0);
 
-  const clickHandler = (e) => {
-    e.stopPropagation();
+  const clickHandler = () => {
     setIsOpen((prev) => !prev);
   };
 
@@ -62,50 +63,55 @@ const EmojiListButton = ({
         onClick={clickHandler}
       >
         <img src={DropdownIcon} alt="이미지 목록 토글" />
-
-        {isOpen && (
-          <ul ref={popoverRef} className={styles.emojiDropdown}>
-            <AsyncStateRenderer
-              isLoading={isLoading}
-              isError={isError}
-              isEmpty={isEmpty}
-            >
-              <AsyncStateRenderer.Loading>
-                <li className={styles.wrapper}>
-                  <Spinner />
-                </li>
-              </AsyncStateRenderer.Loading>
-              <AsyncStateRenderer.Error>
-                <li className={styles.wrapper}>
-                  <p>에러가 발생했어요.</p>
-                  <Button
-                    size="size28"
-                    className={styles.retryButton}
-                    onClick={onRetryRequest}
-                  >
-                    재시도
-                  </Button>
-                </li>
-              </AsyncStateRenderer.Error>
-              <AsyncStateRenderer.Empty>
-                <li className={styles.wrapper}>
-                  <img src={PurplePaperPlane} alt="보라색 종이비행기" />
-                  이모지가 없어요.
-                </li>
-              </AsyncStateRenderer.Empty>
-              <AsyncStateRenderer.Content>
-                {invisibleReactionList.map(({ id, emoji, count }) => (
-                  <li key={id} className={styles.badge}>
-                    <span>{emoji}</span>
-                    <span>{count}</span>
-                  </li>
-                ))}
-                <div ref={intersectingElementRef} />
-              </AsyncStateRenderer.Content>
-            </AsyncStateRenderer>
-          </ul>
-        )}
       </button>
+
+      {isOpen && (
+        <ul
+          ref={popoverRef}
+          className={clsx(styles.emojiDropdown, {
+            [styles.success]: !isLoading && !isError && !isEmpty,
+          })}
+        >
+          <AsyncStateRenderer
+            isLoading={isLoading}
+            isError={isError}
+            isEmpty={isEmpty}
+          >
+            <AsyncStateRenderer.Loading>
+              <li className={styles.wrapper}>
+                <Spinner />
+              </li>
+            </AsyncStateRenderer.Loading>
+            <AsyncStateRenderer.Error>
+              <li className={styles.wrapper}>
+                <p>에러가 발생했어요.</p>
+                <Button
+                  size="size28"
+                  className={styles.retryButton}
+                  onClick={onRetryRequest}
+                >
+                  재시도
+                </Button>
+              </li>
+            </AsyncStateRenderer.Error>
+            <AsyncStateRenderer.Empty>
+              <li className={styles.wrapper}>
+                <img src={PurplePaperPlane} alt="보라색 종이비행기" />
+                이모지가 없어요.
+              </li>
+            </AsyncStateRenderer.Empty>
+            <AsyncStateRenderer.Content>
+              {invisibleReactionList.map(({ id, emoji, count }) => (
+                <li key={id} className={styles.badge}>
+                  <span>{emoji}</span>
+                  <span>{count}</span>
+                </li>
+              ))}
+              <div ref={intersectingElementRef} />
+            </AsyncStateRenderer.Content>
+          </AsyncStateRenderer>
+        </ul>
+      )}
     </div>
   );
 };
