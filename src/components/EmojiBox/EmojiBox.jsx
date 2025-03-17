@@ -15,8 +15,9 @@ const EmojiBox = ({ recipientId }) => {
     [recipientId],
   );
 
-  const { isLoading, isError, data, requestData, updateState } =
-    useFetchData(fetchReactions);
+  const { isLoading, isError, data, refetch, updateState } = useFetchData(
+    (params) => getReactionsById({ recipientId, next: params?.next }),
+  );
 
   const { visibleReactionList, invisibleReactionList } = useMemo(() => {
     const reactionData = data?.results || [];
@@ -49,8 +50,8 @@ const EmojiBox = ({ recipientId }) => {
   }, [fetchReactions, recipientId, updateState, data?.next]);
 
   const handleRetryRequest = useCallback(() => {
-    requestData({ recipientId, next: data?.next });
-  }, [requestData, recipientId, data?.next]);
+    refetch({ recipientId, next: data?.next });
+  }, [refetch, recipientId, data?.next]);
 
   const handleClickPickEmoji = useCallback(
     async (emoji) => {
@@ -60,9 +61,9 @@ const EmojiBox = ({ recipientId }) => {
         type: "increase",
       });
 
-      requestData({ recipientId });
+      refetch({ recipientId });
     },
-    [recipientId, requestData],
+    [recipientId, refetch],
   );
 
   return (
