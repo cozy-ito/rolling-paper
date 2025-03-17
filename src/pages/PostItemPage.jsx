@@ -1,33 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
 import BackgroundOptionItem from "../components/BackgroundOptionItem/BackgroundOptionItem";
+import backgroundStyles from "../components/BackgroundOptionItem/BackgroundOptionItem.module.css";
 import Button from "../components/Button/Button";
 import Input from "../components/input/Input";
 import ToggleButtonGroup from "../components/ToggleButtonGroup/ToggleButtonGroup";
 
 import styles from "./PostItemPage.module.css";
 
-import backgroundStyles from "../components/BackgroundOptionItem/BackgroundOptionItem.module.css";
+const defaultImages = [
+  new URL("/src/assets/imgs/card-background1.jpg", import.meta.url).href,
+  new URL("/src/assets/imgs/card-background2.jpg", import.meta.url).href,
+  new URL("/src/assets/imgs/card-background2.jpg", import.meta.url).href,
+  new URL("/src/assets/imgs/card-background1.jpg", import.meta.url).href,
+];
 
-import FirstCardBackground from "/src/assets/imgs/card-background1.jpg";
-import SecondCardBackground from "/src/assets/imgs/card-background2.jpg";
-import third from "/src/assets/imgs/card-background2.jpg";
-import four from "/src/assets/imgs/card-background2.jpg";
-
-const defaultImages = [FirstCardBackground, SecondCardBackground, third, four];
 const colors = ["beige", "purple", "green", "blue"];
 
 const PostItemPage = () => {
   const [toName, setToName] = useState("");
   const [error, setError] = useState(false);
   const [selectedColor, setSelectedColor] = useState(colors[0]);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [selectedBackground, setSelectedBackground] = useState(
     defaultImages[0],
   );
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [mode, setMode] = useState("color");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -36,6 +36,23 @@ const PostItemPage = () => {
     { name: "컬러", optionValue: "color" },
     { name: "이미지", optionValue: "image" },
   ];
+
+  useEffect(() => {
+    if (mode === "image" && selectedImageIndex === null) {
+      setSelectedImageIndex(0);
+      setSelectedBackground(defaultImages[0]);
+    }
+  }, [mode]);
+
+  const isValidURL = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (e) {
+      console.error("Invalid URL:", e);
+      return false;
+    }
+  };
 
   //1. input 컴포넌트 작성
   const handleBlur = () => {
@@ -46,13 +63,14 @@ const PostItemPage = () => {
   const handleSelectedColor = (color) => {
     setSelectedColor(color);
     setSelectedBackground(color);
+    setSelectedImageIndex(null);
     setMode("color");
   };
 
   //3. 이미지 선택
-  const handleSelectedImage = (image) => {
-    setSelectedImage(image);
-    setSelectedBackground(image);
+  const handleSelectedImage = (index) => {
+    setSelectedImageIndex(index);
+    setSelectedBackground(defaultImages[index]);
     setMode("image");
   };
 
@@ -67,14 +85,17 @@ const PostItemPage = () => {
     try {
       const requestBody = {
         name: `To. ${toName}`,
+        backgroundColor: selectedColor,
       };
 
-      if (mode === "color") {
-        requestBody.backgroundColor = selectedColor;
-      } else if (mode === "image") {
-        requestBody.backgroundImageURL = selectedBackground;
+      if (mode === "image") {
+        if (isValidURL(selectedBackground)) {
+          requestBody.backgroundImageURL = selectedBackground;
+        } else {
+          setLoading(false);
+          return;
+        }
       }
-
       console.log("보내는 데이터:", requestBody);
 
       const response = await fetch(
@@ -87,13 +108,14 @@ const PostItemPage = () => {
           body: JSON.stringify(requestBody),
         },
       );
+
       const data = await response.json();
       console.log("API 응답:", data);
 
       if (!response.ok) {
         throw new Error(data.message || "롤링페이퍼 생성 실패");
       }
-      //alert("롤링페이퍼 성공적으로 생성");
+
       navigate(`/post/${data.id}`);
     } catch (error) {
       console.error("롤링페이퍼 생성 실패: ", error);
@@ -158,20 +180,20 @@ const PostItemPage = () => {
       {mode === "image" && (
         <div className={styles.imageOptions}>
           {defaultImages.map((image, index) => (
-            <BackgroundOptionItem
+            <div
               key={index}
-              isSelected={selectedImage === image}
-              onClick={() => handleSelectedImage(image)}
+              isSelected={selectedImageIndex === index}
+              onClick={() => handleSelectedImage(index)}
               className={clsx(backgroundStyles.optionItem, {
-                [backgroundStyles.selected]: selectedImage === image,
+                [backgroundStyles.selected]: selectedImageIndex === index,
               })}
             >
               <img
                 src={image}
-                alt="배경 이미지 "
-                className={backgroundStyles.optionImage}
+                alt="배경이미지"
+                className={styles.optionImage}
               />
-              {selectedImage === image && (
+              {selectedImageIndex === index && (
                 <div className={backgroundStyles.checkRound}>
                   <img
                     src="src/assets/icons/check.svg"
@@ -180,11 +202,10 @@ const PostItemPage = () => {
                   />
                 </div>
               )}
-            </BackgroundOptionItem>
+            </div>
           ))}
         </div>
       )}
-
       <div className={styles.buttonContainer}>
         <Button
           variant="primary"
