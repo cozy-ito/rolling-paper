@@ -1,0 +1,240 @@
+.title {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-24);
+  line-height: var(--line-height-24);
+  margin-top: 3.125rem;
+  margin-bottom: 1rem;
+}
+
+.cardListWrapper {
+  overflow: hidden;
+  width: 72.5rem;
+  height: 16.25rem;
+}
+
+.cardList {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  will-change: transform;
+}
+
+.card {
+  width: 17.1875rem; /* 카드의 너비 */
+  margin-right: 1.25rem; /* 카드 사이의 간격 */
+}
+
+.button {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.buttonChild {
+  width: 17.5rem;
+  height: 3.5rem;
+  background-color: var(--color-purple-600);
+  color: var(--color-white);
+  font-size: var(--font-size-18);
+  font-weight: var(--font-weight-bold);
+  border-radius: 0.75rem;
+  margin-bottom: 13.625rem;
+  cursor: pointer;
+}
+
+.carouselContainer {
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+}
+
+.arrowLeftButton {
+  position: absolute;
+  z-index: 1;
+  top: 6.875rem;
+  left: -1.3125rem;
+}
+
+.arrowRightButton {
+  position: absolute;
+  z-index: 1;
+  top: 6.875rem;
+  right: 1.3125rem;
+}
+
+/* 스켈레톤 전체 컨테이너 */
+.skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  height: 100vh; /* 화면 중앙 정렬 */
+}
+
+/* 카드 리스트 전체를 감싸는 컨테이너 */
+.skeletonWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 개별 카드 리스트 */
+.skeletonCardListWrapper {
+  display: flex;
+  gap: 1.25rem; /* 카드 간격 추가 */
+}
+
+.titleIndependent {
+  position: relative;
+  right: 27.65625rem;
+  z-index: 1;
+}
+
+/* 개별 스켈레톤 카드 */
+.skeletonCard {
+  width: 100%;
+  max-width: 72.5rem;
+  height: 16.25rem;
+  background-color: #e0e0e0; /* 기본 로딩 색상 */
+  border-radius: 1rem; /* 둥근 테두리 */
+  animation: skeleton-loading 1.5s infinite alternate;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 2.5rem;
+  margin-top: -1.25rem;
+  margin-bottom: -1.25rem;
+}
+
+/* 스켈레톤 애니메이션 */
+@keyframes skeleton-loading {
+  0% {
+    background-color: #e0e0e0;
+  }
+  100% {
+    background-color: #f5f5f5;
+  }
+}
+
+/* ✅ 카드 중앙에 위치하는 스피너 */
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 정확한 중앙 정렬 */
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0.25rem solid #e0e0e0;
+  border-top: 0.25rem solid #a64eff; /* 스피너 색상 */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* 스피너 애니메이션 */
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@media (max-width: 1280px) {
+  .arrowLeftButton,
+  .arrowRightButton {
+    display: none;
+  }
+  .cardListWrapper {
+    width: 100%;
+    overflow-x: auto; /* 터치 스크롤 가능하게 설정 */
+    white-space: nowrap; /* 한 줄로 배치 */
+    padding-bottom: 0.625rem;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE & Edge */
+  }
+}
+
+/* Tablet (768px ~ 1024px) */
+@media (max-width: 1024px) {
+  .cardListWrapper {
+    width: 100%;
+    overflow-x: auto; /* 터치 스크롤 가능하게 설정 */
+    white-space: nowrap; /* 한 줄로 배치 */
+    padding-bottom: 0.625rem;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE & Edge */
+  }
+
+  .cardListWrapper::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+
+  .arrowLeftButton,
+  .arrowRightButton {
+    display: none;
+  }
+
+  .buttonChild {
+    width: 100%;
+    height: 3.5rem;
+    background-color: var(--color-purple-600);
+    color: var(--color-white);
+    font-size: 1.125rem;
+    font-weight: bold;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    padding: 1rem 0;
+  }
+
+  .skeletonCard {
+    max-width: 54.1875rem;
+  }
+}
+
+/* Mobile (Max 767px) */
+@media (max-width: 767px) {
+  .cardListWrapper {
+    width: 100%;
+    overflow-x: auto; /* 터치 스크롤 가능하게 설정 */
+    white-space: nowrap; /* 한 줄로 배치 */
+    padding-bottom: 0.625rem;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE & Edge */
+  }
+
+  .cardListWrapper::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+
+  .arrowLeftButton,
+  .arrowRightButton {
+    display: none;
+  }
+
+  .buttonChild {
+    width: 100%;
+    height: 3.5rem;
+    background-color: var(--color-purple-600);
+    color: var(--color-white);
+    font-size: 1.125rem;
+    font-weight: bold;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    padding: 1rem 0;
+  }
+  .skeletonCard {
+    max-width: 41.875rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .skeletonCard {
+    width: 27.25rem; /* 모바일에서는 전체 너비 */
+    height: 14.5rem; /* 높이도 조정 */
+  }
+
+  .skeletonCard {
+    max-width: 27.25rem;
+  }
+
+  .cardListWrapper {
+    height: 14.5rem;
+  }
+}
