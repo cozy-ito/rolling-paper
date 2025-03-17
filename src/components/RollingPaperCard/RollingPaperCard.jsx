@@ -5,7 +5,7 @@ import DeleteIcon from "../../assets/icons/delete.svg";
 import defaultProfileImg from "../../assets/icons/person.svg";
 import Badge from "../Badge/Badge";
 
-import styles from "./card.module.css";
+import styles from "./RollingPaperCard.module.css";
 
 const Card = ({
   type = "default",
@@ -17,6 +17,7 @@ const Card = ({
   onDelete,
   badge,
   prefix,
+  onClick,
   ...props
 }) => {
   const navigate = useNavigate();
@@ -25,11 +26,14 @@ const Card = ({
   const handleClick = () => {
     if (type === "add" && id) {
       navigate(`/post/${id}/message`);
+    } else {
+      onClick?.();
     }
   };
 
   const handleDelete = (e) => {
-    if (e.target !== e.currentTarget) {
+    e.stopPropagation();
+    if (!e.currentTarget.contains(e.target)) {
       return;
     }
     onDelete();

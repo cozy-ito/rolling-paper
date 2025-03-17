@@ -1,11 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import EditPage from "./pages/EditPage";
 import HomePage from "./pages/HomePage";
 import ListPage from "./pages/ListPage";
 import MessagePage from "./pages/MessagePage";
 import NotFoundPage from "./pages/NotFoundPage";
-import PostItemPage from "./pages/PostItemPage";
+import PostItemPage from "./pages/PostItemPage/PostItemPage";
 import PostPage from "./pages/PostPage";
 
 import Header from "./layouts/Header/Header";
@@ -36,7 +35,7 @@ const Router = () => {
           }
         >
           <Route path={ROUTES.POST_ITEM} element={<PostItemPage />} />
-          <Route path={ROUTES.EDIT_POST_ITEM} element={<EditPage />} />
+          <Route path={ROUTES.EDIT_POST_ITEM} element={<PostItemPage />} />
         </Route>
 
         <Route

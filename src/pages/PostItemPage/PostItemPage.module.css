@@ -1,0 +1,83 @@
+.container {
+  width: 100%;
+  margin-top: 7rem;
+  margin-bottom: 15rem;
+}
+
+.buttonWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.buttonWrapper .button {
+  width: auto;
+  height: auto;
+  padding: 0.375rem 1rem;
+  line-height: var(--line-height-18);
+}
+
+.buttonWrapper .button:focus {
+  border: none;
+}
+
+.messageContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem 1.5rem;
+  width: 100%;
+}
+
+/* Tablet (768px ~ 1024px) */
+@media (max-width: 1024px) {
+  .container {
+    margin-top: 5.75rem;
+    margin-bottom: 5.625rem;
+  }
+
+  .messageContainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .buttonWrapper {
+    position: sticky;
+    top: 0;
+    left: 0;
+    margin-bottom: 0;
+    padding: 1.5rem 0 1rem 0;
+    background: linear-gradient(var(--color-white) 20%, transparent 100%);
+    z-index: var(--sticky-index);
+  }
+
+  .buttonWrapper .button {
+    position: relative;
+    width: 10rem;
+    padding: 0.875rem 0;
+    font-size: var(--font-size-18);
+    line-height: var(--line-height-18);
+  }
+}
+
+/* Mobile (Max 767px) */
+@media (max-width: 767px) {
+  .container {
+    margin-top: 2rem;
+    margin-bottom: 2.375rem;
+  }
+
+  .messageContainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Card용 반응형 브레이크 포인트  */
+@media (max-width: 650px) {
+  .messageContainer {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+  }
+}

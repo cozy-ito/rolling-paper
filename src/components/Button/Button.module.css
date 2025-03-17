@@ -74,6 +74,26 @@
   color: var(--color-gray-900);
 }
 
+.warning {
+  background-color: var(--color-error);
+  color: var(--color-white);
+}
+
+.warning:hover {
+  background-color: var(--color-error);
+  filter: brightness(105%);
+}
+
+.warning:active {
+  background-color: var(--color-error);
+  filter: brightness(95%);
+}
+
+.warning:focus {
+  background-color: var(--color-error);
+  filter: brightness(95%);
+}
+
 .size56 {
   font-size: 1.125rem;
 }
