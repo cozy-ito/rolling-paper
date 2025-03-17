@@ -22,12 +22,12 @@ const EmojiPickerButton = ({ onClick }) => {
   };
 
   return (
-    <div className={styles.buttonWrapper}>
+    <div ref={popoverRef} className={styles.buttonWrapper}>
       <button type="button" className={styles.button} onClick={handleClickOpen}>
         <img src={EmojiPlusIcon} alt="이모지 플러스 아이콘" />
         <span className={styles.buttonText}>추가</span>
       </button>
-      <div ref={popoverRef} className={styles.emojiBox}>
+      <div className={styles.emojiBox}>
         {isOpen && <EmojiPicker onEmojiClick={handleClickPickEmoji} />}
       </div>
     </div>

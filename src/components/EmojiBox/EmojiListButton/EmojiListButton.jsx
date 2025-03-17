@@ -56,7 +56,7 @@ const EmojiListButton = ({
   }, [isOpen, invisibleReactionList, observerHandler]);
 
   return (
-    <div className={styles.container}>
+    <div ref={popoverRef} className={styles.container}>
       <button
         type="button"
         className={styles.openButton}
@@ -67,7 +67,6 @@ const EmojiListButton = ({
 
       {isOpen && (
         <ul
-          ref={popoverRef}
           className={clsx(styles.emojiDropdown, {
             [styles.success]: !isLoading && !isError && !isEmpty,
           })}
