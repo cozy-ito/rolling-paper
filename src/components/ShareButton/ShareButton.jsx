@@ -42,7 +42,7 @@ const ShareButton = ({
   return (
     <PopoverWrapper>
       {({ popoverRef, isOpen, setIsOpen }) => (
-        <div className={styles.container}>
+        <div ref={popoverRef} className={styles.container}>
           <button
             type="button"
             className={styles.button}
@@ -51,7 +51,7 @@ const ShareButton = ({
             <img src={ShareIcon} alt="공유하기 아이콘" />
           </button>
           {isOpen && (
-            <ul ref={popoverRef} className={styles.dropdown}>
+            <ul className={styles.dropdown}>
               <li>
                 <button type="button" onClick={handleClickShareKakao}>
                   카카오톡 공유

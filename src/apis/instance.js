@@ -5,7 +5,7 @@ class Fetcher {
     this.baseUrl = baseUrl;
   }
 
-  async makeRequest(endpoint, options = {}) {
+  async #makeRequest(endpoint, options = {}) {
     const url = `${this.baseUrl}${endpoint}`;
 
     const response = await fetch(url, options);
@@ -33,7 +33,7 @@ class Fetcher {
    * @throws {Error} 네트워크 오류나 API 응답 에러 발생 시
    */
   get(endpoint, options = {}) {
-    return this.makeRequest(endpoint, { method: "GET", ...options });
+    return this.#makeRequest(endpoint, { method: "GET", ...options });
   }
 
   /**
@@ -46,7 +46,7 @@ class Fetcher {
    * @throws {Error} 네트워크 오류나 API 응답 에러 발생 시
    */
   post(endpoint, data, options = {}) {
-    return this.makeRequest(endpoint, {
+    return this.#makeRequest(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json", ...options.headers },
       body: JSON.stringify(data),
@@ -63,7 +63,7 @@ class Fetcher {
    * @throws {Error} 네트워크 오류나 API 응답 에러 발생 시
    */
   delete(endpoint, options = {}) {
-    return this.makeRequest(endpoint, { method: "DELETE", ...options });
+    return this.#makeRequest(endpoint, { method: "DELETE", ...options });
   }
 
   /**
@@ -76,8 +76,25 @@ class Fetcher {
    * @throws {Error} 네트워크 오류나 API 응답 에러 발생 시
    */
   patch(endpoint, data, options = {}) {
-    return this.makeRequest(endpoint, {
+    return this.#makeRequest(endpoint, {
       method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options.headers },
+      body: JSON.stringify(data),
+      ...options,
+    });
+  }
+  /**
+   * PUT 요청을 수행합니다
+   * @async
+   * @param {string} endpoint - API 엔드포인트
+   * @param {Object} data - 요청 본문 데이터
+   * @param {RequestInit?} [options={}] - fetch API 옵션
+   * @returns {Promise<Object|null>} 응답 데이터
+   * @throws {Error} 네트워크 오류나 API 응답 에러 발생 시
+   */
+  PUT(endpoint, data, options = {}) {
+    return this.#makeRequest(endpoint, {
+      method: "PUT",
       headers: { "Content-Type": "application/json", ...options.headers },
       body: JSON.stringify(data),
       ...options,
