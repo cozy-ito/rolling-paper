@@ -1,8 +1,14 @@
-export const makeQueryString = (queries) =>
-  Object.entries(queries)
-    .map(([key, value]) => (value ? `${key}=${value}` : ""))
-    .filter((queryValue) => Boolean(queryValue))
-    .join("&");
+export const makeQueryString = (queries) => {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(queries).forEach(([key, value]) => {
+    if (value) {
+      searchParams.append(key, value);
+    }
+  });
+
+  return searchParams.toString();
+};
 
 //* ex) http://BASE_URL/14-6/endpoint -> /endpoint로 변환
 export const removeBaseUrl = (url) => {
