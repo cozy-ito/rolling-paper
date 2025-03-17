@@ -3,22 +3,28 @@ import { useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { getMessagesById } from "../../apis/message";
+import AsyncStateRenderer from "../../components/AsyncStateRenderer/AsyncStateRenderer";
 import Badge from "../../components/Badge/Badge";
 import Button from "../../components/Button/Button";
 import Modal from "../../components/Modal/Modal";
 import RollingPaperCard from "../../components/RollingPaperCard/RollingPaperCard";
+import Spinner from "../../components/Spinner/Spinner";
 import useFetchData from "../../hooks/useFetchData";
 import { formatDateWithDots } from "../../utils/formatter";
 
 import styles from "./PostItemPage.module.css";
 
+const VISIBLE_SKELETON_CARDS = 6;
+
 const PostItemPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { id: recipientId } = useParams();
-  const { data: fetchedMessageData } = useFetchData(() =>
-    getMessagesById({ recipientId }),
-  );
+  const {
+    isLoading,
+    isError,
+    data: fetchedMessageData,
+  } = useFetchData(() => getMessagesById({ recipientId }));
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessageIndex, setModalMessageIndex] = useState(null);
   const observerTargetRef = useRef(null);
@@ -93,34 +99,52 @@ const PostItemPage = () => {
         )}
       </div>
       <div className={styles.messageContainer}>
-        <RollingPaperCard type="add" id={recipientId} />
-        {messages?.map(
-          (
-            { id, profileImageURL, sender, relationship, content, createdAt },
-            index,
-          ) => (
-            <RollingPaperCard
-              type={isEditPage && "edit"}
-              key={id}
-              id={recipientId}
-              image={profileImageURL}
-              prefix="From. "
-              author={sender}
-              badge={makeBadge(relationship)}
-              content={content}
-              date={formatDateWithDots(createdAt)}
-              onClick={() => clickHandlerOpenModal(index)}
-              onDelete={() => handleClickDeleteMessage(id)}
+        <AsyncStateRenderer isLoading={isLoading} isError={isError}>
+          <AsyncStateRenderer.Loading>
+            {Array.from({ length: VISIBLE_SKELETON_CARDS }).map((_, index) => (
+              <div key={index} className={styles.skeletonCard}>
+                <Spinner />
+              </div>
+            ))}
+          </AsyncStateRenderer.Loading>
+          <AsyncStateRenderer.Content>
+            <RollingPaperCard type="add" id={recipientId} />
+            {messages?.map(
+              (
+                {
+                  id,
+                  profileImageURL,
+                  sender,
+                  relationship,
+                  content,
+                  createdAt,
+                },
+                index,
+              ) => (
+                <RollingPaperCard
+                  type={isEditPage && "edit"}
+                  key={id}
+                  id={recipientId}
+                  image={profileImageURL}
+                  prefix="From. "
+                  author={sender}
+                  badge={makeBadge(relationship)}
+                  content={content}
+                  date={formatDateWithDots(createdAt)}
+                  onClick={() => clickHandlerOpenModal(index)}
+                  onDelete={() => handleClickDeleteMessage(id)}
+                />
+              ),
+            )}
+            <div ref={observerTargetRef} />
+            <Modal
+              fromLabel="From. "
+              isModalOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              {...makeModalProps(messages[modalMessageIndex])}
             />
-          ),
-        )}
-        <div ref={observerTargetRef} />
-        <Modal
-          fromLabel="From. "
-          isModalOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          {...makeModalProps(messages[modalMessageIndex])}
-        />
+          </AsyncStateRenderer.Content>
+        </AsyncStateRenderer>
       </div>
     </div>
   );
