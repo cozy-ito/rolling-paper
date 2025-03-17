@@ -29,7 +29,7 @@ const EmojiListButton = ({
     !isError &&
     (!invisibleReactionList || invisibleReactionList.length === 0);
 
-  const clickHandler = () => {
+  const handleClickToggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
@@ -60,7 +60,7 @@ const EmojiListButton = ({
       <button
         type="button"
         className={styles.openButton}
-        onClick={clickHandler}
+        onClick={handleClickToggleDropdown}
       >
         <img src={DropdownIcon} alt="이미지 목록 토글" />
       </button>
