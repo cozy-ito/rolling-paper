@@ -1,30 +1,56 @@
+import { useEffect, useMemo } from "react";
+
 import clsx from "clsx";
 import { useParams } from "react-router-dom";
 
+import { getRecipientById } from "../../apis/rollingPaper";
 import AvatarStack from "../../components/AvatarStack/AvatarStack";
 import EmojiBox from "../../components/EmojiBox/EmojiBox";
 import ShareButton from "../../components/ShareButton/ShareButton";
+import useFetchData from "../../hooks/useFetchData";
 
 import styles from "./PostItemPageHeader.module.css";
 
-const TOTAL_MESSAGE_COUNT = 10;
-
 const PostItemPageHeader = () => {
-  //* 페이지 구현 시, API 연동 예정
   const { id: recipientId } = useParams();
-  const recentMessages = Array.from({ length: TOTAL_MESSAGE_COUNT });
+  const { data } = useFetchData(() => getRecipientById(recipientId));
+
+  const { recipient, totalMessageCount, recentMessagesUrls } = useMemo(() => {
+    const recipient = `To. ${data?.name ?? ""}`;
+    const totalMessageCount = data?.messageCount;
+    const recentMessagesUrls =
+      data?.recentMessages.map(({ profileImageURL }) => profileImageURL) || [];
+    return { recipient, totalMessageCount, recentMessagesUrls };
+  }, [data]);
+
+  useEffect(() => {
+    const rootElement = document.querySelector("#root");
+    if (data) {
+      const { backgroundImageURL, backgroundColor } = data;
+      const backgroundValue = backgroundImageURL
+        ? `center/cover no-repeat url(${backgroundImageURL})`
+        : `var(--color-${backgroundColor}-200)`;
+
+      rootElement.style.background = backgroundValue;
+    }
+
+    return () => {
+      rootElement.style.background = "";
+    };
+  }, [data]);
 
   return (
     <div className={styles.container}>
       <div className={styles.innerContainer}>
-        <p className={styles.rollingPaperToName}>To. Ashley Kim</p>
+        <p className={styles.rollingPaperToName}>{recipient}</p>
         <div className={styles.rollingPaperInfo}>
           <div className={styles.profileChipWrapper}>
             <AvatarStack
-              avatarUrls={recentMessages}
+              avatarUrls={recentMessagesUrls}
+              totalMessageCount={totalMessageCount}
               message={
                 <>
-                  <strong>{TOTAL_MESSAGE_COUNT}</strong>
+                  <strong>{totalMessageCount}</strong>
                   명이 작성했어요!
                 </>
               }
@@ -35,8 +61,7 @@ const PostItemPageHeader = () => {
             <EmojiBox recipientId={recipientId} />
           </div>
           <div className={clsx(styles.divider, styles.marginX12)} />
-          {/* API 연동 후 타이틀 및 관련 정보 수정 예정입니다. */}
-          <ShareButton kakaoSharetitle="테스트 타이틀" />
+          <ShareButton kakaoSharetitle={recipient} />
         </div>
       </div>
     </div>
