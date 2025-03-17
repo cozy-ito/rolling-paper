@@ -4,7 +4,9 @@ export const makeQueryString = (queries) =>
     .filter((queryValue) => Boolean(queryValue))
     .join("&");
 
+//* ex) http://BASE_URL/14-6/endpoint -> /endpoint로 변환
 export const removeBaseUrl = (url) => {
-  const haveHttp = typeof url === "string" && !url.includes("http");
-  return haveHttp || url?.slice(url.indexOf("14-6") + 4);
+  if (!url) return false;
+  const haveBaseUrl = typeof url === "string" && url.includes("http");
+  return haveBaseUrl && url.slice(url.indexOf("14-6") + 4);
 };
