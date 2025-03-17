@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import ReactQuill from "react-quill-new";
 
 import "react-quill-new/dist/quill.snow.css";
 import styles from "./TextEditor.module.css";
 
-const TextEditor = ({ value = "", onChange }) => {
+const TextEditor = ({ value = "", onChange, selectedFont }) => {
   const [content, setContent] = useState(value);
+
+  useEffect(() => {
+    if (selectedFont) {
+      document.querySelector(".ql-editor").style.fontFamily = selectedFont;
+    }
+  }, [selectedFont]);
 
   const handleChange = (newContent) => {
     setContent(newContent);
@@ -30,6 +36,7 @@ const TextEditor = ({ value = "", onChange }) => {
         }}
         formats={["bold", "italic", "underline", "align", "list", "color"]}
         theme="snow"
+        style={{ fontFamily: selectedFont }}
       />
     </div>
   );
