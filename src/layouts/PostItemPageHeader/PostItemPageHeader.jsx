@@ -1,30 +1,61 @@
+import { useEffect } from "react";
+
 import clsx from "clsx";
 import { useParams } from "react-router-dom";
 
+import { getRecipientById } from "../../apis/rollingPaper";
 import AvatarStack from "../../components/AvatarStack/AvatarStack";
 import EmojiBox from "../../components/EmojiBox/EmojiBox";
 import ShareButton from "../../components/ShareButton/ShareButton";
+import useFetchData from "../../hooks/useFetchData";
 
 import styles from "./PostItemPageHeader.module.css";
 
-const TOTAL_MESSAGE_COUNT = 10;
-
 const PostItemPageHeader = () => {
-  //* 페이지 구현 시, API 연동 예정
   const { id: recipientId } = useParams();
-  const recentMessages = Array.from({ length: TOTAL_MESSAGE_COUNT });
+  const { data: rollingPaperData } = useFetchData(() =>
+    getRecipientById(recipientId),
+  );
+
+  const {
+    name: recipientName,
+    messageCount,
+    recentMessages,
+    backgroundImageURL,
+    backgroundColor,
+  } = rollingPaperData || ROLLING_PAPER_DEFAULT_DATA;
+
+  const title = `To. ${recipientName}`;
+  const recentMessagesUrls = recentMessages.map(
+    ({ profileImageURL }) => profileImageURL,
+  );
+
+  useEffect(() => {
+    const rootElement = document.querySelector("#root");
+    const backgroundStyle =
+      backgroundImageURL === null
+        ? `var(--color-${backgroundColor}-200)`
+        : `center/cover no-repeat url(${backgroundImageURL})`;
+
+    rootElement.style.background = backgroundStyle;
+
+    return () => {
+      rootElement.style.background = "";
+    };
+  }, [backgroundColor, backgroundImageURL]);
 
   return (
     <div className={styles.container}>
       <div className={styles.innerContainer}>
-        <p className={styles.rollingPaperToName}>To. Ashley Kim</p>
+        <p className={styles.rollingPaperToName}>{title}</p>
         <div className={styles.rollingPaperInfo}>
           <div className={styles.profileChipWrapper}>
             <AvatarStack
-              avatarUrls={recentMessages}
+              avatarUrls={recentMessagesUrls}
+              totalMessageCount={messageCount}
               message={
                 <>
-                  <strong>{TOTAL_MESSAGE_COUNT}</strong>
+                  <strong>{messageCount}</strong>
                   명이 작성했어요!
                 </>
               }
@@ -35,12 +66,19 @@ const PostItemPageHeader = () => {
             <EmojiBox recipientId={recipientId} />
           </div>
           <div className={clsx(styles.divider, styles.marginX12)} />
-          {/* API 연동 후 타이틀 및 관련 정보 수정 예정입니다. */}
-          <ShareButton kakaoSharetitle="테스트 타이틀" />
+          <ShareButton kakaoSharetitle={title} />
         </div>
       </div>
     </div>
   );
+};
+
+const ROLLING_PAPER_DEFAULT_DATA = {
+  name: "",
+  messageCount: 0,
+  recentMessages: [],
+  backgroundImageURL: null,
+  backgroundColor: "",
 };
 
 export default PostItemPageHeader;
