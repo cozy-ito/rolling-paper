@@ -19,6 +19,7 @@ const Card = ({
   badge,
   prefix,
   onClick,
+  className,
   ...props
 }) => {
   const navigate = useNavigate();
@@ -42,7 +43,13 @@ const Card = ({
 
   return (
     <div
-      className={clsx(styles.card, { [styles.addCard]: type === "add" })}
+      className={clsx(
+        styles.card,
+        {
+          [styles.addCard]: type === "add",
+        },
+        className,
+      )}
       onClick={handleClick}
       {...props}
     >
