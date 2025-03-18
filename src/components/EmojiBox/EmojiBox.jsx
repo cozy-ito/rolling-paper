@@ -10,7 +10,7 @@ import styles from "./EmojiBox.module.css";
 import EmojiListButton from "./EmojiListButton/EmojiListButton";
 import EmojiPickerButton from "./EmojiPickerButton/EmojiPickerButton";
 
-const VISIBLE_EMOJI_COUNT = 3;
+const VISIBLE_EMOJI_COUNT = 6;
 const EMOJI_PAGE_UNIT = 20;
 
 const EmojiBox = ({ recipientId }) => {
