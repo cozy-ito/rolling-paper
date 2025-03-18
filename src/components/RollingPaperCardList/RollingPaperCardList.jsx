@@ -1,13 +1,15 @@
 import { useState } from "react";
 
+import clsx from "clsx";
+
 import BinIcon from "../../assets/icons/delete.svg";
+import { FONT_MAP } from "../../constants/fonts";
 import useIntersection from "../../hooks/useIntersection";
 import { formatDateWithDots } from "../../utils/formatter";
 import { makeBadge } from "../../utils/mapper";
 import Badge from "../Badge/Badge";
 import Card from "../Card/Card";
 import Modal from "../Modal/Modal";
-import RollingPaperCard from "../RollingPaperCard/RollingPaperCard";
 import Spinner from "../Spinner/Spinner";
 import HtmlContentDisplay from "../TextEditor/HtmlContentDisplay/HtmlContentDisplay";
 
@@ -41,7 +43,15 @@ const RollingPaperCardList = ({
     <>
       {messages.map(
         (
-          { id, profileImageURL, sender, relationship, content, createdAt },
+          {
+            id,
+            profileImageURL,
+            sender,
+            relationship,
+            content,
+            createdAt,
+            font,
+          },
           index,
         ) => (
           <Card
@@ -62,7 +72,7 @@ const RollingPaperCardList = ({
             middle={
               <div className={styles.cardMiddle}>
                 <hr />
-                <div className={styles.content}>
+                <div className={clsx(styles[FONT_MAP[font]], styles.content)}>
                   <HtmlContentDisplay htmlContent={content} />
                 </div>
               </div>
@@ -122,7 +132,7 @@ const RollingPaperCardTop = ({
 
 const makeModalProps = (messageData) => {
   if (messageData) {
-    const { profileImageURL, sender, relationship, createdAt, content } =
+    const { profileImageURL, sender, relationship, createdAt, content, font } =
       messageData;
 
     return {
@@ -131,6 +141,7 @@ const makeModalProps = (messageData) => {
       badge: <Badge {...makeBadge(relationship)} />,
       date: formatDateWithDots(createdAt),
       bodyText: <HtmlContentDisplay htmlContent={content} />,
+      font,
     };
   }
 };

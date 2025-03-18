@@ -1,3 +1,7 @@
+import clsx from "clsx";
+
+import { FONT_MAP } from "../../constants/fonts";
+
 import styles from "./Modal.module.css";
 
 const Modal = ({
@@ -9,10 +13,11 @@ const Modal = ({
   date,
   bodyText,
   fromLabel,
+  font,
 }) => {
   if (!isModalOpen) return null;
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={clsx(styles.modalOverlay, styles[font])} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <div className={styles.modalHeaderUserInfo}>
@@ -28,7 +33,7 @@ const Modal = ({
           <p className={styles.date}>{date}</p>
         </div>
         <hr className={styles.divider} />
-        <p className={styles.bodyText}>{bodyText}</p>
+        <div className={styles.bodyText}>{bodyText}</div>
         <button onClick={onClose} className={styles.button}>
           확인
         </button>
