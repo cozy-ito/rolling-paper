@@ -25,8 +25,10 @@ const EmojiBox = ({ recipientId }) => {
   );
   const { isLoading, isError, data, refetch, updateState } =
     useFetchData(fetchReactions);
-  const [isFetchReactionsError, setIsfetchReactionsError] = useState(false);
-  const [fetchReactionsError, setFetchReactionsError] = useState(null);
+  const [reactionError, setReactionError] = useState({
+    isError: false,
+    error: null,
+  });
   const pageRef = useRef(1);
 
   const reactionData = data?.results || [];
@@ -34,12 +36,16 @@ const EmojiBox = ({ recipientId }) => {
   const invisibleReactionList = reactionData.slice(VISIBLE_EMOJI_COUNT);
 
   const catchError = (fetchFn) => {
-    setIsfetchReactionsError(false);
-    setFetchReactionsError(null);
+    setReactionError({
+      error: null,
+      isError: false,
+    });
 
     return fetchFn().catch((error) => {
-      setIsfetchReactionsError(true);
-      setFetchReactionsError(error);
+      setReactionError({
+        error: error,
+        isError: true,
+      });
       return null;
     });
   };
@@ -99,7 +105,7 @@ const EmojiBox = ({ recipientId }) => {
         })}
       >
         <ul className={styles.emojiList}>
-          {!isFetchReactionsError &&
+          {!reactionError.isError &&
             visibleReactionList.length > 0 &&
             visibleReactionList.map(({ id, emoji, count }) => (
               <li key={id} className={styles.badge}>
@@ -108,10 +114,9 @@ const EmojiBox = ({ recipientId }) => {
               </li>
             ))}
         </ul>
-        {isFetchReactionsError && fetchReactionsError?.message}
         <EmojiListButton
           isLoading={isLoading}
-          isError={isError || isFetchReactionsError}
+          isError={isError || reactionError.isError}
           onUpdate={handleUpdate}
           next={data?.next}
           onRetryRequest={handleRetryRequest}
