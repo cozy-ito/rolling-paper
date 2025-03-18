@@ -135,6 +135,7 @@ const ListPage = () => {
           >
             {popularRecipients.map((recipient) => {
               const hexColor = getHexColor(recipient.backgroundColor);
+              const backgroundImageURL = recipient.backgroundImageURL;
               // **동적 프로필 이미지**: recentMessages에서 profileImageURL 사용
               const dynamicProfileImages =
                 recipient.recentMessages?.map((msg) => (
@@ -156,6 +157,7 @@ const ListPage = () => {
                 <div className={styles.card} key={recipient.id}>
                   <CardList
                     backgroundColor={hexColor}
+                    backgroundImageURL={backgroundImageURL}
                     profileSection={dynamicProfileImages}
                     totalUsers={recipient.messageCount}
                     message={`To. ${recipient.name}`}
