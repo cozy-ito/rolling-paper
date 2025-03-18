@@ -84,7 +84,7 @@ const PostPage = () => {
 
     try {
       const requestBody = {
-        name: `To. ${toName}`,
+        name: `${toName}`,
         backgroundColor: selectedColor,
       };
 
