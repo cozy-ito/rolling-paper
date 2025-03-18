@@ -2,9 +2,9 @@ import { useState, useMemo } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import ArrowButton from "../components/ArrowButton/ArrowButton";
-import CardList from "../components/CardList/CardList";
-import useFetchData from "../hooks/useFetchData";
+import ArrowButton from "../../components/ArrowButton/ArrowButton";
+import CardList from "../../components/CardList/CardList";
+import useFetchData from "../../hooks/useFetchData";
 
 import styles from "./ListPage.module.css";
 
