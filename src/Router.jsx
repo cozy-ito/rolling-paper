@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import HomePage from "./pages/HomePage/HomePage";
-import ListPage from "./pages/ListPage";
-import MessagePage from "./pages/MessagePage";
-import NotFoundPage from "./pages/NotFoundPage";
+import ListPage from "./pages/ListPage/ListPage";
+import MessagePage from "./pages/MessagePage/MessagePage";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import PostItemPage from "./pages/PostItemPage/PostItemPage";
-import PostPage from "./pages/PostPage";
+import PostPage from "./pages/PostPage/PostPage";
 
 import Header from "./layouts/Header/Header";
 import MainLayout from "./layouts/MainLayout/MainLayout";
