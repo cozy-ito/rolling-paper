@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 import clsx from "clsx";
 import { useParams } from "react-router-dom";
@@ -30,12 +30,12 @@ const PostItemPageHeader = () => {
     ({ profileImageURL }) => profileImageURL,
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const rootElement = document.querySelector("#root");
     const backgroundStyle =
       backgroundImageURL === null
         ? `var(--color-${backgroundColor}-200)`
-        : `center/cover no-repeat url(${backgroundImageURL})`;
+        : `center/cover no-repeat fixed url(${backgroundImageURL})`;
 
     rootElement.style.background = backgroundStyle;
 

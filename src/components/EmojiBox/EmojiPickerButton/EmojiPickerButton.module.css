@@ -26,6 +26,7 @@
   position: absolute;
   top: 2.75rem;
   right: 1rem;
+  z-index: var(--dropdown-index);
 }
 
 /* Tablet (768px ~ 1024px) */

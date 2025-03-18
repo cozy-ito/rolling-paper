@@ -6,7 +6,7 @@
 }
 
 .emojiBoxLoading {
-  width: 13.5rem;
+  min-width: 24.25rem;
   justify-content: flex-end;
 }
 

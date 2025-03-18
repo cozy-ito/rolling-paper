@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import clsx from "clsx";
 
@@ -10,36 +10,42 @@ import styles from "./EmojiBox.module.css";
 import EmojiListButton from "./EmojiListButton/EmojiListButton";
 import EmojiPickerButton from "./EmojiPickerButton/EmojiPickerButton";
 
-const VISIBLE_EMOJI_COUNT = 3;
+const VISIBLE_EMOJI_COUNT = 6;
+const EMOJI_PAGE_UNIT = 20;
 
 const EmojiBox = ({ recipientId }) => {
   const fetchReactions = useCallback(
-    (params) => getReactionsById({ recipientId, next: params?.next }),
+    (params) =>
+      getReactionsById({
+        recipientId,
+        offset: params?.offset,
+        limit: EMOJI_PAGE_UNIT,
+      }),
     [recipientId],
   );
-
   const { isLoading, isError, data, refetch, updateState } =
     useFetchData(fetchReactions);
+  const [reactionError, setReactionError] = useState({
+    isError: false,
+    error: null,
+  });
+  const pageRef = useRef(1);
 
-  const { visibleReactionList, invisibleReactionList } = useMemo(() => {
-    const reactionData = data?.results || [];
-    return {
-      visibleReactionList: reactionData.slice(0, VISIBLE_EMOJI_COUNT),
-      invisibleReactionList: reactionData.slice(VISIBLE_EMOJI_COUNT),
-    };
-  }, [data?.results]);
-
-  const [isFetchReactionsError, setIsfetchReactionsError] = useState(false);
-  const [fetchReactionsError, setFetchReactionsError] = useState(null);
+  const reactionData = data?.results || [];
+  const visibleReactionList = reactionData.slice(0, VISIBLE_EMOJI_COUNT);
+  const invisibleReactionList = reactionData.slice(VISIBLE_EMOJI_COUNT);
 
   const catchError = (fetchFn) => {
-    setIsfetchReactionsError(false);
-    setFetchReactionsError(null);
+    setReactionError({
+      error: null,
+      isError: false,
+    });
 
     return fetchFn().catch((error) => {
-      console.log(error.message);
-      setIsfetchReactionsError(true);
-      setFetchReactionsError(error);
+      setReactionError({
+        error: error,
+        isError: true,
+      });
       return null;
     });
   };
@@ -50,7 +56,7 @@ const EmojiBox = ({ recipientId }) => {
     const nextPageData = await catchError(() =>
       fetchReactions({
         recipientId,
-        next: data?.next,
+        offset: pageRef.current++ * EMOJI_PAGE_UNIT,
       }),
     );
 
@@ -99,7 +105,7 @@ const EmojiBox = ({ recipientId }) => {
         })}
       >
         <ul className={styles.emojiList}>
-          {!isFetchReactionsError &&
+          {!reactionError.isError &&
             visibleReactionList.length > 0 &&
             visibleReactionList.map(({ id, emoji, count }) => (
               <li key={id} className={styles.badge}>
@@ -108,10 +114,9 @@ const EmojiBox = ({ recipientId }) => {
               </li>
             ))}
         </ul>
-        {isFetchReactionsError && fetchReactionsError?.message}
         <EmojiListButton
           isLoading={isLoading}
-          isError={isError || isFetchReactionsError}
+          isError={isError || reactionError.isError}
           onUpdate={handleUpdate}
           next={data?.next}
           onRetryRequest={handleRetryRequest}

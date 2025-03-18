@@ -8,7 +8,7 @@
 }
 
 .card {
-  width: 24rem;
+  flex-shrink: 0;
   height: 17.5rem;
   background: var(--color-white);
   border: 0.0625rem solid var(--color-gray-300);
@@ -29,6 +29,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-gray-500);
+  cursor: pointer;
 }
 
 .cardHeader {
@@ -113,7 +124,6 @@
 /* Tablet */
 @media (max-width: 1024px) {
   .card {
-    width: 22rem;
     height: 17.75rem;
   }
 
@@ -153,7 +163,6 @@
   }
 
   .card {
-    width: 20rem;
     height: 14.375rem;
   }
 

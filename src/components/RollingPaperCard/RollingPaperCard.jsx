@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 import DeleteIcon from "../../assets/icons/delete.svg";
 import defaultProfileImg from "../../assets/icons/person.svg";
+import AddIcon from "../../assets/icons/plus.svg";
 import Badge from "../Badge/Badge";
 
-import styles from "./card.module.css";
+import styles from "./RollingPaperCard.module.css";
 
 const Card = ({
   type = "default",
@@ -17,6 +18,7 @@ const Card = ({
   onDelete,
   badge,
   prefix,
+  onClick,
   ...props
 }) => {
   const navigate = useNavigate();
@@ -25,11 +27,14 @@ const Card = ({
   const handleClick = () => {
     if (type === "add" && id) {
       navigate(`/post/${id}/message`);
+    } else {
+      onClick?.();
     }
   };
 
   const handleDelete = (e) => {
-    if (e.target !== e.currentTarget) {
+    e.stopPropagation();
+    if (!e.currentTarget.contains(e.target)) {
       return;
     }
     onDelete();
@@ -42,9 +47,9 @@ const Card = ({
       {...props}
     >
       {type === "add" ? (
-        // <Button/>
-        // 임시 코드, Button 공통 컴포넌트가 병합되면 제거 될 코드
-        <button className={styles.addButton}>+</button>
+        <button className={styles.addButton}>
+          <img src={AddIcon} alt="추가 아이콘" />
+        </button>
       ) : (
         <>
           <div className={styles.cardHeader}>

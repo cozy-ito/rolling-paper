@@ -52,6 +52,11 @@
   --color-error: #dc3a3a;
   --color-surface: #f6f8ff;
 
+  /* Z-Index */
+  --dropdown-index: 10;
+  --sticky-index: 5;
+  --header-index: 200;
+
   /* ========================================
   	Font
   ====================================== */
