@@ -1,16 +1,9 @@
 import { useCallback, useRef, useState } from "react";
 
 import clsx from "clsx";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 
-import { deleteMessageById, getMessagesById } from "../../apis/message";
-import { deleteRecipientById } from "../../apis/rollingPaper";
-import CautionIcon from "../../assets/icons/close.svg";
+import { getMessagesById } from "../../apis/message";
 import EmptyPaperplane from "../../assets/imgs/paperplane_empty.webp";
 import ErrorPaperplane from "../../assets/imgs/paperplane_error.webp";
 import AsyncStateRenderer from "../../components/AsyncStateRenderer/AsyncStateRenderer";
@@ -18,8 +11,6 @@ import Button from "../../components/Button/Button";
 import RollingPaperCard from "../../components/RollingPaperCard/RollingPaperCard";
 import RollingPaperCardList from "../../components/RollingPaperCardList/RollingPaperCardList";
 import Spinner from "../../components/Spinner/Spinner";
-import Toast from "../../components/Toast/Toast";
-import { ROUTES } from "../../constants/routes";
 import useFetchData from "../../hooks/useFetchData";
 
 import styles from "./PostItemPage.module.css";
@@ -33,16 +24,10 @@ const CONSTANTS = {
 };
 
 const PostItemPage = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const { id: recipientId } = useParams();
   const pageRef = useRef(CONSTANTS.INITIAL_MESSAGE_PAGE_NUMBER);
 
-  const [visibleErrorToast, setVisibleErrorToast] = useState({
-    message: "",
-    isError: false,
-    icon: null,
-  });
   const [messageError, setMessageError] = useState({
     isError: false,
     error: null,
@@ -66,10 +51,12 @@ const PostItemPage = () => {
     refetch,
     updateState,
   } = useFetchData(fetchMessages);
+  const [selectedItemsToDelete, setSelectedItemsDelete] = useState([]);
 
   const messages = fetchedMessageData?.results ?? [];
   const isEditPage = location.pathname.endsWith(CONSTANTS.EDIT_PAGE_LAST_URL);
   const isEmptyMessage = fetchedMessageData?.results?.length === 0;
+  const isNotFound = error?.toString().includes("Not found");
 
   const loadMoreMessages = useCallback(async () => {
     if (messageError.isError || isLoading) {
@@ -94,48 +81,19 @@ const PostItemPage = () => {
     }
   }, [fetchMessages, updateState, messageError.isError, isLoading]);
 
-  const handleClickDeleteRollingPaper = () => {
-    deleteRecipientById(recipientId)
-      .then(() => navigate(ROUTES.LIST))
-      .catch(() => setVisibleErrorToast(true));
-  };
-
   const handleClickDeleteMessage = async (targetId) => {
-    deleteMessageById(targetId)
-      .then((result) => {
-        if (result === null) {
-          updateState((prev) => ({
-            ...prev,
-            results: [
-              ...(prev?.results || []).filter(({ id }) => id !== targetId),
-            ],
-          }));
-          setVisibleErrorToast({
-            isError: true,
-            message: "삭제 되었습니다.",
-            icon: undefined,
-          });
-        }
-      })
-      .catch(() =>
-        setVisibleErrorToast({
-          isError: true,
-          message: "삭제에 실패하였습니다. 다시 시도해주세요.",
-          icon: (
-            <span className={styles.failIcon}>
-              <img src={CautionIcon} alt="X 아이콘" />
-            </span>
-          ),
-        }),
-      );
+    setSelectedItemsDelete((prev) => [...prev, targetId]);
+
+    updateState((prev) => ({
+      ...prev,
+      results: [...(prev?.results || []).filter(({ id }) => id !== targetId)],
+    }));
   };
 
   const handleRefreshMessages = useCallback(() => {
     setMessageError({ isError: false, error: null });
     refetch();
   }, [refetch]);
-
-  const isNotFound = error?.toString().includes("Not found");
 
   if (isNotFound) {
     return <Navigate to="/not-found" />;
@@ -147,7 +105,9 @@ const PostItemPage = () => {
         <PostItemPageModeButtons
           recipientId={recipientId}
           isEditPage={isEditPage}
-          onDelete={handleClickDeleteRollingPaper}
+          messages={messages}
+          updateState={updateState}
+          selectedItemsToDelete={selectedItemsToDelete}
         />
       </div>
       <div
@@ -182,13 +142,6 @@ const PostItemPage = () => {
           </AsyncStateRenderer.Content>
         </AsyncStateRenderer>
       </div>
-      <Toast
-        isVisible={visibleErrorToast.isError}
-        setIsVisible={setVisibleErrorToast}
-        duration={3000}
-        message={visibleErrorToast.message}
-        icon={visibleErrorToast.icon}
-      />
     </div>
   );
 };
