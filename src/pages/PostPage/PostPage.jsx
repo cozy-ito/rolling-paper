@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
-//import useFetchData from "../../hooks/useFetchData";
 import BackgroundOptionItem from "../../components/BackgroundOptionItem/BackgroundOptionItem";
 import backgroundStyles from "../../components/BackgroundOptionItem/BackgroundOptionItem.module.css";
 import Button from "../../components/Button/Button";
@@ -29,7 +28,6 @@ const PostPage = () => {
     defaultImages[0],
   );
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [uploadedImages, setUploadedImages] = useState([]);
   const [mode, setMode] = useState("color");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -70,23 +68,10 @@ const PostPage = () => {
   };
 
   //3. 이미지 선택
-  const handleSelectedImage = (index, isUploaded = false) => {
+  const handleSelectedImage = (index) => {
     setSelectedImageIndex(index);
-    setSelectedBackground(
-      isUploaded ? uploadedImages[index] : defaultImages[index],
-    );
+    setSelectedBackground(defaultImages[index]);
     setMode("image");
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUploadedImages((prev) => [...prev, reader.result]);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   //4. 버튼 활성화 및 페이지 이동
@@ -194,30 +179,11 @@ const PostPage = () => {
 
       {mode === "image" && (
         <div className={styles.imageOptions}>
-          <label
-            className={clsx(backgroundStyles.optionItem, styles.imageUploadBox)}
-          >
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              hidden
-            />
-
-            <div className={backgroundStyles.checkRound}>
-              <img
-                src="src/assets/icons/plus.svg"
-                className={backgroundStyles.checkIcon}
-                alt="선택됨"
-              />
-            </div>
-          </label>
-          {[...uploadedImages, ...defaultImages].map((image, index) => (
+          {defaultImages.map((image, index) => (
             <div
               key={index}
-              onClick={() =>
-                handleSelectedImage(index, index >= defaultImages.length)
-              }
+              isSelected={selectedImageIndex === index}
+              onClick={() => handleSelectedImage(index)}
               className={clsx(backgroundStyles.optionItem, {
                 [backgroundStyles.selected]: selectedImageIndex === index,
               })}
