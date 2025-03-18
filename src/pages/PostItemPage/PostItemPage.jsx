@@ -1,10 +1,16 @@
 import { useCallback, useRef, useState } from "react";
 
 import clsx from "clsx";
-import { Navigate, useLocation, useParams } from "react-router-dom";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 import { deleteMessageById, getMessagesById } from "../../apis/message";
 import { deleteRecipientById } from "../../apis/rollingPaper";
+import CautionIcon from "../../assets/icons/close.svg";
 import EmptyPaperplane from "../../assets/imgs/paperplane_empty.webp";
 import ErrorPaperplane from "../../assets/imgs/paperplane_error.webp";
 import AsyncStateRenderer from "../../components/AsyncStateRenderer/AsyncStateRenderer";
@@ -13,6 +19,7 @@ import RollingPaperCard from "../../components/RollingPaperCard/RollingPaperCard
 import RollingPaperCardList from "../../components/RollingPaperCardList/RollingPaperCardList";
 import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
+import { ROUTES } from "../../constants/routes";
 import useFetchData from "../../hooks/useFetchData";
 
 import styles from "./PostItemPage.module.css";
@@ -26,11 +33,16 @@ const CONSTANTS = {
 };
 
 const PostItemPage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { id: recipientId } = useParams();
   const pageRef = useRef(CONSTANTS.INITIAL_MESSAGE_PAGE_NUMBER);
 
-  const [visibleErrorToast, setVisibleErrorToast] = useState(false);
+  const [visibleErrorToast, setVisibleErrorToast] = useState({
+    message: "",
+    isError: false,
+    icon: null,
+  });
   const [messageError, setMessageError] = useState({
     isError: false,
     error: null,
@@ -63,10 +75,11 @@ const PostItemPage = () => {
     if (messageError.isError || isLoading) {
       return;
     }
-    const offset = pageRef.current * CONSTANTS.MESSAGE_PAGE_UNIT;
 
     try {
+      const offset = pageRef.current * CONSTANTS.MESSAGE_PAGE_UNIT;
       const nextMessageData = await fetchMessages({ offset });
+
       updateState((prev) => ({
         ...nextMessageData,
         results: [...(prev?.results || []), ...nextMessageData.results],
@@ -82,11 +95,39 @@ const PostItemPage = () => {
   }, [fetchMessages, updateState, messageError.isError, isLoading]);
 
   const handleClickDeleteRollingPaper = () => {
-    deleteRecipientById(recipientId).catch(() => setVisibleErrorToast(true));
+    deleteRecipientById(recipientId)
+      .then(() => navigate(ROUTES.LIST))
+      .catch(() => setVisibleErrorToast(true));
   };
 
-  const handleClickDeleteMessage = async (id) => {
-    deleteMessageById(id).catch(() => setVisibleErrorToast(true));
+  const handleClickDeleteMessage = async (targetId) => {
+    deleteMessageById(targetId)
+      .then((result) => {
+        if (result === null) {
+          updateState((prev) => ({
+            ...prev,
+            results: [
+              ...(prev?.results || []).filter(({ id }) => id !== targetId),
+            ],
+          }));
+          setVisibleErrorToast({
+            isError: true,
+            message: "삭제 되었습니다.",
+            icon: undefined,
+          });
+        }
+      })
+      .catch(() =>
+        setVisibleErrorToast({
+          isError: true,
+          message: "삭제에 실패하였습니다. 다시 시도해주세요.",
+          icon: (
+            <span className={styles.failIcon}>
+              <img src={CautionIcon} alt="X 아이콘" />
+            </span>
+          ),
+        }),
+      );
   };
 
   const handleRefreshMessages = useCallback(() => {
@@ -142,10 +183,11 @@ const PostItemPage = () => {
         </AsyncStateRenderer>
       </div>
       <Toast
-        isVisible={visibleErrorToast}
+        isVisible={visibleErrorToast.isError}
         setIsVisible={setVisibleErrorToast}
         duration={3000}
-        message="삭제에 실패하였습니다. 다시 시도해주세요."
+        message={visibleErrorToast.message}
+        icon={visibleErrorToast.icon}
       />
     </div>
   );
