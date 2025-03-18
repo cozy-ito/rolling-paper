@@ -9,6 +9,7 @@ import Card from "../Card/Card";
 import Modal from "../Modal/Modal";
 import RollingPaperCard from "../RollingPaperCard/RollingPaperCard";
 import Spinner from "../Spinner/Spinner";
+import HtmlContentDisplay from "../TextEditor/HtmlContentDisplay/HtmlContentDisplay";
 
 import styles from "./RollingPaperCardList.module.css";
 
@@ -61,7 +62,9 @@ const RollingPaperCardList = ({
             middle={
               <div className={styles.cardMiddle}>
                 <hr />
-                <p className={styles.content}>{content}</p>
+                <div className={styles.content}>
+                  <HtmlContentDisplay htmlContent={content} />
+                </div>
               </div>
             }
             bottom={
@@ -127,7 +130,7 @@ const makeModalProps = (messageData) => {
       title: sender,
       badge: <Badge {...makeBadge(relationship)} />,
       date: formatDateWithDots(createdAt),
-      bodyText: content,
+      bodyText: <HtmlContentDisplay htmlContent={content} />,
     };
   }
 };
