@@ -39,7 +39,7 @@ const reducer = (state, action) => {
  * 컴포넌트 마운트 시 자동으로 데이터를 요청하며, 요청 상태를 관리합니다.
  *
  * @param {Function} fetchFn - 비동기 데이터를 가져오는 콜백 함수
- * @returns {{isLoading: boolean, isError: boolean, error: Error | null, data: any, requestData: Function, resetState: Function}} 요청 상태 및 제어 함수
+ * @returns {{ isLoading: boolean, isError: boolean, error: Error | null, data: any, refetch: Function, resetState: Function, updateState: Function }} 요청 상태 및 제어 함수
  */
 
 /*

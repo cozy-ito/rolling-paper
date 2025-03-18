@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import clsx from "clsx";
 
 import DropdownIcon from "../../../assets/icons/arrow-down.svg";
 import PurplePaperPlane from "../../../assets/imgs/paperplane.png";
+import useIntersection from "../../../hooks/useIntersection";
 import useOutsideClick from "../../../hooks/useOutsideClick";
 import AsyncStateRenderer from "../../AsyncStateRenderer/AsyncStateRenderer";
 import Button from "../../Button/Button";
@@ -19,10 +20,16 @@ const EmojiListButton = ({
   onUpdate,
   onRetryRequest,
 }) => {
-  const intersectingElementRef = useRef(null);
   const popoverRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   useOutsideClick(popoverRef, () => setIsOpen(false));
+  const intersectingElementRef = useIntersection(
+    {
+      condition: !isLoading && next,
+      callback: onUpdate,
+    },
+    [isLoading, next, onUpdate],
+  );
 
   const isEmpty =
     !isLoading &&
@@ -32,28 +39,6 @@ const EmojiListButton = ({
   const handleClickToggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
-
-  const observerHandler = useCallback(
-    ([entry]) => {
-      if (!isLoading && next && entry.isIntersecting) {
-        onUpdate();
-      }
-    },
-    [onUpdate, next, isLoading],
-  );
-
-  useEffect(() => {
-    const element = intersectingElementRef.current;
-    if (!element) {
-      return;
-    }
-    const observer = new IntersectionObserver(observerHandler);
-
-    observer.observe(element);
-    return () => {
-      observer.disconnect();
-    };
-  }, [isOpen, invisibleReactionList, observerHandler]);
 
   return (
     <div ref={popoverRef} className={styles.container}>

@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 17.5rem;
+  padding: 1.5rem;
+  background-color: var(--color-white);
+  border-radius: 1rem;
+  box-shadow: 0 0.125rem 0.75rem #00000014;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.container:hover {
+  transform: scale(1.025);
+}
+
+.top {
+  display: flex;
+}
+
+.middle {
+  flex: 1;
+  display: flex;
+}
+
+.bottom {
+  display: flex;
+}
+
+/* Tablet (768px ~ 1024px) */
+@media (max-width: 1024px) {
+  .container {
+    height: 17.75rem;
+  }
+}
+
+/* Mobile (Max 767px) */
+@media (max-width: 767px) {
+  .container {
+    height: 14.375rem;
+  }
+}

@@ -37,6 +37,7 @@
   color: var(--color-gray-900);
   line-height: 1.625rem;
   letter-spacing: -1px;
+  z-index: var(--dropdown-index);
 }
 
 .dropdown li button {

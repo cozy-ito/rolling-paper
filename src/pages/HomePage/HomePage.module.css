@@ -65,6 +65,10 @@
   justify-content: center;
 }
 
+.right img {
+  width: 100%;
+}
+
 .buttonContainer {
   display: flex;
   justify-content: center;
