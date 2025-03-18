@@ -186,7 +186,6 @@ const PostItemPageModeButtons = ({
         message={toastState.message}
         icon={toastState.icon}
       />
-      ;
     </>
   );
 };
