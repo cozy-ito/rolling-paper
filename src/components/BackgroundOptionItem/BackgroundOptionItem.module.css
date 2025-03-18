@@ -6,8 +6,10 @@
   width: 10.5rem;
   height: 10.5rem;
   border-radius: 1rem;
-  overflow: visible;
+  overflow: hidden;
   cursor: pointer;
+  position: relative;
+  aspect-ratio: 1/1;
 }
 
 .optionImage {
