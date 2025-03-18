@@ -2,10 +2,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 import { useParams, useNavigate } from "react-router-dom";
 
+import CheckIcon from "../../assets/icons/check.svg";
 import Button from "../../components/Button/Button";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Input from "../../components/input/Input";
 import ProfileButton from "../../components/ProfileButton/ProfileButton";
+import Spinner from "../../components/Spinner/Spinner";
 import TextEditor from "../../components/TextEditor/TextEditor";
 import Header from "../../layouts/Header/Header";
 
@@ -28,6 +30,13 @@ const PROFILE_IMAGE_URLS = {
 
 const MAX_PROFILE_IMAGES = 10;
 const MAX_SENDER_NAME_LENGTH = 20;
+
+// 프로필 이미지 URL 목록을 최대 개수만큼 가져옴
+const profileImages = [
+  PROFILE_IMAGE_URLS.default, // ✅ 기본 이미지 추가
+  ...Object.values(PROFILE_IMAGE_URLS).slice(1, MAX_PROFILE_IMAGES),
+]; // 나머지 이미지들 추가
+
 const FONT_ITEMS = [
   { label: "Noto Sans", value: "Noto Sans" },
   { label: "Pretendard", value: "Pretendard, sans-serif" },
@@ -60,6 +69,9 @@ const MessagePage = () => {
     isFontOpen: false,
     isFormValid: false,
     isLoading: false,
+    loadingImages: {
+      ...Object.fromEntries(profileImages.slice(1).map((url) => [url, true])), // ✅ 기본 이미지는 제외하고 로딩 상태 관리
+    },
   });
 
   const {
@@ -79,12 +91,6 @@ const MessagePage = () => {
     relation: useRef(null),
     font: useRef(null),
   };
-
-  // 프로필 이미지 URL 목록을 최대 개수만큼 가져옴
-  const profileImages = Object.values(PROFILE_IMAGE_URLS).slice(
-    0,
-    MAX_PROFILE_IMAGES,
-  );
 
   // 폼 유효성 검사
   const validateForm = (senderVal, contentVal) => {
@@ -226,6 +232,25 @@ const MessagePage = () => {
   );
 
   useEffect(() => {
+    profileImages.forEach((url) => {
+      const img = new Image();
+      img.src = url;
+      img.onload = () => {
+        setFormStatus((prev) => ({
+          ...prev,
+          loadingImages: { ...prev.loadingImages, [url]: false }, // 해당 이미지 로딩 완료
+        }));
+      };
+      img.onerror = () => {
+        setFormStatus((prev) => ({
+          ...prev,
+          loadingImages: { ...prev.loadingImages, [url]: false }, // 에러 발생 시에도 로딩 완료 처리
+        }));
+      };
+    });
+  }, []);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       setFormStatus((prev) => {
         let updatedStatus = { ...prev };
@@ -258,7 +283,7 @@ const MessagePage = () => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [formData.sender]);
+  }, [formData.sender, refs.input, refs.font, refs.relation]);
 
   return (
     <>
@@ -286,11 +311,43 @@ const MessagePage = () => {
               </span>
               <div className={styles.rightSection}>
                 {profileImages.map((image, i) => (
-                  <ProfileButton
-                    key={i}
-                    src={image}
-                    onClick={() => handleProfileClick(image)}
-                  />
+                  <div key={i} className={styles.profileItem}>
+                    {i === 0 ? (
+                      <div className={styles.profileButtonWrapper}>
+                        <ProfileButton
+                          src={image}
+                          onClick={() => handleProfileClick(image)}
+                        />
+                        {selectedImage === image && (
+                          <img
+                            src={CheckIcon}
+                            alt="선택됨"
+                            className={styles.checkIcon}
+                          />
+                        )}
+                      </div>
+                    ) : formStatus.loadingImages[image] ? (
+                      <Spinner
+                        size="md"
+                        text={null}
+                        className={styles.profileButton}
+                      />
+                    ) : (
+                      <div className={styles.profileButtonWrapper}>
+                        <ProfileButton
+                          src={image}
+                          onClick={() => handleProfileClick(image)}
+                        />
+                        {selectedImage === image && (
+                          <img
+                            src={CheckIcon}
+                            alt="선택됨"
+                            className={styles.checkIcon}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
