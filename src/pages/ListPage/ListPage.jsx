@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import ArrowButton from "../../components/ArrowButton/ArrowButton";
 import CardList from "../../components/CardList/CardList";
+import Spinner from "../../components/Spinner/Spinner";
 import useFetchData from "../../hooks/useFetchData";
 
 import styles from "./ListPage.module.css";
@@ -78,7 +79,9 @@ const ListPage = () => {
           <div className={styles.skeletonCardListWrapper}>
             {[...Array(1)].map((_, colIndex) => (
               <div key={colIndex} className={styles.skeletonCard}>
-                <div className={styles.spinner} />
+                <div>
+                  <Spinner />
+                </div>
               </div>
             ))}
           </div>
@@ -88,7 +91,9 @@ const ListPage = () => {
           <div className={styles.skeletonCardListWrapper}>
             {[...Array(1)].map((_, colIndex) => (
               <div key={colIndex} className={styles.skeletonCard}>
-                <div className={styles.spinner} />
+                <div>
+                  <Spinner />
+                </div>
               </div>
             ))}
           </div>
