@@ -82,7 +82,7 @@
 
 ::-webkit-scrollbar {
   width: 0.25rem;
-  height: 6.25rem;
+  height: 0.25rem;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -107,4 +107,30 @@
 
 .button:hover {
   background-color: var(--color-purple-700);
+}
+
+@media (max-width: 768px) {
+  .modal {
+    width: 23.125rem;
+    height: 22rem;
+    padding: 1.5rem;
+  }
+
+  .bodyText {
+    width: 100%;
+    height: 10rem;
+    overflow-y: auto;
+  }
+
+  .img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .button {
+    margin-top: 1rem;
+    width: 6.25rem;
+    height: 2.25rem;
+    font-size: 0.875rem;
+  }
 }

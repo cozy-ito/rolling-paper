@@ -1,37 +1,61 @@
-import clsx from "clsx";
-// import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
+import clsx from "clsx";
+import { useParams } from "react-router-dom";
+
+import { getRecipientById } from "../../apis/rollingPaper";
 import AvatarStack from "../../components/AvatarStack/AvatarStack";
 import EmojiBox from "../../components/EmojiBox/EmojiBox";
-import EmojiPickerButton from "../../components/EmojiPickerButton/EmojiPickerButton";
 import ShareButton from "../../components/ShareButton/ShareButton";
+import useFetchData from "../../hooks/useFetchData";
 
 import styles from "./PostItemPageHeader.module.css";
 
-const TOTAL_MESSAGE_COUNT = 10;
-const VISIBLE_EMOJI_COUNT = 3;
-
 const PostItemPageHeader = () => {
-  //* 페이지 구현 시, API 연동 예정
-  // const { id } = useParams();
-  const recentMessages = Array.from({ length: TOTAL_MESSAGE_COUNT });
+  const { id: recipientId } = useParams();
+  const { data: rollingPaperData } = useFetchData(() =>
+    getRecipientById(recipientId),
+  );
 
-  const emojiList = Array.from({ length: 20 }, () => ({
-    emoji: "🤗",
-    count: 34,
-  }));
+  const {
+    name: recipientName,
+    messageCount,
+    recentMessages,
+    backgroundImageURL,
+    backgroundColor,
+  } = rollingPaperData || ROLLING_PAPER_DEFAULT_DATA;
+
+  const title = `To. ${recipientName}`;
+  const recentMessagesUrls = recentMessages.map(
+    ({ profileImageURL }) => profileImageURL,
+  );
+
+  useEffect(() => {
+    const rootElement = document.querySelector("#root");
+    const backgroundStyle =
+      backgroundImageURL === null
+        ? `var(--color-${backgroundColor}-200)`
+        : `center/cover no-repeat url(${backgroundImageURL})`;
+
+    rootElement.style.background = backgroundStyle;
+
+    return () => {
+      rootElement.style.background = "";
+    };
+  }, [backgroundColor, backgroundImageURL]);
 
   return (
     <div className={styles.container}>
       <div className={styles.innerContainer}>
-        <p className={styles.rollingPaperToName}>To. Ashley Kim</p>
+        <p className={styles.rollingPaperToName}>{title}</p>
         <div className={styles.rollingPaperInfo}>
           <div className={styles.profileChipWrapper}>
             <AvatarStack
-              avatarUrls={recentMessages}
+              avatarUrls={recentMessagesUrls}
+              totalMessageCount={messageCount}
               message={
                 <>
-                  <strong>{TOTAL_MESSAGE_COUNT}</strong>
+                  <strong>{messageCount}</strong>
                   명이 작성했어요!
                 </>
               }
@@ -39,25 +63,22 @@ const PostItemPageHeader = () => {
           </div>
           <div className={clsx(styles.divider, styles.marginX28)} />
           <div className={styles.emojiWrapper}>
-            <div className={styles.emojiBox}>
-              <ul className={styles.emojiList}>
-                {Array.from({ length: VISIBLE_EMOJI_COUNT }).map((_, index) => (
-                  <li key={index} className={styles.badge}>
-                    <span>😊</span>
-                    <span>24</span>
-                  </li>
-                ))}
-              </ul>
-              <EmojiBox recipientId={1} emojiList={emojiList} />
-            </div>
-            <EmojiPickerButton />
+            <EmojiBox recipientId={recipientId} />
           </div>
           <div className={clsx(styles.divider, styles.marginX12)} />
-          <ShareButton />
+          <ShareButton kakaoSharetitle={title} />
         </div>
       </div>
     </div>
   );
+};
+
+const ROLLING_PAPER_DEFAULT_DATA = {
+  name: "",
+  messageCount: 0,
+  recentMessages: [],
+  backgroundImageURL: null,
+  backgroundColor: "",
 };
 
 export default PostItemPageHeader;

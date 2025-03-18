@@ -1,12 +1,49 @@
+.container {
+  position: relative;
+}
+
+.container button {
+  background-color: var(--color-white);
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.container button:hover {
+  background-color: var(--color-gray-100);
+}
+
+.container button:active {
+  background-color: var(--color-gray-200);
+}
+
 .button {
   display: flex;
   align-items: center;
   gap: 0.25rem;
   padding: 0.375rem 1rem;
-  background-color: var(--color-white);
   border: 1px solid var(--color-gray-300);
   border-radius: 0.375rem;
-  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  min-width: 8.625rem;
+  padding: 0.625rem 0;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  border-radius: 0.5rem;
+  color: var(--color-gray-900);
+  line-height: 1.625rem;
+  letter-spacing: -1px;
+}
+
+.dropdown li button {
+  width: 100%;
+  height: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
 }
 
 /* Tablet (768px ~ 1024px) */

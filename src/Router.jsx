@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import EditPage from "./pages/EditPage";
-import HomePage from "./pages/HomePage";
-import ListPage from "./pages/ListPage";
+import HomePage from "./pages/HomePage/HomePage";
+import ListPage from "./pages/ListPage/ListPage";
 import MessagePage from "./pages/MessagePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import PostItemPage from "./pages/PostItemPage";
