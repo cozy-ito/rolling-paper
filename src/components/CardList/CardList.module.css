@@ -16,6 +16,11 @@
   padding: 1.875rem 1.5rem 1.25rem 1.5rem;
 }
 
+.whiteText {
+  color: #f1f1f1;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6); /* 약간의 어두운 그림자 */
+}
+
 .cardBackground {
   position: absolute;
   width: 8.875rem;

@@ -112,30 +112,6 @@
   }
 }
 
-/* ✅ 카드 중앙에 위치하는 스피너 */
-.spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* 정확한 중앙 정렬 */
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 0.25rem solid #e0e0e0;
-  border-top: 0.25rem solid #a64eff; /* 스피너 색상 */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-/* 스피너 애니메이션 */
-@keyframes spin {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
 @media (max-width: 1280px) {
   .arrowLeftButton,
   .arrowRightButton {
