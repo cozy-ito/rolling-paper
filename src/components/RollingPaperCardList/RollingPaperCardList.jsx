@@ -1,14 +1,18 @@
 import { useState } from "react";
 
+import BinIcon from "../../assets/icons/delete.svg";
 import useIntersection from "../../hooks/useIntersection";
 import { formatDateWithDots } from "../../utils/formatter";
 import { makeBadge } from "../../utils/mapper";
 import Badge from "../Badge/Badge";
+import Card from "../Card/Card";
 import Modal from "../Modal/Modal";
 import RollingPaperCard from "../RollingPaperCard/RollingPaperCard";
+import Spinner from "../Spinner/Spinner";
+
+import styles from "./RollingPaperCardList.module.css";
 
 const RollingPaperCardList = ({
-  recipientId,
   isLoading,
   isEditPage,
   next,
@@ -39,18 +43,32 @@ const RollingPaperCardList = ({
           { id, profileImageURL, sender, relationship, content, createdAt },
           index,
         ) => (
-          <RollingPaperCard
-            key={id}
-            id={recipientId}
-            type={isEditPage && "edit"}
-            image={profileImageURL}
-            prefix="From. "
-            author={sender}
-            content={content}
-            badge={makeBadge(relationship)}
-            date={formatDateWithDots(createdAt)}
+          <Card
+            key={index}
             onClick={() => handleClickOpenModal(index)}
-            onDelete={() => onDeleteMessage(id)}
+            top={
+              <RollingPaperCardTop
+                isEditPage={isEditPage}
+                sender={sender}
+                profileImageURL={profileImageURL}
+                relationship={relationship}
+                onDelete={(e) => {
+                  e.stopPropagation();
+                  onDeleteMessage(id);
+                }}
+              />
+            }
+            middle={
+              <div className={styles.cardMiddle}>
+                <hr />
+                <p className={styles.content}>{content}</p>
+              </div>
+            }
+            bottom={
+              <span className={styles.createdDate}>
+                {formatDateWithDots(createdAt)}
+              </span>
+            }
           />
         ),
       )}
@@ -62,6 +80,40 @@ const RollingPaperCardList = ({
         {...makeModalProps(messages[modalMessageIndex])}
       />
     </>
+  );
+};
+
+const RollingPaperCardTop = ({
+  isEditPage,
+  sender,
+  profileImageURL,
+  relationship,
+  onDelete,
+}) => {
+  return (
+    <div className={styles.cardTop}>
+      <div className={styles.senderInfo}>
+        <div className={styles.avatar}>
+          <img src={profileImageURL} alt={sender} />
+          <div className={styles.spinner}>
+            <Spinner text={null} responsive />
+          </div>
+        </div>
+        <div className={styles.info}>
+          <p className={styles.sender}>From. {sender}</p>
+          <Badge {...makeBadge(relationship)} />
+        </div>
+      </div>
+      {isEditPage && (
+        <button
+          type="button"
+          className={styles.deleteButton}
+          onClick={onDelete}
+        >
+          <img src={BinIcon} alt="삭제 아이콘" />
+        </button>
+      )}
+    </div>
   );
 };
 

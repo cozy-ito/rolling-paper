@@ -120,7 +120,6 @@ const PostItemPage = () => {
           <AsyncStateRenderer.Content>
             <RollingPaperCard type="add" id={recipientId} />
             <RollingPaperCardList
-              recipientId={recipientId}
               isLoading={isLoading}
               isEditPage={isEditPage}
               next={fetchedMessageData?.next}
