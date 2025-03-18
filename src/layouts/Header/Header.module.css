@@ -52,6 +52,11 @@
 
 /* Mobile (Max 767px) */
 @media (max-width: 767px) {
+  .innerContainer {
+    width: 100%;
+    padding: 0 1rem;
+  }
+
   .button {
     padding: 0.625rem 1rem;
   }
