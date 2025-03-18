@@ -1,9 +1,10 @@
 import { useCallback, useRef, useState } from "react";
 
 import clsx from "clsx";
-import { useLocation, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 
-import { getMessagesById } from "../../apis/message";
+import { deleteMessageById, getMessagesById } from "../../apis/message";
+import { deleteRecipientById } from "../../apis/rollingPaper";
 import EmptyPaperplane from "../../assets/imgs/paperplane_empty.webp";
 import ErrorPaperplane from "../../assets/imgs/paperplane_error.webp";
 import AsyncStateRenderer from "../../components/AsyncStateRenderer/AsyncStateRenderer";
@@ -11,6 +12,7 @@ import Button from "../../components/Button/Button";
 import RollingPaperCard from "../../components/RollingPaperCard/RollingPaperCard";
 import RollingPaperCardList from "../../components/RollingPaperCardList/RollingPaperCardList";
 import Spinner from "../../components/Spinner/Spinner";
+import Toast from "../../components/Toast/Toast";
 import useFetchData from "../../hooks/useFetchData";
 
 import styles from "./PostItemPage.module.css";
@@ -28,6 +30,7 @@ const PostItemPage = () => {
   const { id: recipientId } = useParams();
   const pageRef = useRef(CONSTANTS.INITIAL_MESSAGE_PAGE_NUMBER);
 
+  const [visibleErrorToast, setVisibleErrorToast] = useState(false);
   const [messageError, setMessageError] = useState({
     isError: false,
     error: null,
@@ -46,6 +49,7 @@ const PostItemPage = () => {
   const {
     isLoading,
     isError,
+    error,
     data: fetchedMessageData,
     refetch,
     updateState,
@@ -63,7 +67,6 @@ const PostItemPage = () => {
 
     try {
       const nextMessageData = await fetchMessages({ offset });
-
       updateState((prev) => ({
         ...nextMessageData,
         results: [...(prev?.results || []), ...nextMessageData.results],
@@ -78,16 +81,24 @@ const PostItemPage = () => {
     }
   }, [fetchMessages, updateState, messageError.isError, isLoading]);
 
-  const handleClickDeleteRollingPaper = () => {};
+  const handleClickDeleteRollingPaper = () => {
+    deleteRecipientById(recipientId).catch(() => setVisibleErrorToast(true));
+  };
 
-  const handleClickDeleteMessage = (id) => {
-    console.log("id", id);
+  const handleClickDeleteMessage = async (id) => {
+    deleteMessageById(id).catch(() => setVisibleErrorToast(true));
   };
 
   const handleRefreshMessages = useCallback(() => {
     setMessageError({ isError: false, error: null });
     refetch();
   }, [refetch]);
+
+  const isNotFound = error?.toString().includes("Not found");
+
+  if (isNotFound) {
+    return <Navigate to="/not-found" />;
+  }
 
   return (
     <div className={styles.container}>
@@ -130,6 +141,12 @@ const PostItemPage = () => {
           </AsyncStateRenderer.Content>
         </AsyncStateRenderer>
       </div>
+      <Toast
+        isVisible={visibleErrorToast}
+        setIsVisible={setVisibleErrorToast}
+        duration={3000}
+        message="삭제에 실패하였습니다. 다시 시도해주세요."
+      />
     </div>
   );
 };
