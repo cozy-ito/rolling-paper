@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import clsx from "clsx";
 
@@ -11,33 +11,33 @@ import EmojiListButton from "./EmojiListButton/EmojiListButton";
 import EmojiPickerButton from "./EmojiPickerButton/EmojiPickerButton";
 
 const VISIBLE_EMOJI_COUNT = 3;
+const EMOJI_PAGE_UNIT = 20;
 
 const EmojiBox = ({ recipientId }) => {
   const fetchReactions = useCallback(
-    (params) => getReactionsById({ recipientId, next: params?.next }),
+    (params) =>
+      getReactionsById({
+        recipientId,
+        offset: params?.offset,
+        limit: EMOJI_PAGE_UNIT,
+      }),
     [recipientId],
   );
-
   const { isLoading, isError, data, refetch, updateState } =
     useFetchData(fetchReactions);
-
-  const { visibleReactionList, invisibleReactionList } = useMemo(() => {
-    const reactionData = data?.results || [];
-    return {
-      visibleReactionList: reactionData.slice(0, VISIBLE_EMOJI_COUNT),
-      invisibleReactionList: reactionData.slice(VISIBLE_EMOJI_COUNT),
-    };
-  }, [data?.results]);
-
   const [isFetchReactionsError, setIsfetchReactionsError] = useState(false);
   const [fetchReactionsError, setFetchReactionsError] = useState(null);
+  const pageRef = useRef(1);
+
+  const reactionData = data?.results || [];
+  const visibleReactionList = reactionData.slice(0, VISIBLE_EMOJI_COUNT);
+  const invisibleReactionList = reactionData.slice(VISIBLE_EMOJI_COUNT);
 
   const catchError = (fetchFn) => {
     setIsfetchReactionsError(false);
     setFetchReactionsError(null);
 
     return fetchFn().catch((error) => {
-      console.log(error.message);
       setIsfetchReactionsError(true);
       setFetchReactionsError(error);
       return null;
@@ -50,7 +50,7 @@ const EmojiBox = ({ recipientId }) => {
     const nextPageData = await catchError(() =>
       fetchReactions({
         recipientId,
-        next: data?.next,
+        offset: pageRef.current++ * EMOJI_PAGE_UNIT,
       }),
     );
 

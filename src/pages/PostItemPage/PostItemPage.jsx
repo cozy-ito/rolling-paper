@@ -1,56 +1,80 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import clsx from "clsx";
+import { useLocation, useParams } from "react-router-dom";
 
 import { getMessagesById } from "../../apis/message";
+import ErrorPaperplane from "../../assets/imgs/paperplane_error.webp";
 import AsyncStateRenderer from "../../components/AsyncStateRenderer/AsyncStateRenderer";
-import Badge from "../../components/Badge/Badge";
 import Button from "../../components/Button/Button";
-import Modal from "../../components/Modal/Modal";
 import RollingPaperCard from "../../components/RollingPaperCard/RollingPaperCard";
+import RollingPaperCardList from "../../components/RollingPaperCardList/RollingPaperCardList";
 import Spinner from "../../components/Spinner/Spinner";
 import useFetchData from "../../hooks/useFetchData";
-import { formatDateWithDots } from "../../utils/formatter";
 
 import styles from "./PostItemPage.module.css";
+import PostItemPageModeButtons from "./PostItemPageModeButtons/PostItemPageModeButtons";
 
-const VISIBLE_SKELETON_CARDS = 6;
+const CONSTANTS = {
+  VISIBLE_SKELETON_CARDS: 6,
+  MESSAGE_PAGE_UNIT: 20,
+  INITIAL_MESSAGE_PAGE_NUMBER: 1,
+  EDIT_PAGE_LAST_URL: "edit",
+};
 
 const PostItemPage = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const { id: recipientId } = useParams();
+  const pageRef = useRef(CONSTANTS.INITIAL_MESSAGE_PAGE_NUMBER);
+
+  const [messageError, setMessageError] = useState({
+    isError: false,
+    error: null,
+  });
+
+  const fetchMessages = useCallback(
+    (params) =>
+      getMessagesById({
+        recipientId,
+        offset: params?.offset,
+        limit: CONSTANTS.MESSAGE_PAGE_UNIT,
+      }),
+    [recipientId],
+  );
+
   const {
     isLoading,
     isError,
     data: fetchedMessageData,
-  } = useFetchData(() => getMessagesById({ recipientId }));
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMessageIndex, setModalMessageIndex] = useState(null);
-  const observerTargetRef = useRef(null);
+    refetch,
+    updateState,
+  } = useFetchData(fetchMessages);
 
   const messages = fetchedMessageData?.results ?? [];
-  const isEditPage = location.pathname.split("/").at(-1) === "edit";
+  const isEditPage = location.pathname.endsWith(CONSTANTS.DIT_PAGE_LAST_URL);
 
-  //* {
-  //*   "id": 19066,
-  //*   "recipientId": 10777,
-  //*   "sender": "김하은",
-  //*   "profileImageURL": "https://fastly.picsum.photos/id/311/200/200.jpg?hmac=CHiYGYQ3Xpesshw5eYWH7U0Kyl9zMTZLQuRDU4OtyH8",
-  //*   "relationship": "가족",
-  //*   "content": "열심히 일하는 모습 멋있습니다.",
-  //*   "font": "Pretendard",
-  //*   "createdAt": "2025-03-16T17:25:41.518649Z"
-  //* }
-  console.log(fetchedMessageData);
+  const loadMoreMessages = useCallback(async () => {
+    if (messageError.isError || isLoading) {
+      return;
+    }
+    const offset = pageRef.current * CONSTANTS.MESSAGE_PAGE_UNIT;
 
-  const handleClickMoveEditPage = () => {
-    navigate(`/post/${recipientId}/edit`);
-  };
+    try {
+      const nextMessageData = await fetchMessages({ offset });
 
-  const handleClickMovePostItemPage = () => {
-    navigate(`/post/${recipientId}`);
-  };
+      updateState((prev) => ({
+        ...nextMessageData,
+        results: [...(prev?.results || []), ...nextMessageData.results],
+      }));
+
+      pageRef.current += 1;
+    } catch (error) {
+      setMessageError({
+        isError: true,
+        error,
+      });
+    }
+  }, [fetchMessages, updateState, messageError.isError, isLoading]);
 
   const handleClickDeleteRollingPaper = () => {};
 
@@ -58,90 +82,45 @@ const PostItemPage = () => {
     console.log("id", id);
   };
 
-  const clickHandlerOpenModal = (index) => {
-    setIsModalOpen(true);
-    setModalMessageIndex(index);
-  };
+  const handleRefreshMessages = useCallback(() => {
+    setMessageError({ isError: false, error: null });
+    refetch();
+  }, [refetch]);
 
   return (
     <div className={styles.container}>
       <div className={styles.buttonWrapper}>
-        {isEditPage ? (
-          <>
-            <Button
-              type="button"
-              size="size40"
-              variant="warning"
-              className={styles.button}
-              onClick={handleClickDeleteRollingPaper}
-            >
-              삭제하기
-            </Button>
-            <Button
-              type="button"
-              size="size40"
-              variant="outlined"
-              className={styles.button}
-              onClick={handleClickMovePostItemPage}
-            >
-              취소하기
-            </Button>
-          </>
-        ) : (
-          <Button
-            type="button"
-            size="size40"
-            className={styles.button}
-            onClick={handleClickMoveEditPage}
-          >
-            수정하기
-          </Button>
-        )}
+        <PostItemPageModeButtons
+          recipientId={recipientId}
+          isEditPage={isEditPage}
+          onDelete={handleClickDeleteRollingPaper}
+        />
       </div>
-      <div className={styles.messageContainer}>
-        <AsyncStateRenderer isLoading={isLoading} isError={isError}>
+      <div
+        className={clsx(styles.messageContainer, {
+          [styles.block]: isError,
+        })}
+      >
+        <AsyncStateRenderer
+          isLoading={isLoading}
+          isError={isError || messageError.isError}
+        >
           <AsyncStateRenderer.Loading>
-            {Array.from({ length: VISIBLE_SKELETON_CARDS }).map((_, index) => (
-              <div key={index} className={styles.skeletonCard}>
-                <Spinner />
-              </div>
-            ))}
+            <SkeletonCards />
           </AsyncStateRenderer.Loading>
+          <AsyncStateRenderer.Error>
+            <ErrorDisplay onRetry={handleRefreshMessages} />
+          </AsyncStateRenderer.Error>
           <AsyncStateRenderer.Content>
             <RollingPaperCard type="add" id={recipientId} />
-            {messages?.map(
-              (
-                {
-                  id,
-                  profileImageURL,
-                  sender,
-                  relationship,
-                  content,
-                  createdAt,
-                },
-                index,
-              ) => (
-                <RollingPaperCard
-                  type={isEditPage && "edit"}
-                  key={id}
-                  id={recipientId}
-                  image={profileImageURL}
-                  prefix="From. "
-                  author={sender}
-                  badge={makeBadge(relationship)}
-                  content={content}
-                  date={formatDateWithDots(createdAt)}
-                  onClick={() => clickHandlerOpenModal(index)}
-                  onDelete={() => handleClickDeleteMessage(id)}
-                />
-              ),
-            )}
-            <div ref={observerTargetRef} />
-            <Modal
-              fromLabel="From. "
-              isModalOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              {...makeModalProps(messages[modalMessageIndex])}
+            <RollingPaperCardList
+              recipientId={recipientId}
+              isLoading={isLoading}
+              isEditPage={isEditPage}
+              next={fetchedMessageData?.next}
+              messages={messages}
+              onUpdate={loadMoreMessages}
+              onDeleteMessage={handleClickDeleteMessage}
             />
           </AsyncStateRenderer.Content>
         </AsyncStateRenderer>
@@ -150,30 +129,26 @@ const PostItemPage = () => {
   );
 };
 
-const makeModalProps = (messageData) => {
-  if (messageData) {
-    const { profileImageURL, sender, relationship, createdAt, content } =
-      messageData;
+const SkeletonCards = () => (
+  <>
+    {Array.from({ length: CONSTANTS.VISIBLE_SKELETON_CARDS }).map(
+      (_, index) => (
+        <div key={`skeleton-${index}`} className={styles.skeletonCard}>
+          <Spinner />
+        </div>
+      ),
+    )}
+  </>
+);
 
-    return {
-      profileImg: profileImageURL,
-      title: sender,
-      badge: <Badge {...makeBadge(relationship)} />,
-      date: formatDateWithDots(createdAt),
-      bodyText: content,
-    };
-  }
-};
-
-const BADGE_MAPPER = {
-  가족: "like",
-  지인: "premium",
-  동료: "new",
-  친구: "verified",
-};
-
-const makeBadge = (relation) => {
-  return { text: relation, color: BADGE_MAPPER[relation] };
-};
+const ErrorDisplay = ({ onRetry }) => (
+  <div className={styles.errorMessageWrapper}>
+    <img src={ErrorPaperplane} alt="보라색 종이비행기" />
+    <p>메시지를 불러오는 중 문제가 발생했습니다</p>
+    <Button size="size40" className={styles.retryButton} onClick={onRetry}>
+      재시도
+    </Button>
+  </div>
+);
 
 export default PostItemPage;
