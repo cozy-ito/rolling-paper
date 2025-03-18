@@ -17,6 +17,11 @@ const CardList = ({
 }) => {
   const backgroundImage = getBackgroundImage(backgroundColor);
 
+  const maxVisible = 3;
+  const visibleProfiles = profileSection.slice(0, maxVisible);
+  let extraCount = totalUsers - maxVisible;
+  if (extraCount < 0) extraCount = 0;
+
   return (
     <div
       className={styles.card}
@@ -31,18 +36,18 @@ const CardList = ({
     >
       <div className={styles.cardMessage}>{message}</div>
 
-      {Array.isArray(profileSection) && profileSection.length > 0 && (
-        <div className={styles.profileWrapper}>
-          {profileSection.map(({ src }, index) => (
-            <img
-              key={index}
-              src={src}
-              alt="프로필 이미지"
-              className={styles.profileImage}
-            />
-          ))}
-        </div>
-      )}
+      <div className={styles.profileWrapper}>
+        {visibleProfiles.map((profile, index) => (
+          <div key={index} className={styles.profileImage}>
+            {profile}
+          </div>
+        ))}
+        {extraCount > 0 && (
+          <div className={`${styles.profileImage} ${styles.extraCount}`}>
+            +{extraCount}
+          </div>
+        )}
+      </div>
 
       <div className={styles.userCount}>
         <span className={styles.userCountNumber}>{totalUsers}</span>
@@ -52,7 +57,9 @@ const CardList = ({
       <div className={styles.reactionsWrapper}>
         <div className={styles.reactionsContainer}>
           {badges.map((badge, index) => (
-            <Badge key={index} {...badge} />
+            <div key={index} {...badge} className={styles.badge}>
+              {badge.text} {badge.count}
+            </div>
           ))}
         </div>
       </div>
