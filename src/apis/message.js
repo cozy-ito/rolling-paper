@@ -13,3 +13,7 @@ export const getMessagesById = async ({
 
   return await fetcher.get(url);
 };
+
+export const deleteMessageById = async (messageId) => {
+  return await fetcher.delete(`/messages/${messageId}/`);
+};
