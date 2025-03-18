@@ -16,7 +16,7 @@ const PostItemPageModeButtons = ({ recipientId, isEditPage, onDelete }) => {
         className={styles.button}
         onClick={onDelete}
       >
-        삭제하기
+        페이퍼 삭제하기
       </Button>
       <Button
         type="button"

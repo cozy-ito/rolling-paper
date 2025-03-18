@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { useLocation, useParams } from "react-router-dom";
 
 import { getMessagesById } from "../../apis/message";
+import EmptyPaperplane from "../../assets/imgs/paperplane_empty.webp";
 import ErrorPaperplane from "../../assets/imgs/paperplane_error.webp";
 import AsyncStateRenderer from "../../components/AsyncStateRenderer/AsyncStateRenderer";
 import Button from "../../components/Button/Button";
@@ -51,7 +52,8 @@ const PostItemPage = () => {
   } = useFetchData(fetchMessages);
 
   const messages = fetchedMessageData?.results ?? [];
-  const isEditPage = location.pathname.endsWith(CONSTANTS.DIT_PAGE_LAST_URL);
+  const isEditPage = location.pathname.endsWith(CONSTANTS.EDIT_PAGE_LAST_URL);
+  const isEmptyMessage = fetchedMessageData?.results?.length === 0;
 
   const loadMoreMessages = useCallback(async () => {
     if (messageError.isError || isLoading) {
@@ -98,12 +100,13 @@ const PostItemPage = () => {
       </div>
       <div
         className={clsx(styles.messageContainer, {
-          [styles.block]: isError,
+          [styles.block]: isError || isEmptyMessage,
         })}
       >
         <AsyncStateRenderer
           isLoading={isLoading}
           isError={isError || messageError.isError}
+          isEmpty={isEmptyMessage}
         >
           <AsyncStateRenderer.Loading>
             <SkeletonCards />
@@ -111,6 +114,9 @@ const PostItemPage = () => {
           <AsyncStateRenderer.Error>
             <ErrorDisplay onRetry={handleRefreshMessages} />
           </AsyncStateRenderer.Error>
+          <AsyncStateRenderer.Empty>
+            <EmptyDisplay />
+          </AsyncStateRenderer.Empty>
           <AsyncStateRenderer.Content>
             <RollingPaperCard type="add" id={recipientId} />
             <RollingPaperCardList
@@ -129,17 +135,12 @@ const PostItemPage = () => {
   );
 };
 
-const SkeletonCards = () => (
-  <>
-    {Array.from({ length: CONSTANTS.VISIBLE_SKELETON_CARDS }).map(
-      (_, index) => (
-        <div key={`skeleton-${index}`} className={styles.skeletonCard}>
-          <Spinner />
-        </div>
-      ),
-    )}
-  </>
-);
+const SkeletonCards = () =>
+  Array.from({ length: CONSTANTS.VISIBLE_SKELETON_CARDS }).map((_, index) => (
+    <div key={`skeleton-${index}`} className={styles.skeletonCard}>
+      <Spinner />
+    </div>
+  ));
 
 const ErrorDisplay = ({ onRetry }) => (
   <div className={styles.errorMessageWrapper}>
@@ -148,6 +149,13 @@ const ErrorDisplay = ({ onRetry }) => (
     <Button size="size40" className={styles.retryButton} onClick={onRetry}>
       재시도
     </Button>
+  </div>
+);
+
+const EmptyDisplay = () => (
+  <div className={styles.errorMessageWrapper}>
+    <img src={EmptyPaperplane} alt="보라색 종이비행기" />
+    <p>받은 메시지가 없습니다.</p>
   </div>
 );
 

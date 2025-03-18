@@ -3,10 +3,11 @@
   height: auto;
   padding: 0.375rem 1rem;
   line-height: var(--line-height-18);
+  border: 1px solid transparent;
 }
 
 .button:focus {
-  border: none;
+  border: 1px solid transparent;
 }
 
 /* Tablet (768px ~ 1024px) */
