@@ -99,7 +99,7 @@ const PostPage = () => {
       console.log("보내는 데이터:", requestBody);
 
       const response = await fetch(
-        "https://rolling-api.vercel.app/14-6/recipients/",
+        "`${import.meta.env.VITE_BASE_URL}/recipients/`",
         {
           method: "POST",
           headers: {
