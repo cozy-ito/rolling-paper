@@ -9,18 +9,33 @@
 .cardListWrapper {
   overflow: hidden;
   width: 72.5rem;
-  height: 16.25rem;
+  min-height: 16.25rem;
 }
 
 .cardList {
   display: flex;
   transition: transform 0.5s ease-in-out;
   will-change: transform;
+  align-items: stretch; /* 높이가 변해도 유연하게 적용되도록 설정 */
 }
 
 .card {
   width: 17.1875rem; /* 카드의 너비 */
+  height: auto;
   margin-right: 1.25rem; /* 카드 사이의 간격 */
+  scroll-snap-type: x mandatory;
+  transition:
+    transform 0.3s ease,
+    height 0.5s ease;
+}
+
+.card:hover {
+  transform: scale(0.97);
+  height: auto; /* 높이가 자연스럽게 늘어나도록 설정 */
+}
+
+.cardSnapScroll {
+  scroll-snap-align: start;
 }
 
 .button {
@@ -102,6 +117,11 @@
   margin-bottom: -1.25rem;
 }
 
+.error {
+  font-size: 1.5rem;
+  color: rgb(248, 62, 62);
+}
+
 /* 스켈레톤 애니메이션 */
 @keyframes skeleton-loading {
   0% {
@@ -124,6 +144,17 @@
     padding-bottom: 0.625rem;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE & Edge */
+  }
+  .cardListWrapper {
+    overflow-x: auto; /* 가로 스크롤 가능 */
+    scroll-snap-type: x mandatory;
+    display: flex;
+    gap: 1.25rem; /* 카드 사이 간격 */
+  }
+  .card {
+    scroll-snap-align: start;
+    flex: 0 0 auto; /* 크기 고정 */
+    width: 17.1875rem; /* 기존 카드 크기 유지 */
   }
 }
 
@@ -162,6 +193,17 @@
   .skeletonCard {
     max-width: 54.1875rem;
   }
+  .cardListWrapper {
+    overflow-x: auto; /* 가로 스크롤 가능 */
+    scroll-snap-type: x mandatory;
+    display: flex;
+    gap: 25rem; /* 카드 사이 간격 */
+  }
+  .card {
+    scroll-snap-align: start;
+    flex: 0 0 auto; /* 크기 고정 */
+    width: 17.1875rem; /* 기존 카드 크기 유지 */
+  }
 }
 
 /* Mobile (Max 767px) */
@@ -173,10 +215,6 @@
     padding-bottom: 0.625rem;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE & Edge */
-  }
-
-  .cardListWrapper::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
   }
 
   .arrowLeftButton,
@@ -198,6 +236,19 @@
   .skeletonCard {
     max-width: 41.875rem;
   }
+  .cardListWrapper {
+    overflow-x: auto; /* 가로 스크롤 가능 */
+    scroll-snap-type: x mandatory;
+    display: flex;
+    gap: 0.625rem; /* 카드 사이 간격 */
+  }
+  .card {
+    scroll-snap-align: start;
+    width: 13rem; /* 기존 카드 크기 유지 */
+  }
+  .cardSnapScroll {
+    width: 13rem;
+  }
 }
 
 @media (max-width: 500px) {
@@ -212,5 +263,18 @@
 
   .cardListWrapper {
     height: 14.5rem;
+  }
+  .cardListWrapper {
+    overflow-x: auto; /* 가로 스크롤 가능 */
+    scroll-snap-type: x mandatory;
+    display: flex;
+    gap: 0.625rem; /* 카드 사이 간격 */
+  }
+  .card {
+    scroll-snap-align: start;
+    width: 13rem; /* 기존 카드 크기 유지 */
+  }
+  .cardSnapScroll {
+    width: 13rem;
   }
 }
