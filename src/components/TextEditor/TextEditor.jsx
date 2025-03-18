@@ -36,7 +36,6 @@ const TextEditor = ({ value = "", onChange, selectedFont }) => {
         }}
         formats={["bold", "italic", "underline", "align", "list", "color"]}
         theme="snow"
-        style={{ fontFamily: selectedFont }}
       />
     </div>
   );

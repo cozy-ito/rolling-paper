@@ -9,7 +9,6 @@ import Input from "../../components/input/Input";
 import ProfileButton from "../../components/ProfileButton/ProfileButton";
 import Spinner from "../../components/Spinner/Spinner";
 import TextEditor from "../../components/TextEditor/TextEditor";
-import Header from "../../layouts/Header/Header";
 
 import styles from "./MessagePage.module.css";
 
@@ -287,7 +286,6 @@ const MessagePage = () => {
 
   return (
     <>
-      <Header visibleOn={["desktop", "tablet"]} />
       <div className={styles.container}>
         <div className={styles.fromWrap}>
           <h2 className={styles.title}>From.</h2>
