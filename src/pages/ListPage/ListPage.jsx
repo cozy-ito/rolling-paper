@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import ArrowButton from "../../components/ArrowButton/ArrowButton";
 import CardList from "../../components/CardList/CardList";
+import Spinner from "../../components/Spinner/Spinner";
 import useFetchData from "../../hooks/useFetchData";
 
 import styles from "./ListPage.module.css";
@@ -78,7 +79,9 @@ const ListPage = () => {
           <div className={styles.skeletonCardListWrapper}>
             {[...Array(1)].map((_, colIndex) => (
               <div key={colIndex} className={styles.skeletonCard}>
-                <div className={styles.spinner} />
+                <div>
+                  <Spinner />
+                </div>
               </div>
             ))}
           </div>
@@ -88,7 +91,9 @@ const ListPage = () => {
           <div className={styles.skeletonCardListWrapper}>
             {[...Array(1)].map((_, colIndex) => (
               <div key={colIndex} className={styles.skeletonCard}>
-                <div className={styles.spinner} />
+                <div>
+                  <Spinner />
+                </div>
               </div>
             ))}
           </div>
@@ -130,6 +135,7 @@ const ListPage = () => {
           >
             {popularRecipients.map((recipient) => {
               const hexColor = getHexColor(recipient.backgroundColor);
+              const backgroundImageURL = recipient.backgroundImageURL;
               // **동적 프로필 이미지**: recentMessages에서 profileImageURL 사용
               const dynamicProfileImages =
                 recipient.recentMessages?.map((msg) => (
@@ -151,6 +157,7 @@ const ListPage = () => {
                 <div className={styles.card} key={recipient.id}>
                   <CardList
                     backgroundColor={hexColor}
+                    backgroundImageURL={backgroundImageURL}
                     profileSection={dynamicProfileImages}
                     totalUsers={recipient.messageCount}
                     message={`To. ${recipient.name}`}

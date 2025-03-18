@@ -8,6 +8,7 @@ import styles from "./CardList.module.css";
 
 const CardList = ({
   backgroundColor,
+  backgroundImageURL,
   profileSection = [],
   totalUsers = 0,
   message,
@@ -15,7 +16,7 @@ const CardList = ({
   badges = [],
   onClick,
 }) => {
-  const backgroundImage = getBackgroundImage(backgroundColor);
+  const imageToUse = backgroundImageURL || getBackgroundImage(backgroundColor);
 
   const maxVisible = 3;
   const visibleProfiles = profileSection.slice(0, maxVisible);
@@ -27,14 +28,18 @@ const CardList = ({
       className={styles.card}
       style={{
         background: backgroundColor,
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : "none",
-        backgroundSize: "50% auto",
+        backgroundImage: imageToUse ? `url(${imageToUse})` : "none",
+        backgroundSize: backgroundImageURL ? `cover` : `50% auto`,
         backgroundPosition: "bottom right",
         backgroundRepeat: "no-repeat",
       }}
       onClick={onClick}
     >
-      <div className={styles.cardMessage}>{message}</div>
+      <div
+        className={`${styles.cardMessage} ${backgroundImageURL ? styles.whiteText : ""}`}
+      >
+        {message}
+      </div>
 
       <div className={styles.profileWrapper}>
         {visibleProfiles.map((profile, index) => (
@@ -49,9 +54,17 @@ const CardList = ({
         )}
       </div>
 
-      <div className={styles.userCount}>
-        <span className={styles.userCountNumber}>{totalUsers}</span>
-        {userMessage}
+      <div
+        className={`${styles.userCount} ${backgroundImageURL ? styles.whiteText : ""}`}
+      >
+        <span
+          className={`${styles.userCountNumber} ${backgroundImageURL ? styles.whiteText : ""}`}
+        >
+          {totalUsers}
+        </span>
+        <span className={`${backgroundImageURL ? styles.whiteText : ""}`}>
+          {userMessage}
+        </span>
       </div>
 
       <div className={styles.reactionsWrapper}>
