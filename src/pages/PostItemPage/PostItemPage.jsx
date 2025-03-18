@@ -170,7 +170,7 @@ const PostItemPage = () => {
             <EmptyDisplay />
           </AsyncStateRenderer.Empty>
           <AsyncStateRenderer.Content>
-            <RollingPaperCard type="add" id={recipientId} />
+            {!isEditPage && <RollingPaperCard type="add" id={recipientId} />}
             <RollingPaperCardList
               isLoading={isLoading}
               isEditPage={isEditPage}
