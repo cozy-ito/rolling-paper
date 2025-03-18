@@ -66,9 +66,12 @@
 }
 
 .dropdownMenu {
+  position: absolute;
   width: 20rem;
   border: 0.0625rem solid var(--color-gray-300);
   border-radius: 0.5rem;
+  background-color: var(--color-white);
+  z-index: 100;
 }
 
 .dropdownList {
@@ -79,4 +82,8 @@
 
 .dropdownList:hover {
   background-color: var(--color-gray-100);
+}
+
+.dropdownContainer {
+  position: relative;
 }
