@@ -1,0 +1,63 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background-color: #f6eefe; /* 연한 보라색 배경 */
+  gap: 1.875rem; /* 30px → 1.875rem */
+}
+
+.image {
+  width: 9.375rem; /* 150px → 9.375rem */
+  height: auto;
+  margin-bottom: 1.25rem; /* 20px → 1.25rem */
+}
+
+@keyframes fly {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(12.5rem, -6.25rem) rotate(10deg); /* 200px → 12.5rem, 100px → 6.25rem */
+  }
+  100% {
+    transform: translate(25rem, -12.5rem) rotate(20deg); /* 400px → 25rem, 200px → 12.5rem */
+    opacity: 0;
+  }
+}
+
+.image {
+  left: 0.625rem; /* 10px → 0.625rem */
+  bottom: 0.625rem; /* 10px → 0.625rem */
+  width: 9.375rem; /* 150px → 9.375rem */
+  animation: fly 3s ease-in-out infinite;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #7d5ba6;
+}
+
+p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1.25rem; /* 20px → 1.25rem */
+}
+
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem; /* 12px 24px → 0.75rem 1.5rem */
+  background-color: #a67df5; /* 버튼 보라색 */
+  color: white;
+  font-size: 1rem;
+  border-radius: 0.5rem; /* 8px → 0.5rem */
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.button:hover {
+  background-color: #8c5dd5;
+}
