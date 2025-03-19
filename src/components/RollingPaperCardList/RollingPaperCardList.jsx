@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import clsx from "clsx";
 import { motion } from "framer-motion";
@@ -111,14 +111,40 @@ const RollingPaperCardTop = ({
   relationship,
   onDelete,
 }) => {
+  const [isImageLoading, setIsImageLoading] = useState(true);
+  const [isImageLoadError, setIsImageLoadError] = useState(false);
+
+  useEffect(() => {
+    setIsImageLoading(true);
+    setIsImageLoadError(false);
+  }, [profileImageURL]);
+
+  const handleImageLoaded = () => {
+    setIsImageLoading(false);
+  };
+
+  const handleImageError = () => {
+    setIsImageLoading(false);
+    setIsImageLoadError(true);
+  };
+
   return (
     <div className={styles.cardTop}>
       <div className={styles.senderInfo}>
         <div className={styles.avatar}>
-          <img src={profileImageURL} alt={sender} />
-          <div className={styles.spinner}>
-            <Spinner text={null} responsive />
-          </div>
+          {isImageLoadError === false && (
+            <img
+              src={profileImageURL}
+              alt={sender}
+              onLoad={handleImageLoaded}
+              onError={handleImageError}
+            />
+          )}
+          {isImageLoading && (
+            <div className={styles.spinner}>
+              <Spinner text={null} responsive />
+            </div>
+          )}
         </div>
         <div className={styles.info}>
           <p className={styles.sender}>From. {sender}</p>
