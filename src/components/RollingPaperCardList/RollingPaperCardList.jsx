@@ -62,7 +62,7 @@ const RollingPaperCardList = ({
                   relationship={relationship}
                   onDelete={(e) => {
                     e?.stopPropagation();
-                    onDeleteMessage(index);
+                    onDeleteMessage(id);
                   }}
                 />
               }
