@@ -13,7 +13,7 @@
 }
 
 .fromWrap,
-.profileWra,
+.profileWrap,
 .textEditorWrap {
   display: flex;
   flex-direction: column;
