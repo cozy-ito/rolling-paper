@@ -40,7 +40,7 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
+      "no-unused-vars": ["error", { varsIgnorePattern: "^motion$|^[A-Z_]" }],
       "func-style": ["error", "expression"],
       "react-refresh/only-export-components": [
         "warn",
