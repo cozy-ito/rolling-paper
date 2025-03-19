@@ -21,11 +21,6 @@ const EmojiListButton = ({
   const [isOpen, setIsOpen] = useState(false);
   useOutsideClick(popoverRef, () => setIsOpen(false));
 
-  const isEmpty =
-    !isLoading &&
-    !isError &&
-    (!invisibleReactionList || invisibleReactionList.length === 0);
-
   const handleClickToggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
@@ -43,14 +38,10 @@ const EmojiListButton = ({
       {isOpen && (
         <ul
           className={clsx(styles.emojiDropdown, {
-            [styles.success]: !isLoading && !isError && !isEmpty,
+            [styles.success]: !isLoading && !isError,
           })}
         >
-          <AsyncStateRenderer
-            isLoading={isLoading}
-            isError={isError}
-            isEmpty={isEmpty}
-          >
+          <AsyncStateRenderer isLoading={isLoading} isError={isError}>
             <AsyncStateRenderer.Loading>
               <li className={styles.wrapper}>
                 <Spinner />
@@ -68,14 +59,6 @@ const EmojiListButton = ({
                 </Button>
               </li>
             </AsyncStateRenderer.Error>
-            <AsyncStateRenderer.Empty>
-              <li className={styles.wrapper}>
-                <p className={styles.transparentEmoji}>🫥</p>
-                <p className={styles.emptyDescription}>
-                  아직 들어온 이모지가 없어요. 😢
-                </p>
-              </li>
-            </AsyncStateRenderer.Empty>
             <AsyncStateRenderer.Content>
               {invisibleReactionList.map(({ id, emoji, count }) => (
                 <li key={id} className={styles.badge}>

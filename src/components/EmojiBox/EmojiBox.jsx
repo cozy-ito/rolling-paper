@@ -89,12 +89,14 @@ const EmojiBox = ({ recipientId }) => {
               </li>
             ))}
         </ul>
-        <EmojiListButton
-          isLoading={isLoading}
-          isError={isError || reactionError.isError}
-          onRetryRequest={handleRetryRequest}
-          invisibleReactionList={invisibleReactionList}
-        />
+        {reactionData.length > VISIBLE_EMOJI_COUNT && (
+          <EmojiListButton
+            isLoading={isLoading}
+            isError={isError || reactionError.isError}
+            onRetryRequest={handleRetryRequest}
+            invisibleReactionList={invisibleReactionList}
+          />
+        )}
       </div>
       <EmojiPickerButton onClick={handleClickPickEmoji} />
     </>
