@@ -147,7 +147,9 @@ const RollingPaperCardTop = ({
           )}
         </div>
         <div className={styles.info}>
-          <p className={styles.sender}>From. {sender}</p>
+          <p className={styles.sender}>
+            From. <strong>{sender}</strong>
+          </p>
           <Badge {...makeBadge(relationship)} />
         </div>
       </div>

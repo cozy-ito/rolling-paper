@@ -76,6 +76,7 @@
 .bodyText {
   width: 32.5rem;
   height: 16rem;
+  line-height: var(--line-height-16);
   overflow-x: scroll;
   text-align: left;
 }
