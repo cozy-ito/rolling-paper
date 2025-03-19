@@ -28,7 +28,15 @@ const EmojiPickerButton = ({ onClick }) => {
         <span className={styles.buttonText}>추가</span>
       </button>
       <div className={styles.emojiBox}>
-        {isOpen && <EmojiPicker onEmojiClick={handleClickPickEmoji} />}
+        {isOpen && (
+          <EmojiPicker
+            height="22rem"
+            lazyLoadEmojis
+            searchDisabled
+            skinTonesDisabled
+            onEmojiClick={handleClickPickEmoji}
+          />
+        )}
       </div>
     </div>
   );

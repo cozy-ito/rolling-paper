@@ -42,4 +42,8 @@
   .button .buttonText {
     display: none;
   }
+
+  .emojiBox {
+    right: -5rem;
+  }
 }
