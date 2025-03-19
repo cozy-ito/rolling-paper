@@ -1,6 +1,5 @@
 import { memo, useCallback, useRef, useState } from "react";
 
-import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 
@@ -107,7 +106,7 @@ const PostItemPage = () => {
       setToastState({
         message: "메시지 삭제에 성공했습니다",
         isVisible: true,
-        icon: null,
+        icon: undefined,
       });
     } catch (error) {
       setToastState({
@@ -148,11 +147,7 @@ const PostItemPage = () => {
           isEditPage={isEditPage}
         />
       </div>
-      <div
-        className={clsx(styles.messageContainer, {
-          [styles.block]: isError || isEmptyMessage,
-        })}
-      >
+      <div className={styles.messageContainer}>
         <AsyncStateRenderer
           isLoading={isLoading}
           isError={isError}
@@ -165,6 +160,11 @@ const PostItemPage = () => {
             <ErrorDisplay onRetry={handleRefreshMessages} />
           </AsyncStateRenderer.Error>
           <AsyncStateRenderer.Empty>
+            <RollingPaperCard
+              type="add"
+              id={recipientId}
+              className={styles.emptyAddCard}
+            />
             <EmptyDisplay />
           </AsyncStateRenderer.Empty>
           <AsyncStateRenderer.Content>
