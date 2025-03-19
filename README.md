@@ -28,6 +28,22 @@
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"><img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"><img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white"><img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 
 
+## 💡 시작 가이드
+```shell
+### 1. 클론하기
+>git clone https://github.com/cozy-ito/rolling-paper.git
+
+### 2. 디렉토리 이동 
+>cd rolling-paper
+
+### 3. 패키지 설치 
+>npm install
+
+### 4. 프로젝트 실행
+>npm run dev
+
+```
+
 ## 🫱🏻‍🫲🏻 역할 분담
 ### ❤️ 최혜윤
 - 페이지 작업
@@ -67,6 +83,7 @@
 - [롤링 페이퍼 만들기] 버튼 클릭 시 롤링 페이퍼 만들기 페이지로 이동할 수 있습니다
 
 ### 2. 롤링페이퍼 목록 페이지
+![Image](https://github.com/user-attachments/assets/8a15f4f7-4571-48d0-a866-1cee4c84d547)
 - [나도 만들어보기] 버튼 클릭 시 롤링 페이퍼 만들기 페이지로 이동할 수 있습니다 
 - [인기 롤링 페이퍼]는 리액션 수를 기준으로 정렬됩니다
 - [최근에 만든 롤링 페이퍼]는 최근 생성 기준으로 정렬됩니다
@@ -79,24 +96,28 @@
 ![Image](https://github.com/user-attachments/assets/1a4b6073-e659-42dc-9c83-0cee21026850)
 - [컬러] 토글을 선택하면 배경색을 선택할 수 있고, [이미지] 토글을 선택하면 업로드할 이미지를 선택할 수 있습니다
 - 받는 사람의 이름을 입력하지 않을 경우 [생성하기] 버튼은 비활성화 상태가 됩니다
-- [생성하기] 버튼을 누르면 롤링 페이퍼가 생성되고 생성된 롤링 페이퍼 페이지로 이동할 수 있습니다
+- 받는 사람의 이름을 입력하지 않고 focus out을 하면 "값을 입력해 주세요" 에러 메시지가 뜹니다 
+- [생성하기] 버튼을 누르면 롤링페이퍼가 생성되고 생성된 롤링페이퍼 페이지로 이동할 수 있습니다
  
 ### 4. 생성된 롤링페이퍼 페이지
+![Image](https://github.com/user-attachments/assets/79d20238-0e55-4445-b6da-970de3cf2c86)
 - 해당 롤링페이퍼에 작성된 메시지 카드 목록을 볼 수 있습니다
 - 헤더의 [추가] 버튼을 눌러 다양한 이모지를 사용할 수 있습니다
-- 헤더의 아래 화살표 버튼을 눌러 이모지 리스트를 확인할 수 있습니다
-  - 이모지 개수가 20개가 넘을 경우 무한 스크롤로 다음 이모지가 자연스럽게 나타납니다 
+- 헤더의 아래 화살표 버튼을 눌러 이모지 리스트를 확인할 수 있습니다 
 - 헤더의 공유 버튼을 통해 카카오톡 및 URL로 해당 롤링페이퍼를 공유할 수 있습니다
 - [+] 버튼을 누르면 카드를 작성할 수 있는 롤링페이퍼 메시지 보내기 페이지로 이동할 수 있습니다
 
 ### 5. 생성된 롤링페이퍼 수정 페이지
-- [수정하기] 버튼을 통해 카드를 수정할 수 있습니다
-- [페이지 삭제하기] 버튼을 통해 카드를 삭제할 수 있습니다
+![Image](https://github.com/user-attachments/assets/8881704a-64d0-4507-a125-5bbb67da7afd)
+- [수정하기] 버튼을 통해 메시지 카드를 수정할 수 있습니다
+- [페이지 삭제하기] 버튼을 통해 롤링페이퍼를 삭제할 수 있습니다
 	- [페이지 삭제하기] 버튼을 누르면 롤링페이퍼 목록 페이지로 이동합니다 
+- [휴지통] 버튼을 통해 메시지 카드를 삭제할 수 있습니다
   
 ### 6. 롤링페이퍼 메시지 보내기 페이지
 ![Image](https://github.com/user-attachments/assets/7a06445d-a00b-4834-966a-c4940aeb755e)
 - 보내는 사람 이름을 입력합니다 (입력할 수 있는 글자는 최대 20자)
+- 보내는 사람의 이름을 입력하지 않고 focus out을 하면 "값을 입력해 주세요" 에러 메시지가 뜹니다 
 - 프로필 버튼을 클릭하여 원하는 이미지로 프로필을 선택할 수 있습니다 
 - 관계를 선택하여 지인, 가족 등의 관계를 표시할 수 있습니다
 - 이름과 메세지의 입력값이 비어 있으면 버튼은 비활성화 상태가 됩니다
