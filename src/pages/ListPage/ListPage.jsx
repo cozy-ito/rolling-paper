@@ -271,7 +271,7 @@ const getHexColor = (apiColor) => {
 
 const fetchPopularRecipients = async (limit = 100) => {
   const res = await fetch(
-    `https://rolling-api.vercel.app/14-6/recipients/?sort=like&limit=${limit}`,
+    `${import.meta.env.VITE_BASE_URL}/recipients/?sort=like&limit=${limit}`,
   );
   if (!res.ok) throw new Error("데이터 불러오기 실패");
   const data = await res.json();
@@ -280,7 +280,7 @@ const fetchPopularRecipients = async (limit = 100) => {
 
 const fetchRecentRecipients = async (limit = 100) => {
   const res = await fetch(
-    `https://rolling-api.vercel.app/14-6/recipients/?limit=${limit}`,
+    `${import.meta.env.VITE_BASE_URL}/recipients/?limit=${limit}`,
   );
   if (!res.ok) throw new Error("데이터 불러오기 실패");
   const data = await res.json();
