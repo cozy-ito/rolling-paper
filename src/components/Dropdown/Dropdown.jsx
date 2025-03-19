@@ -8,7 +8,7 @@ import styles from "./Dropdown.module.css";
 const Dropdown = forwardRef(
   ({ selectedText, isOpen, setIsOpen, items, onSelect }, ref) => {
     const handleDropdownClick = (e) => {
-      if (e.target !== e.currentTarget) {
+      if (!e.currentTarget.contains(e.target)) {
         return;
       }
       setIsOpen((prev) => !prev);
