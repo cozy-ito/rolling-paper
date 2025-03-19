@@ -109,6 +109,22 @@
   background-color: var(--color-purple-700);
 }
 
+.notoSans {
+  font-family: "Noto Sans, sans-serif";
+}
+
+.pretendard {
+  font-family: "Pretendard, sans-serif";
+}
+
+.nanumMyeongjo {
+  font-family: "Nanum Myeongjo, serif";
+}
+
+.nanumSonPyeonJi {
+  font-family: "NanumSonPyeonJiCe, cursive";
+}
+
 @media (max-width: 768px) {
   .modal {
     width: 23.125rem;
