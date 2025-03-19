@@ -32,8 +32,6 @@ const PostPage = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        console.log("이미지 API 요청 시작");
-
         const response = await fetch(
           "https://rolling-api.vercel.app/background-images/",
           {
@@ -104,7 +102,7 @@ const PostPage = () => {
       console.log("API 요청 데이터:", requestBody);
 
       const response = await fetch(
-        "https://rolling-api.vercel.app/14-6/recipients/",
+        `${import.meta.env.VITE_BASE_URL}/recipients/`,
         {
           method: "POST",
           headers: {
