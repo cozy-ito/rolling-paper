@@ -269,17 +269,19 @@ const getHexColor = (apiColor) => {
   return colorMapping[apiColor] || "#FFE2AD";
 };
 
-const fetchPopularRecipients = async () => {
+const fetchPopularRecipients = async (limit = 100) => {
   const res = await fetch(
-    "https://rolling-api.vercel.app/14-6/recipients/?sort=like",
+    `https://rolling-api.vercel.app/14-6/recipients/?sort=like&limit=${limit}`,
   );
   if (!res.ok) throw new Error("데이터 불러오기 실패");
   const data = await res.json();
   return data.results || [];
 };
 
-const fetchRecentRecipients = async () => {
-  const res = await fetch("https://rolling-api.vercel.app/14-6/recipients/");
+const fetchRecentRecipients = async (limit = 100) => {
+  const res = await fetch(
+    `https://rolling-api.vercel.app/14-6/recipients/?limit=${limit}`,
+  );
   if (!res.ok) throw new Error("데이터 불러오기 실패");
   const data = await res.json();
   return data.results || [];
