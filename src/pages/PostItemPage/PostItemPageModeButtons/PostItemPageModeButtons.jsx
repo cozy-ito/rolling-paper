@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
+import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
 import { deleteMessageById } from "../../../apis/message";
@@ -15,28 +16,15 @@ const PostItemPageModeButtons = ({
   recipientId,
   isEditPage,
   selectedItemsToDelete,
-  messages,
+  restoreMessages,
+  clearSelectedItems,
   updateState,
 }) => {
-  const navigate = useNavigate();
-  const [backupMessages, setBackupMessages] = useState([]);
   const [toastState, setToastState] = useState({
     message: "",
     isVisible: false,
     icon: null,
   });
-
-  const getPostItemURL = useCallback(
-    (suffix = "") => `/post/${recipientId}${suffix}`,
-    [recipientId],
-  );
-
-  useEffect(() => {
-    // 편집 페이지에서 새로고침 상황 감지 (isEditPage는 true이지만 backupMessages는 비어있음)
-    if (isEditPage && messages.length > 0 && backupMessages.length === 0) {
-      setBackupMessages([...messages]);
-    }
-  }, [isEditPage, messages, backupMessages.length]);
 
   const showToast = useCallback((toastType, customMessage = null) => {
     setToastState({
@@ -53,79 +41,194 @@ const PostItemPageModeButtons = ({
     });
   }, []);
 
-  const restoreMessages = useCallback(() => {
-    if (backupMessages.length > 0) {
-      updateState((prev) => ({
-        ...prev,
-        results: [...backupMessages],
-      }));
-    }
-  }, [backupMessages, updateState]);
+  return (
+    <>
+      {!isEditPage && (
+        <EditButton recipientId={recipientId}>수정하기</EditButton>
+      )}
+      {isEditPage && (
+        <>
+          <CurrentStateSaveButton
+            recipientId={recipientId}
+            selectedItems={selectedItemsToDelete}
+            restoreMessages={restoreMessages}
+            clearSelectedItems={clearSelectedItems}
+            updateState={updateState}
+            showToast={showToast}
+          >
+            저장하기
+          </CurrentStateSaveButton>
+          <DeleteRollingPaperButton
+            recipientId={recipientId}
+            showToast={showToast}
+          >
+            페이지 삭제하기
+          </DeleteRollingPaperButton>
+          <CancelButton
+            recipientId={recipientId}
+            restoreMessages={restoreMessages}
+            clearSelectedItems={clearSelectedItems}
+          >
+            취소하기
+          </CancelButton>
+        </>
+      )}
+      <Toast
+        isVisible={toastState.isVisible}
+        setIsVisible={(isVisible) => {
+          if (!isVisible) {
+            resetToast();
+          }
+        }}
+        duration={3000}
+        message={toastState.message}
+        icon={toastState.icon}
+      />
+    </>
+  );
+};
 
-  const handleClickChangeEditMode = useCallback(() => {
-    // 전체 메시지의 원본 상태를 백업 (숨김 처리 없는 원본)
-    setBackupMessages([...messages]);
-    navigate(getPostItemURL("/edit"));
-  }, [messages, navigate, getPostItemURL]);
+const EditButton = ({
+  recipientId,
+  children,
+  className,
+  onClick,
+  ...props
+}) => {
+  const navigate = useNavigate();
 
-  const handleClickCancelEdit = useCallback(() => {
-    if (isEditPage) {
-      restoreMessages();
-      navigate(getPostItemURL());
-    }
-  }, [isEditPage, restoreMessages, navigate, getPostItemURL]);
+  const clickHandler = (e) => {
+    navigate(getPostItemURL(recipientId, "edit"));
+    onClick?.(e);
+  };
 
-  const handleClickConfirmDeleteMessages = useCallback(async () => {
-    if (selectedItemsToDelete.length <= 0) {
-      navigate(getPostItemURL());
+  return (
+    <Button
+      size="size40"
+      className={clsx(styles.button, className)}
+      onClick={clickHandler}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+};
+
+const CurrentStateSaveButton = ({
+  recipientId,
+  children,
+  selectedItems,
+  // showToast,
+  // restoreMessages,
+  clearSelectedItems,
+  updateState,
+  ...props
+}) => {
+  const navigate = useNavigate();
+
+  const handleClickSave = async () => {
+    if (selectedItems.length <= 0) {
+      navigate(getPostItemURL(recipientId));
       return;
     }
-
-    const backupData =
-      backupMessages.length > 0 ? backupMessages : [...messages];
-
-    try {
-      const deletePromises = selectedItemsToDelete.map(deleteMessageById);
-      const results = await Promise.allSettled(deletePromises);
-
-      const failedDeletions = results.filter(
-        ({ status }) => status === "rejected",
-      );
-
-      if (failedDeletions.length === 0) {
-        showToast(TOAST_TYPES.SUCCESS);
-        navigate(getPostItemURL());
-        return;
+    const results = [];
+    const unsuccessfulOperations = [];
+    for (let i = 0; i < selectedItems.length; i++) {
+      try {
+        const response = await deleteMessageById(selectedItems[i].id);
+        console.log(response);
+        if (response === null) {
+          results.push({
+            index: i,
+            success: true,
+            data: selectedItems[i],
+            error: undefined,
+          });
+        } else {
+          results.push({
+            index: i,
+            success: false,
+            data: selectedItems[i],
+            error: response,
+          });
+        }
+      } catch (error) {
+        unsuccessfulOperations.push(selectedItems[i]);
+        results.push({
+          index: i,
+          success: false,
+          data: selectedItems[i],
+          error,
+        });
       }
-
-      // 일부 삭제가 실패한 경우 백업 데이터로 복원
-      updateState((prev) => ({
-        ...prev,
-        results: backupData,
-      }));
-
-      showToast(TOAST_TYPES.ERROR);
-    } catch (error) {
-      console.error("Message deletion error:", error);
-
-      updateState((prev) => ({
-        ...prev,
-        results: backupData,
-      }));
-
-      showToast(TOAST_TYPES.ERROR, error?.message);
     }
-  }, [
-    messages,
-    backupMessages,
-    selectedItemsToDelete,
-    navigate,
-    updateState,
-    showToast,
-    getPostItemURL,
-  ]);
 
-  const handleClickDeleteRollingPaper = useCallback(async () => {
+    const hasFailures = results.some((result) => !result.success);
+    console.log(unsuccessfulOperations, hasFailures);
+
+    if (hasFailures) {
+      console.log("일부 작업 실패, 롤백 시작");
+      updateState((prev) => ({
+        ...prev,
+        results: [...prev.results, ...unsuccessfulOperations].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        ),
+      }));
+      // navigate(getPostItemURL(recipientId));
+    }
+    clearSelectedItems();
+
+    // try {
+    // const deletePromises = await selectedItems.map(async ({ id }) => {
+    //   const result = deleteMessageById(id);
+    //   console.log("result", result);
+    //   return result;
+    // });
+    // console.log(deletePromises);
+
+    // const results = await Promise.all(deletePromises);
+
+    // console.log(results);
+    // const failedDeletions = results.filter(
+    //   ({ status }) => status === "rejected",
+    // );
+
+    // if (failedDeletions.length === 0) {
+    //   clearSelectedItems();
+    //   showToast(TOAST_TYPES.SUCCESS);
+    //   navigate(getPostItemURL(recipientId));
+    //   return;
+    // }
+
+    // throw new Error("Something wrong!");
+    // restoreMessages();
+    // clearSelectedItems();
+    // showToast(TOAST_TYPES.ERROR);
+    // } catch (error) {
+    //   console.error("Message deletion error:", error);
+    //   restoreMessages();
+    //   clearSelectedItems();
+    //   showToast(TOAST_TYPES.ERROR, error?.message);
+    // }
+  };
+
+  return (
+    <Button
+      type="button"
+      size="size40"
+      className={styles.button}
+      onClick={handleClickSave}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+};
+
+const DeleteRollingPaperButton = ({ recipientId, children, showToast }) => {
+  const navigate = useNavigate();
+
+  const handleClickDeleteRollingPaper = async () => {
     try {
       await deleteRecipientById(recipientId);
       navigate(ROUTES.LIST);
@@ -135,60 +238,50 @@ const PostItemPageModeButtons = ({
         message: error?.message || TOAST_TYPES.ERROR.message,
       });
     }
-  }, [recipientId, navigate, showToast]);
+  };
 
   return (
-    <>
-      {!isEditPage && (
-        <Button
-          type="button"
-          size="size40"
-          className={styles.button}
-          onClick={handleClickChangeEditMode}
-        >
-          수정하기
-        </Button>
-      )}
-      {isEditPage && (
-        <>
-          <Button
-            type="button"
-            size="size40"
-            className={styles.button}
-            onClick={handleClickConfirmDeleteMessages}
-          >
-            저장하기
-          </Button>
-          <Button
-            type="button"
-            size="size40"
-            variant="warning"
-            className={styles.button}
-            onClick={handleClickDeleteRollingPaper}
-          >
-            페이지 삭제하기
-          </Button>
-          <Button
-            type="button"
-            size="size40"
-            variant="outlined"
-            className={styles.button}
-            onClick={handleClickCancelEdit}
-          >
-            취소하기
-          </Button>
-        </>
-      )}
-      <Toast
-        isVisible={toastState.isVisible}
-        setIsVisible={(isVisible) => (isVisible ? null : resetToast())}
-        duration={3000}
-        message={toastState.message}
-        icon={toastState.icon}
-      />
-    </>
+    <Button
+      type="button"
+      size="size40"
+      variant="warning"
+      className={styles.button}
+      onClick={handleClickDeleteRollingPaper}
+    >
+      {children}
+    </Button>
   );
 };
+
+const CancelButton = ({
+  children,
+  recipientId,
+  restoreMessages,
+  clearSelectedItems,
+}) => {
+  const navigate = useNavigate();
+
+  const handleClickCancelEdit = () => {
+    restoreMessages();
+    clearSelectedItems();
+    navigate(getPostItemURL(recipientId));
+  };
+
+  return (
+    <Button
+      type="button"
+      size="size40"
+      variant="outlined"
+      className={styles.button}
+      onClick={handleClickCancelEdit}
+    >
+      {children}
+    </Button>
+  );
+};
+
+const getPostItemURL = (recipientId, suffix = "") =>
+  `/post/${recipientId}/${suffix}`;
 
 const TOAST_TYPES = {
   SUCCESS: {

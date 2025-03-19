@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { motion } from "framer-motion";
+
 import BinIcon from "../../assets/icons/delete.svg";
 import useIntersection from "../../hooks/useIntersection";
 import { formatDateWithDots } from "../../utils/formatter";
@@ -16,7 +18,7 @@ const RollingPaperCardList = ({
   isLoading,
   isEditPage,
   next,
-  messages,
+  messages = [],
   onUpdate,
   onDeleteMessage,
 }) => {
@@ -43,33 +45,40 @@ const RollingPaperCardList = ({
           { id, profileImageURL, sender, relationship, content, createdAt },
           index,
         ) => (
-          <Card
-            key={index}
-            onClick={() => handleClickOpenModal(index)}
-            top={
-              <RollingPaperCardTop
-                isEditPage={isEditPage}
-                sender={sender}
-                profileImageURL={profileImageURL}
-                relationship={relationship}
-                onDelete={(e) => {
-                  e.stopPropagation();
-                  onDeleteMessage(id);
-                }}
-              />
-            }
-            middle={
-              <div className={styles.cardMiddle}>
-                <hr />
-                <p className={styles.content}>{content}</p>
-              </div>
-            }
-            bottom={
-              <span className={styles.createdDate}>
-                {formatDateWithDots(createdAt)}
-              </span>
-            }
-          />
+          <motion.div
+            key={id}
+            layout
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Card
+              onClick={() => handleClickOpenModal(index)}
+              top={
+                <RollingPaperCardTop
+                  isEditPage={isEditPage}
+                  sender={sender}
+                  profileImageURL={profileImageURL}
+                  relationship={relationship}
+                  onDelete={(e) => {
+                    e?.stopPropagation();
+                    onDeleteMessage(index);
+                  }}
+                />
+              }
+              middle={
+                <div className={styles.cardMiddle}>
+                  <hr />
+                  <p className={styles.content}>{content}</p>
+                </div>
+              }
+              bottom={
+                <span className={styles.createdDate}>
+                  {formatDateWithDots(createdAt)}
+                </span>
+              }
+            />
+          </motion.div>
         ),
       )}
       <div ref={intersectingElementRef} />
@@ -118,18 +127,26 @@ const RollingPaperCardTop = ({
 };
 
 const makeModalProps = (messageData) => {
-  if (messageData) {
-    const { profileImageURL, sender, relationship, createdAt, content } =
-      messageData;
-
+  if (!messageData) {
     return {
-      profileImg: profileImageURL,
-      title: sender,
-      badge: <Badge {...makeBadge(relationship)} />,
-      date: formatDateWithDots(createdAt),
-      bodyText: content,
+      profileImg: "",
+      title: "",
+      badge: null,
+      date: "",
+      bodyText: "",
     };
   }
+
+  const { profileImageURL, sender, relationship, createdAt, content } =
+    messageData;
+
+  return {
+    profileImg: profileImageURL || "",
+    title: sender || "",
+    badge: relationship ? <Badge {...makeBadge(relationship)} /> : null,
+    date: createdAt ? formatDateWithDots(createdAt) : "",
+    bodyText: content || "",
+  };
 };
 
 export default RollingPaperCardList;

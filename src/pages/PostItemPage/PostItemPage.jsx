@@ -1,6 +1,7 @@
-import { useCallback, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import clsx from "clsx";
+import { AnimatePresence, motion } from "framer-motion";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 
 import { getMessagesById } from "../../apis/message";
@@ -52,11 +53,25 @@ const PostItemPage = () => {
     updateState,
   } = useFetchData(fetchMessages);
   const [selectedItemsToDelete, setSelectedItemsDelete] = useState([]);
+  const [backupState, setBackupState] = useState([]);
 
-  const messages = fetchedMessageData?.results ?? [];
+  const messages = useMemo(
+    () => fetchedMessageData?.results ?? [],
+    [fetchedMessageData],
+  );
   const isEditPage = location.pathname.endsWith(CONSTANTS.EDIT_PAGE_LAST_URL);
   const isEmptyMessage = fetchedMessageData?.results?.length === 0;
-  const isNotFound = error?.toString().includes("Not found");
+  const hasError = isError || messageError.isError;
+  const isNotFound =
+    error?.response?.status === 404 || error?.toString().includes("Not found");
+
+  useEffect(() => {
+    setBackupState(messages);
+  }, [isLoading]);
+
+  const restoreMessages = useCallback(() => {
+    updateState((prev) => ({ ...prev, results: backupState }));
+  }, [updateState, backupState]);
 
   const loadMoreMessages = useCallback(async () => {
     if (messageError.isError || isLoading) {
@@ -66,13 +81,17 @@ const PostItemPage = () => {
     try {
       const offset = pageRef.current * CONSTANTS.MESSAGE_PAGE_UNIT;
       const nextMessageData = await fetchMessages({ offset });
-
-      updateState((prev) => ({
-        ...nextMessageData,
-        results: [...(prev?.results || []), ...nextMessageData.results],
-      }));
-
       pageRef.current += 1;
+
+      updateState((prev) => {
+        if (!prev?.results) {
+          return prev;
+        }
+        return {
+          ...nextMessageData,
+          results: [...prev.results, ...nextMessageData.results],
+        };
+      });
     } catch (error) {
       setMessageError({
         isError: true,
@@ -81,17 +100,28 @@ const PostItemPage = () => {
     }
   }, [fetchMessages, updateState, messageError.isError, isLoading]);
 
-  const handleClickDeleteMessage = async (targetId) => {
-    setSelectedItemsDelete((prev) => [...prev, targetId]);
+  const clearSelectedItems = () => {
+    setSelectedItemsDelete([]);
+    setBackupState(messages);
+  };
 
-    updateState((prev) => ({
-      ...prev,
-      results: [...(prev?.results || []).filter(({ id }) => id !== targetId)],
-    }));
+  const handleClickDeleteMessage = (targetIndex) => {
+    setSelectedItemsDelete((prev) => [...prev, messages[targetIndex]]);
+
+    updateState((prev) => {
+      if (!prev?.results) {
+        return prev;
+      }
+      return {
+        ...prev,
+        results: [...prev.results.filter((_, index) => index !== targetIndex)],
+      };
+    });
   };
 
   const handleRefreshMessages = useCallback(() => {
     setMessageError({ isError: false, error: null });
+    pageRef.current = CONSTANTS.INITIAL_MESSAGE_PAGE_NUMBER;
     refetch();
   }, [refetch]);
 
@@ -105,19 +135,20 @@ const PostItemPage = () => {
         <PostItemPageModeButtons
           recipientId={recipientId}
           isEditPage={isEditPage}
-          messages={messages}
-          updateState={updateState}
+          restoreMessages={restoreMessages}
           selectedItemsToDelete={selectedItemsToDelete}
+          clearSelectedItems={clearSelectedItems}
+          updateState={updateState}
         />
       </div>
       <div
         className={clsx(styles.messageContainer, {
-          [styles.block]: isError || isEmptyMessage,
+          [styles.block]: hasError || isEmptyMessage,
         })}
       >
         <AsyncStateRenderer
           isLoading={isLoading}
-          isError={isError || messageError.isError}
+          isError={hasError}
           isEmpty={isEmptyMessage}
         >
           <AsyncStateRenderer.Loading>
@@ -130,15 +161,28 @@ const PostItemPage = () => {
             <EmptyDisplay />
           </AsyncStateRenderer.Empty>
           <AsyncStateRenderer.Content>
-            {!isEditPage && <RollingPaperCard type="add" id={recipientId} />}
-            <RollingPaperCardList
-              isLoading={isLoading}
-              isEditPage={isEditPage}
-              next={fetchedMessageData?.next}
-              messages={messages}
-              onUpdate={loadMoreMessages}
-              onDeleteMessage={handleClickDeleteMessage}
-            />
+            <AnimatePresence mode="popLayout">
+              {!isEditPage && (
+                <motion.div
+                  key="add-card"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, x: -20, transition: { duration: 0.2 } }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <RollingPaperCard type="add" id={recipientId} />
+                </motion.div>
+              )}
+
+              <RollingPaperCardList
+                isLoading={isLoading}
+                isEditPage={isEditPage}
+                next={fetchedMessageData?.next}
+                messages={messages}
+                onUpdate={loadMoreMessages}
+                onDeleteMessage={handleClickDeleteMessage}
+              />
+            </AnimatePresence>
           </AsyncStateRenderer.Content>
         </AsyncStateRenderer>
       </div>
@@ -146,14 +190,15 @@ const PostItemPage = () => {
   );
 };
 
-const SkeletonCards = () =>
+const SkeletonCards = memo(() =>
   Array.from({ length: CONSTANTS.VISIBLE_SKELETON_CARDS }).map((_, index) => (
     <div key={`skeleton-${index}`} className={styles.skeletonCard}>
       <Spinner />
     </div>
-  ));
+  )),
+);
 
-const ErrorDisplay = ({ onRetry }) => (
+const ErrorDisplay = memo(({ onRetry }) => (
   <div className={styles.errorMessageWrapper}>
     <img src={ErrorPaperplane} alt="보라색 종이비행기" />
     <p>메시지를 불러오는 중 문제가 발생했습니다</p>
@@ -161,13 +206,13 @@ const ErrorDisplay = ({ onRetry }) => (
       재시도
     </Button>
   </div>
-);
+));
 
-const EmptyDisplay = () => (
+const EmptyDisplay = memo(() => (
   <div className={styles.errorMessageWrapper}>
     <img src={EmptyPaperplane} alt="보라색 종이비행기" />
     <p>받은 메시지가 없습니다.</p>
   </div>
-);
+));
 
 export default PostItemPage;
