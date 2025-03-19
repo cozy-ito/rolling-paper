@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import clsx from "clsx";
+import { motion } from "framer-motion";
 
 import BinIcon from "../../assets/icons/delete.svg";
+import { FONT_MAP } from "../../constants/fonts";
 import useIntersection from "../../hooks/useIntersection";
 import { formatDateWithDots } from "../../utils/formatter";
 import { makeBadge } from "../../utils/mapper";
 import Badge from "../Badge/Badge";
 import Card from "../Card/Card";
 import Modal from "../Modal/Modal";
-import RollingPaperCard from "../RollingPaperCard/RollingPaperCard";
 import Spinner from "../Spinner/Spinner";
+import HtmlContentDisplay from "../TextEditor/HtmlContentDisplay/HtmlContentDisplay";
 
 import styles from "./RollingPaperCardList.module.css";
 
@@ -16,7 +20,7 @@ const RollingPaperCardList = ({
   isLoading,
   isEditPage,
   next,
-  messages,
+  messages = [],
   onUpdate,
   onDeleteMessage,
 }) => {
@@ -40,36 +44,53 @@ const RollingPaperCardList = ({
     <>
       {messages.map(
         (
-          { id, profileImageURL, sender, relationship, content, createdAt },
+          {
+            id,
+            profileImageURL,
+            sender,
+            relationship,
+            content,
+            createdAt,
+            font,
+          },
           index,
         ) => (
-          <Card
-            key={index}
-            onClick={() => handleClickOpenModal(index)}
-            top={
-              <RollingPaperCardTop
-                isEditPage={isEditPage}
-                sender={sender}
-                profileImageURL={profileImageURL}
-                relationship={relationship}
-                onDelete={(e) => {
-                  e.stopPropagation();
-                  onDeleteMessage(id);
-                }}
-              />
-            }
-            middle={
-              <div className={styles.cardMiddle}>
-                <hr />
-                <p className={styles.content}>{content}</p>
-              </div>
-            }
-            bottom={
-              <span className={styles.createdDate}>
-                {formatDateWithDots(createdAt)}
-              </span>
-            }
-          />
+          <motion.div
+            key={id}
+            layout
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Card
+              onClick={() => handleClickOpenModal(index)}
+              top={
+                <RollingPaperCardTop
+                  isEditPage={isEditPage}
+                  sender={sender}
+                  profileImageURL={profileImageURL}
+                  relationship={relationship}
+                  onDelete={(e) => {
+                    e?.stopPropagation();
+                    onDeleteMessage(id);
+                  }}
+                />
+              }
+              middle={
+                <div className={styles.cardMiddle}>
+                  <hr />
+                  <div className={clsx(styles[FONT_MAP[font]], styles.content)}>
+                    <HtmlContentDisplay htmlContent={content} />
+                  </div>
+                </div>
+              }
+              bottom={
+                <span className={styles.createdDate}>
+                  {formatDateWithDots(createdAt)}
+                </span>
+              }
+            />
+          </motion.div>
         ),
       )}
       <div ref={intersectingElementRef} />
@@ -90,14 +111,40 @@ const RollingPaperCardTop = ({
   relationship,
   onDelete,
 }) => {
+  const [isImageLoading, setIsImageLoading] = useState(true);
+  const [isImageLoadError, setIsImageLoadError] = useState(false);
+
+  useEffect(() => {
+    setIsImageLoading(true);
+    setIsImageLoadError(false);
+  }, [profileImageURL]);
+
+  const handleImageLoaded = () => {
+    setIsImageLoading(false);
+  };
+
+  const handleImageError = () => {
+    setIsImageLoading(false);
+    setIsImageLoadError(true);
+  };
+
   return (
     <div className={styles.cardTop}>
       <div className={styles.senderInfo}>
         <div className={styles.avatar}>
-          <img src={profileImageURL} alt={sender} />
-          <div className={styles.spinner}>
-            <Spinner text={null} responsive />
-          </div>
+          {isImageLoadError === false && (
+            <img
+              src={profileImageURL}
+              alt={sender}
+              onLoad={handleImageLoaded}
+              onError={handleImageError}
+            />
+          )}
+          {isImageLoading && (
+            <div className={styles.spinner}>
+              <Spinner text={null} responsive />
+            </div>
+          )}
         </div>
         <div className={styles.info}>
           <p className={styles.sender}>From. {sender}</p>
@@ -118,18 +165,28 @@ const RollingPaperCardTop = ({
 };
 
 const makeModalProps = (messageData) => {
-  if (messageData) {
-    const { profileImageURL, sender, relationship, createdAt, content } =
-      messageData;
-
+  if (!messageData) {
     return {
-      profileImg: profileImageURL,
-      title: sender,
-      badge: <Badge {...makeBadge(relationship)} />,
-      date: formatDateWithDots(createdAt),
-      bodyText: content,
+      profileImg: "",
+      title: "",
+      badge: null,
+      date: "",
+      bodyText: "",
+      font: null,
     };
   }
+
+  const { profileImageURL, sender, relationship, createdAt, content, font } =
+    messageData;
+
+  return {
+    profileImg: profileImageURL || "",
+    title: sender || "",
+    badge: relationship ? <Badge {...makeBadge(relationship)} /> : null,
+    date: createdAt ? formatDateWithDots(createdAt) : "",
+    bodyText: content || "",
+    font: font || null,
+  };
 };
 
 export default RollingPaperCardList;

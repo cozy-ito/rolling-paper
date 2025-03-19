@@ -103,6 +103,22 @@
   color: var(--color-gray-300);
 }
 
+.notoSans {
+  font-family: "Noto Sans, sans-serif";
+}
+
+.pretendard {
+  font-family: "Pretendard, sans-serif";
+}
+
+.nanumMyeongjo {
+  font-family: "Nanum Myeongjo, serif";
+}
+
+.nanumSonPyeonJi {
+  font-family: "NanumSonPyeonJiCe, cursive";
+}
+
 /* Tablet (768px ~ 1024px) */
 @media (max-width: 1024px) {
   .cardMiddle .content {

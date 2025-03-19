@@ -1,9 +1,10 @@
-import { useCallback, useRef, useState } from "react";
+import { memo, useCallback, useRef, useState } from "react";
 
-import clsx from "clsx";
+import { AnimatePresence, motion } from "framer-motion";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 
-import { getMessagesById } from "../../apis/message";
+import { deleteMessageById, getMessagesById } from "../../apis/message";
+import CautionIcon from "../../assets/icons/close.svg";
 import EmptyPaperplane from "../../assets/imgs/paperplane_empty.webp";
 import ErrorPaperplane from "../../assets/imgs/paperplane_error.webp";
 import AsyncStateRenderer from "../../components/AsyncStateRenderer/AsyncStateRenderer";
@@ -11,6 +12,7 @@ import Button from "../../components/Button/Button";
 import RollingPaperCard from "../../components/RollingPaperCard/RollingPaperCard";
 import RollingPaperCardList from "../../components/RollingPaperCardList/RollingPaperCardList";
 import Spinner from "../../components/Spinner/Spinner";
+import Toast from "../../components/Toast/Toast";
 import useFetchData from "../../hooks/useFetchData";
 
 import styles from "./PostItemPage.module.css";
@@ -28,9 +30,10 @@ const PostItemPage = () => {
   const { id: recipientId } = useParams();
   const pageRef = useRef(CONSTANTS.INITIAL_MESSAGE_PAGE_NUMBER);
 
-  const [messageError, setMessageError] = useState({
-    isError: false,
-    error: null,
+  const [toastState, setToastState] = useState({
+    message: "",
+    isVisible: false,
+    icon: null,
   });
 
   const fetchMessages = useCallback(
@@ -51,49 +54,86 @@ const PostItemPage = () => {
     refetch,
     updateState,
   } = useFetchData(fetchMessages);
-  const [selectedItemsToDelete, setSelectedItemsDelete] = useState([]);
 
   const messages = fetchedMessageData?.results ?? [];
+  const isEmptyMessage = messages.length === 0;
   const isEditPage = location.pathname.endsWith(CONSTANTS.EDIT_PAGE_LAST_URL);
-  const isEmptyMessage = fetchedMessageData?.results?.length === 0;
-  const isNotFound = error?.toString().includes("Not found");
+  const isNotFound =
+    error?.response?.status === 404 || error?.toString().includes("Not found");
 
   const loadMoreMessages = useCallback(async () => {
-    if (messageError.isError || isLoading) {
+    if (isError || isLoading) {
       return;
     }
 
     try {
       const offset = pageRef.current * CONSTANTS.MESSAGE_PAGE_UNIT;
       const nextMessageData = await fetchMessages({ offset });
-
-      updateState((prev) => ({
-        ...nextMessageData,
-        results: [...(prev?.results || []), ...nextMessageData.results],
-      }));
-
       pageRef.current += 1;
+
+      updateState((prev) => {
+        if (!prev?.results) {
+          return prev;
+        }
+        return {
+          ...nextMessageData,
+          results: [...prev.results, ...nextMessageData.results],
+        };
+      });
     } catch (error) {
-      setMessageError({
-        isError: true,
-        error,
+      setToastState({
+        message: `메시지 정보를 불러오지 못했습니다: ${error?.message ?? ""}`,
+        isVisible: true,
+        icon: <FailIcon />,
       });
     }
-  }, [fetchMessages, updateState, messageError.isError, isLoading]);
+  }, [isError, fetchMessages, updateState, isLoading]);
 
-  const handleClickDeleteMessage = async (targetId) => {
-    setSelectedItemsDelete((prev) => [...prev, targetId]);
-
-    updateState((prev) => ({
-      ...prev,
-      results: [...(prev?.results || []).filter(({ id }) => id !== targetId)],
-    }));
+  const handleClickDeleteMessage = async (targetid) => {
+    try {
+      const result = await deleteMessageById(targetid);
+      if (result === null) {
+        updateState((prev) => {
+          if (!prev?.results) {
+            return prev;
+          }
+          return {
+            ...prev,
+            results: [...prev.results.filter(({ id }) => id !== targetid)],
+          };
+        });
+      }
+      setToastState({
+        message: "메시지 삭제에 성공했습니다",
+        isVisible: true,
+        icon: undefined,
+      });
+    } catch (error) {
+      setToastState({
+        message: `메시지를 삭제하지 못했습니다: ${error?.message ?? ""}`,
+        isVisible: true,
+        icon: <FailIcon />,
+      });
+    }
   };
 
   const handleRefreshMessages = useCallback(() => {
-    setMessageError({ isError: false, error: null });
+    setToastState({
+      message: "",
+      isVisible: false,
+      icon: null,
+    });
+    pageRef.current = CONSTANTS.INITIAL_MESSAGE_PAGE_NUMBER;
     refetch();
   }, [refetch]);
+
+  const resetToast = useCallback(() => {
+    setToastState({
+      message: "",
+      isVisible: false,
+      icon: null,
+    });
+  }, []);
 
   if (isNotFound) {
     return <Navigate to="/not-found" />;
@@ -105,19 +145,12 @@ const PostItemPage = () => {
         <PostItemPageModeButtons
           recipientId={recipientId}
           isEditPage={isEditPage}
-          messages={messages}
-          updateState={updateState}
-          selectedItemsToDelete={selectedItemsToDelete}
         />
       </div>
-      <div
-        className={clsx(styles.messageContainer, {
-          [styles.block]: isError || isEmptyMessage,
-        })}
-      >
+      <div className={styles.messageContainer}>
         <AsyncStateRenderer
           isLoading={isLoading}
-          isError={isError || messageError.isError}
+          isError={isError}
           isEmpty={isEmptyMessage}
         >
           <AsyncStateRenderer.Loading>
@@ -127,33 +160,64 @@ const PostItemPage = () => {
             <ErrorDisplay onRetry={handleRefreshMessages} />
           </AsyncStateRenderer.Error>
           <AsyncStateRenderer.Empty>
+            <RollingPaperCard
+              type="add"
+              id={recipientId}
+              className={styles.emptyAddCard}
+            />
             <EmptyDisplay />
           </AsyncStateRenderer.Empty>
           <AsyncStateRenderer.Content>
-            {!isEditPage && <RollingPaperCard type="add" id={recipientId} />}
-            <RollingPaperCardList
-              isLoading={isLoading}
-              isEditPage={isEditPage}
-              next={fetchedMessageData?.next}
-              messages={messages}
-              onUpdate={loadMoreMessages}
-              onDeleteMessage={handleClickDeleteMessage}
-            />
+            <AnimatePresence mode="popLayout">
+              {!isEditPage && (
+                <motion.div
+                  key="add-card"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, x: -20, transition: { duration: 0.2 } }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <RollingPaperCard type="add" id={recipientId} />
+                </motion.div>
+              )}
+
+              <RollingPaperCardList
+                isLoading={isLoading}
+                isEditPage={isEditPage}
+                next={fetchedMessageData?.next}
+                messages={messages}
+                onUpdate={loadMoreMessages}
+                onDeleteMessage={handleClickDeleteMessage}
+              />
+            </AnimatePresence>
           </AsyncStateRenderer.Content>
         </AsyncStateRenderer>
       </div>
+
+      <Toast
+        isVisible={toastState.isVisible}
+        setIsVisible={(isVisible) => {
+          if (!isVisible) {
+            resetToast();
+          }
+        }}
+        duration={3000}
+        message={toastState.message}
+        icon={toastState.icon}
+      />
     </div>
   );
 };
 
-const SkeletonCards = () =>
+const SkeletonCards = memo(() =>
   Array.from({ length: CONSTANTS.VISIBLE_SKELETON_CARDS }).map((_, index) => (
     <div key={`skeleton-${index}`} className={styles.skeletonCard}>
       <Spinner />
     </div>
-  ));
+  )),
+);
 
-const ErrorDisplay = ({ onRetry }) => (
+const ErrorDisplay = memo(({ onRetry }) => (
   <div className={styles.errorMessageWrapper}>
     <img src={ErrorPaperplane} alt="보라색 종이비행기" />
     <p>메시지를 불러오는 중 문제가 발생했습니다</p>
@@ -161,13 +225,21 @@ const ErrorDisplay = ({ onRetry }) => (
       재시도
     </Button>
   </div>
-);
+));
 
-const EmptyDisplay = () => (
+const EmptyDisplay = memo(() => (
   <div className={styles.errorMessageWrapper}>
     <img src={EmptyPaperplane} alt="보라색 종이비행기" />
     <p>받은 메시지가 없습니다.</p>
   </div>
-);
+));
+
+const FailIcon = () => {
+  return (
+    <span className={styles.failIcon}>
+      <img src={CautionIcon} alt="X 아이콘" />
+    </span>
+  );
+};
 
 export default PostItemPage;

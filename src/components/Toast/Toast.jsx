@@ -7,12 +7,6 @@ import closeIcon from "../../assets/icons/close.svg";
 
 import styles from "./Toast.module.css";
 
-const DefaultIcon = (
-  <div className={styles.iconWrapper}>
-    <img src={checkIcon} alt="체크 아이콘" className={styles.checkIcon} />
-  </div>
-);
-
 const Toast = ({
   icon = DefaultIcon,
   isVisible,
@@ -35,7 +29,7 @@ const Toast = ({
   return (
     <div className={clsx(styles.toast, { [styles.hidden]: !isVisible })}>
       {icon}
-      <span className={styles.message}>{message}</span>
+      <p className={styles.message}>{message}</p>
       <img
         src={closeIcon}
         alt="닫기 아이콘"
@@ -45,5 +39,11 @@ const Toast = ({
     </div>
   );
 };
+
+const DefaultIcon = (
+  <div className={styles.iconWrapper}>
+    <img src={checkIcon} alt="체크 아이콘" className={styles.checkIcon} />
+  </div>
+);
 
 export default Toast;

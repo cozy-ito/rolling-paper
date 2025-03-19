@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { Link } from "react-router-dom";
 
-import Group1Image from "../../assets/imgs/group-1.webp";
-import Group2Image from "../../assets/imgs/group-2.webp";
+import Group1Image from "../../assets/imgs/group-1.png";
+import Group2Image from "../../assets/imgs/group-2.png";
 import { ROUTES } from "../../constants/routes";
 
 import styles from "./HomePage.module.css";

@@ -5,6 +5,7 @@
  */
 export const formatDateWithDots = (date) => {
   const dateObj = new Date(date);
+
   if (isNaN(dateObj.getTime())) {
     throw new Error("유효하지 않은 날짜입니다.");
   }
