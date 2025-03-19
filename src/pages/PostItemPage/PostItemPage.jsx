@@ -1,5 +1,6 @@
 import { memo, useCallback, useRef, useState } from "react";
 
+import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 
@@ -228,7 +229,7 @@ const ErrorDisplay = memo(({ onRetry }) => (
 ));
 
 const EmptyDisplay = memo(() => (
-  <div className={styles.errorMessageWrapper}>
+  <div className={clsx(styles.errorMessageWrapper, styles.emptyMessage)}>
     <img src={EmptyPaperplane} alt="보라색 종이비행기" />
     <p>받은 메시지가 없습니다.</p>
   </div>
