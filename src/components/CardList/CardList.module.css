@@ -18,7 +18,6 @@
 
 .whiteText {
   color: #f1f1f1;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6); /* 약간의 어두운 그림자 */
 }
 
 .cardBackground {
@@ -93,6 +92,11 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.fakebadge {
+  width: 4.0625rem;
+  height: 2.25rem;
 }
 
 .badge {
