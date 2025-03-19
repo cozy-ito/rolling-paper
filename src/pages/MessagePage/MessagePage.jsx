@@ -32,9 +32,9 @@ const MAX_SENDER_NAME_LENGTH = 20;
 
 // 프로필 이미지 URL 목록을 최대 개수만큼 가져옴
 const profileImages = [
-  PROFILE_IMAGE_URLS.default, // ✅ 기본 이미지 추가
+  PROFILE_IMAGE_URLS.default,
   ...Object.values(PROFILE_IMAGE_URLS).slice(1, MAX_PROFILE_IMAGES),
-]; // 나머지 이미지들 추가
+];
 
 const FONT_ITEMS = [
   { label: "Noto Sans", value: "Noto Sans" },
@@ -129,10 +129,9 @@ const MessagePage = () => {
     (e) => {
       const value = e.target.value.slice(0, MAX_SENDER_NAME_LENGTH);
       updateFormData({ sender: value });
-      updateFormStatus((prev) => ({
-        ...prev,
-        isSenderError: false,
-      }));
+      updateFormStatus({
+        isSenderError: !value.trim(),
+      });
     },
     [updateFormData, updateFormStatus],
   );
@@ -152,9 +151,21 @@ const MessagePage = () => {
   // ProfileButton 클릭 시 Large Size 프로필 이미지 업데이트 핸들러
   const handleProfileClick = useCallback(
     (imageURL) => {
-      updateFormData({ selectedImage: imageURL });
+      updateFormStatus({ isLoading: true });
+
+      const img = new Image();
+      img.src = imageURL;
+
+      img.onload = () => {
+        updateFormData({ selectedImage: imageURL });
+        updateFormStatus({ isLoading: false });
+      };
+
+      img.onerror = () => {
+        updateFormStatus({ isLoading: false });
+      };
     },
-    [updateFormData],
+    [updateFormData, updateFormStatus],
   );
 
   // type에 따라 Dropdown 상태를 토글하는 핸들러
@@ -237,13 +248,13 @@ const MessagePage = () => {
       img.onload = () => {
         setFormStatus((prev) => ({
           ...prev,
-          loadingImages: { ...prev.loadingImages, [url]: false }, // 해당 이미지 로딩 완료
+          loadingImages: { ...prev.loadingImages, [url]: false },
         }));
       };
       img.onerror = () => {
         setFormStatus((prev) => ({
           ...prev,
-          loadingImages: { ...prev.loadingImages, [url]: false }, // 에러 발생 시에도 로딩 완료 처리
+          loadingImages: { ...prev.loadingImages, [url]: false },
         }));
       };
     });
@@ -302,7 +313,15 @@ const MessagePage = () => {
         <div className={styles.profileWrap}>
           <h2 className={styles.title}>프로필 이미지</h2>
           <div className={styles.profileControls}>
-            <ProfileButton size="large" src={selectedImage} />
+            <div className={styles.largeProfile}>
+              <ProfileButton size="large" src={selectedImage} />
+              {isLoading && (
+                <div className={styles.spinnerOverlay}>
+                  <Spinner size="lg" text={null} />
+                </div>
+              )}
+            </div>
+
             <div>
               <span className={styles.profileText}>
                 프로필 이미지를 선택해주세요!
@@ -352,9 +371,10 @@ const MessagePage = () => {
           </div>
         </div>
 
-        <div className={styles.relationWrap} ref={refs.relation}>
+        <div className={styles.relationWrap}>
           <h2 className={styles.title}>상대와의 관계</h2>
           <Dropdown
+            ref={refs.relation}
             selectedText={selectedRelation}
             isOpen={isRelationOpen}
             setIsOpen={() => toggleDropdown("relation")}
@@ -372,9 +392,10 @@ const MessagePage = () => {
           />
         </div>
 
-        <div className={styles.fontWrap} ref={refs.font}>
+        <div className={styles.fontWrap}>
           <h2 className={styles.title}>폰트 선택</h2>
           <Dropdown
+            ref={refs.font}
             selectedText={selectedFont}
             isOpen={isFontOpen}
             setIsOpen={() => toggleDropdown("font")}
