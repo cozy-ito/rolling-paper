@@ -27,9 +27,10 @@ const CardList = ({
     <div
       className={styles.card}
       style={{
-        background: backgroundColor,
-        backgroundImage: imageToUse ? `url(${imageToUse})` : "none",
-        backgroundSize: backgroundImageURL ? `cover` : `50% auto`,
+        background: backgroundImageURL
+          ? `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)), url(${imageToUse})`
+          : backgroundColor,
+        backgroundSize: backgroundImageURL ? "cover" : "50% auto",
         backgroundPosition: "bottom right",
         backgroundRepeat: "no-repeat",
       }}
@@ -74,6 +75,7 @@ const CardList = ({
               {badge.text} {badge.count}
             </div>
           ))}
+          <div className={styles.fakebadge} />
         </div>
       </div>
     </div>

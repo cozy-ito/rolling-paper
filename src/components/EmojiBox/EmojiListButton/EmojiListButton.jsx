@@ -4,7 +4,6 @@ import clsx from "clsx";
 
 import DropdownIcon from "../../../assets/icons/arrow-down.svg";
 import PurplePaperPlane from "../../../assets/imgs/paperplane.png";
-import useIntersection from "../../../hooks/useIntersection";
 import useOutsideClick from "../../../hooks/useOutsideClick";
 import AsyncStateRenderer from "../../AsyncStateRenderer/AsyncStateRenderer";
 import Button from "../../Button/Button";
@@ -16,20 +15,11 @@ const EmojiListButton = ({
   invisibleReactionList,
   isLoading,
   isError,
-  next,
-  onUpdate,
   onRetryRequest,
 }) => {
   const popoverRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   useOutsideClick(popoverRef, () => setIsOpen(false));
-  const intersectingElementRef = useIntersection(
-    {
-      condition: !isLoading && next,
-      callback: onUpdate,
-    },
-    [isLoading, next, onUpdate],
-  );
 
   const isEmpty =
     !isLoading &&
@@ -80,8 +70,10 @@ const EmojiListButton = ({
             </AsyncStateRenderer.Error>
             <AsyncStateRenderer.Empty>
               <li className={styles.wrapper}>
-                <img src={PurplePaperPlane} alt="보라색 종이비행기" />
-                이모지가 없어요.
+                <p className={styles.transparentEmoji}>🫥</p>
+                <p className={styles.emptyDescription}>
+                  아직 들어온 이모지가 없어요. 😢
+                </p>
               </li>
             </AsyncStateRenderer.Empty>
             <AsyncStateRenderer.Content>
@@ -91,7 +83,6 @@ const EmojiListButton = ({
                   <span>{count}</span>
                 </li>
               ))}
-              <div ref={intersectingElementRef} />
             </AsyncStateRenderer.Content>
           </AsyncStateRenderer>
         </ul>
