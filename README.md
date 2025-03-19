@@ -1,24 +1,24 @@
 # 📬 Rolling
 > 코드잇 스프린트 - 프론트엔드 14기 6팀
-<br>개발기간: 2025. 03. 06 ~ 2025. 03. 21
 <br>배포 URL: 
 <br>협업 노션: <https://ito-dev.notion.site/2-6-197e6a3d27348055a455d2746ddd9bcb>
 
-<br>
+
+# 📅 개발기간: 2025. 03. 06 ~ 2025. 03. 21
+![Image](https://github.com/user-attachments/assets/9a18294b-f763-434c-8746-aaae2cc37ab8)
+
 
 ## 🚀 프로젝트 소개
 - 친구, 동료들이 롤링페이퍼를 온라인으로 쉽게 작성할 수 있도록 만든 서비스입니다
   - 다양한 이모지 기능을 통해 감정을 표현할 수 있습니다
   - 간편한 UI로 쉽고 빠르게 롤링페이퍼를 만들 수 있습니다
    
-<br>
 
 ## 💁🏻 팀원 소개
-| <a href="https://github.com/rachelchoi11"><img src="이미지URL1" width="100"></a> | <a href="https://github.com/zeon0xx0"><img src="이미지URL2" width="100"></a> | <a href="https://github.com/jeonghwanJay"><img src="이미지URL3" width="100"></a> | <a href="https://github.com/cozy-ito"><img src="이미지URL4" width="100"></a> | <a href="https://github.com/kwonjin2"><img src="이미지URL5" width="100"></a> |
+| <a href="https://github.com/rachelchoi11"><img src="https://github.com/rachelchoi11.png" width="100"></a> | <a href="https://github.com/zeon0xx0"><img src="https://github.com/zeon0xx0.png" width="100"></a> | <a href="https://github.com/jeonghwanJay"><img src="https://github.com/jeonghwanJay.png" width="100"></a> | <a href="https://github.com/cozy-ito"><img src="https://github.com/cozy-ito.png" width="100"></a> | <a href="https://github.com/kwonjin2"><img src="https://github.com/kwonjin2.png" width="100"></a> |
 |------|------|------|------|------|
 | **[FE] [최혜윤](https://github.com/rachelchoi11)** | **[FE] [조지현](https://github.com/zeon0xx0)** | **[FE] [지정환](https://github.com/jeonghwanJay)** | **[FE] [진성진](https://github.com/cozy-ito)** | **[FE] [최권진](https://github.com/kwonjin2)** |
 
-<br>
 
 ## 🔧 기술 스택
 ### Front-End
@@ -27,7 +27,6 @@
 ### Communication
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"><img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"><img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white"><img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 
-<br>
 
 ## 🫱🏻‍🫲🏻 역할 분담
 ### ❤️ 최혜윤
@@ -53,13 +52,12 @@
 - 페이지 작업
   - 메인 페이지, 생성된 롤링페이퍼 페이지, 생성된 롤링페이퍼 수정 페이지 
         
-### 😝 최권진 
+### 🫧 최권진 
 - 공통 컴포넌트
   - `ToggleButton`, `Option`, `Dropdown`, `Modal`
 - 페이지 작업
   - 롤링페이퍼 목록 페이지, 404 오류 페이지 
-
-<br>        
+      
 
 ## 📌 주요 기능
 
