@@ -7,6 +7,7 @@
   text-align: center;
   background-color: #f6eefe; /* 연한 보라색 배경 */
   gap: 1.875rem; /* 30px → 1.875rem */
+  padding: 2rem;
 }
 
 .image {
@@ -60,4 +61,15 @@ p {
 
 .button:hover {
   background-color: #8c5dd5;
+}
+
+.span {
+  margin-left: 4px;
+}
+
+@media (max-width: 767px) {
+  .span {
+    display: block;
+    margin-top: 10px;
+  }
 }
