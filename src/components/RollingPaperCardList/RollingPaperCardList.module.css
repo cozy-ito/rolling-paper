@@ -107,19 +107,19 @@
 }
 
 .notoSans {
-  font-family: "Noto Sans, sans-serif";
+  font-family: "Noto Sans", "sans-serif";
 }
 
 .pretendard {
-  font-family: "Pretendard, sans-serif";
+  font-family: "Pretendard", "sans-serif";
 }
 
 .nanumMyeongjo {
-  font-family: "Nanum Myeongjo, serif";
+  font-family: "Nanum Myeongjo", "serif";
 }
 
 .nanumSonPyeonJi {
-  font-family: "NanumSonPyeonJiCe, cursive";
+  font-family: "NanumSonPyeonJiCe", "cursive";
 }
 
 /* Tablet (768px ~ 1024px) */
