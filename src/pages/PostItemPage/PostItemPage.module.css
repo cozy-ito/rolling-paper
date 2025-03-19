@@ -103,7 +103,7 @@
 }
 
 /* Card용 반응형 브레이크 포인트  */
-@media (max-width: 650px) {
+@media (max-width: 675px) {
   .messageContainer {
     grid-template-columns: repeat(1, 1fr);
     gap: 1rem;
