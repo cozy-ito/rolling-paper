@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
+import CheckIcon from "../../assets/icons/check.svg";
 import BackgroundOptionItem from "../../components/BackgroundOptionItem/BackgroundOptionItem";
 import backgroundStyles from "../../components/BackgroundOptionItem/BackgroundOptionItem.module.css";
 import Button from "../../components/Button/Button";
@@ -11,95 +12,97 @@ import ToggleButtonGroup from "../../components/ToggleButtonGroup/ToggleButtonGr
 
 import styles from "./PostPage.module.css";
 
-const defaultImages = [
-  new URL("/src/assets/imgs/card-background1.jpg", import.meta.url).href,
-  new URL("/src/assets/imgs/card-background2.jpg", import.meta.url).href,
-  new URL("/src/assets/imgs/card-background2.jpg", import.meta.url).href,
-  new URL("/src/assets/imgs/card-background1.jpg", import.meta.url).href,
-];
-
 const colors = ["beige", "purple", "green", "blue"];
 
 const PostPage = () => {
   const [toName, setToName] = useState("");
   const [error, setError] = useState(false);
   const [selectedColor, setSelectedColor] = useState(colors[0]);
-  const [selectedBackground, setSelectedBackground] = useState(
-    defaultImages[0],
-  );
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedBackground, setSelectedBackground] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [mode, setMode] = useState("color");
   const [loading, setLoading] = useState(false);
+  const [imageOptions, setImageOptions] = useState([]);
   const navigate = useNavigate();
 
   const toggleOptions = [
     { name: "컬러", optionValue: "color" },
     { name: "이미지", optionValue: "image" },
   ];
-
   useEffect(() => {
-    if (mode === "image" && selectedImageIndex === null) {
-      setSelectedImageIndex(0);
-      setSelectedBackground(defaultImages[0]);
-    }
-  }, [mode]);
+    const fetchImages = async () => {
+      try {
+        const response = await fetch(
+          "https://rolling-api.vercel.app/background-images/",
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
 
-  const isValidURL = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch (e) {
-      console.error("Invalid URL:", e);
-      return false;
-    }
-  };
+        if (!response.ok) {
+          throw new Error(`Http오류 상태코드: ${response.status}`);
+        }
+        const data = await response.json();
 
-  //1. input 컴포넌트 작성
+        if (!data.imageUrls || !Array.isArray(data.imageUrls)) {
+          throw new Error("API 응답 데어터 형식이 잘못되었습니다");
+        }
+
+        console.log("배경 이미지 API 응답 데이터:", data);
+        setImageOptions(data.imageUrls);
+      } catch (error) {
+        console.error("배경 이밎 로드 실패:", error.message);
+        alert("배경 이미지를 불러오는 데 실패했습니다");
+      }
+    };
+    fetchImages();
+  }, []);
+
   const handleBlur = () => {
     setError(toName.trim().length === 0);
   };
 
-  //2. 컬러 선택
   const handleSelectedColor = (color) => {
     setSelectedColor(color);
-    setSelectedBackground(color);
+    setSelectedBackground(null);
     setSelectedImageIndex(null);
     setMode("color");
   };
 
-  //3. 이미지 선택
   const handleSelectedImage = (index) => {
+    if (!imageOptions || imageOptions.length === 0) {
+      console.error("이미지 리스트 비어있음");
+      return;
+    }
+
+    const imageUrl = imageOptions[index];
+    console.log("선택한 이미지 URL:", imageUrl);
+
+    setSelectedBackground(imageUrl);
     setSelectedImageIndex(index);
-    setSelectedBackground(defaultImages[index]);
     setMode("image");
   };
 
-  //4. 버튼 활성화 및 페이지 이동
   const handleSubmit = async () => {
     if (!toName.trim()) {
       return;
     }
-
     setLoading(true);
 
     try {
       const requestBody = {
-        name: `${toName}`,
+        name: toName,
         backgroundColor: selectedColor,
+        backgroundImageURL: mode === "image" ? selectedBackground : null,
       };
-
-      if (mode === "image") {
-        if (isValidURL(selectedBackground)) {
-          requestBody.backgroundImageURL = selectedBackground;
-        } else {
-          setLoading(false);
-          return;
-        }
-      }
-      console.log("보내는 데이터:", requestBody);
+      console.log("API 요청 데이터:", requestBody);
 
       const response = await fetch(
-        "`${import.meta.env.VITE_BASE_URL}/recipients/`",
+        `${import.meta.env.VITE_BASE_URL}/recipients/`,
         {
           method: "POST",
           headers: {
@@ -115,7 +118,6 @@ const PostPage = () => {
       if (!response.ok) {
         throw new Error(data.message || "롤링페이퍼 생성 실패");
       }
-
       navigate(`/post/${data.id}`);
     } catch (error) {
       console.error("롤링페이퍼 생성 실패: ", error);
@@ -155,18 +157,15 @@ const PostPage = () => {
           {colors.map((color) => (
             <BackgroundOptionItem
               key={color}
-              isSelected={selectedColor === color}
               onClick={() => handleSelectedColor(color)}
-              className={clsx(
-                backgroundStyles.optionItem,
-                backgroundStyles[color],
-                { [backgroundStyles.selected]: selectedColor === color },
-              )}
+              className={clsx(styles.optionItem, backgroundStyles[color], {
+                [backgroundStyles.selected]: selectedColor === color,
+              })}
             >
               {selectedColor === color && (
                 <div className={backgroundStyles.checkRound}>
                   <img
-                    src="src/assets/icons/check.svg"
+                    src={CheckIcon}
                     className={backgroundStyles.checkIcon}
                     alt="선택"
                   />
@@ -179,24 +178,25 @@ const PostPage = () => {
 
       {mode === "image" && (
         <div className={styles.imageOptions}>
-          {defaultImages.map((image, index) => (
+          {imageOptions.map((image, index) => (
             <div
               key={index}
-              isSelected={selectedImageIndex === index}
               onClick={() => handleSelectedImage(index)}
-              className={clsx(backgroundStyles.optionItem, {
+              className={clsx(styles.optionItem, {
                 [backgroundStyles.selected]: selectedImageIndex === index,
               })}
             >
               <img
                 src={image}
                 alt="배경이미지"
-                className={styles.optionImage}
+                className={clsx(styles.optionImage, {
+                  [styles.selectedImage]: selectedImageIndex === index,
+                })}
               />
               {selectedImageIndex === index && (
                 <div className={backgroundStyles.checkRound}>
                   <img
-                    src="src/assets/icons/check.svg"
+                    src={CheckIcon}
                     className={backgroundStyles.checkIcon}
                     alt="선택"
                   />
@@ -206,6 +206,7 @@ const PostPage = () => {
           ))}
         </div>
       )}
+
       <div className={styles.buttonContainer}>
         <Button
           variant="primary"
@@ -214,7 +215,7 @@ const PostPage = () => {
           onClick={handleSubmit}
           disabled={toName.trim() === ""}
         >
-          {loading ? "생성 중..." : "생성하기"}
+          {loading ? "생성 중" : "생성하기"}
         </Button>
       </div>
     </div>
