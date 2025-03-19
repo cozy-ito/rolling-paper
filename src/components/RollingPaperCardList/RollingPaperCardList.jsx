@@ -184,7 +184,7 @@ const makeModalProps = (messageData) => {
     title: sender || "",
     badge: relationship ? <Badge {...makeBadge(relationship)} /> : null,
     date: createdAt ? formatDateWithDots(createdAt) : "",
-    bodyText: content || "",
+    bodyText: content ? <HtmlContentDisplay htmlContent={content} /> : "",
     font: font || null,
   };
 };
