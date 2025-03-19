@@ -6,15 +6,21 @@
 >배포 URL: 
 
 협업 노션: <https://ito-dev.notion.site/2-6-197e6a3d27348055a455d2746ddd9bcb>
+
 <br>
+
 ## 🚀프로젝트 소개
 - Rolling은 친구, 동료들이 롤링페이퍼를 온라인으로 쉽게 작성할 수 있도록 만든 서비스입니다
+
 <br>
+
 ## 💁🏻팀원 소개
 | <img src="이미지URL1" width="100"> | <img src="![image]![image](https://github.com/user-attachments/assets/743579ce-4129-44a9-8a97-daec087080ea)" width="100"> | <img src="이미지URL3" width="100"> | <img src="이미지URL4" width="100"> | <img src="이미지URL4" width="100"> |
 |------|------|------|------|
 | **[FE] [최혜윤](https://github.com/rachelchoi11)** | **[FE] [조지현](https://github.com/zeon0xx0)** | **[FE] [지정환](https://github.com/jeonghwanJay)** | **[FE] [진성진](https://github.com/cozy-ito)** | **[FE] [최권진](https://github.com/kwonjin2)** |
+
 <br>
+
 ## 🔧기술 스택
 ### Front-End
 <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"><img src="https://img.shields.io/badge/module css-1572B6?style=for-the-badge&logo=module css3&logoColor=white"> 
@@ -28,7 +34,9 @@
 <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
 <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+
 <br>
+
 ## 🫱🏻‍🫲🏻역할 분담
 ### ❤️최혜윤
 - 페이지 작업
@@ -58,8 +66,11 @@
   - ToggleButton, Option, Dropdown, Modal
 - 페이지 작업
   - 롤링페이퍼 목록 페이지, 404 오류 페이지 
+
 <br>        
+
 ## 📌주요 기능
+
 ### 1. 메인 페이지
 - [구경해보기] 버튼 클릭 시 롤링 페이퍼 리스트 페이지로 이동할 수 있습니다 
 - [롤링 페이퍼 만들기] 버튼 클릭 시 롤링 페이퍼 만들기 페이지로 이동할 수 있습니다
