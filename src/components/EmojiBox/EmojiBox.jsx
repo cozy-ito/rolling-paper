@@ -1,16 +1,16 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
 import clsx from "clsx";
 
 import { getReactionsById, postReactionById } from "../../apis/reaction";
 import useFetchData from "../../hooks/useFetchData";
-import Spinner from "../Spinner/Spinner";
 
 import styles from "./EmojiBox.module.css";
 import EmojiListButton from "./EmojiListButton/EmojiListButton";
 import EmojiPickerButton from "./EmojiPickerButton/EmojiPickerButton";
 
-const VISIBLE_EMOJI_COUNT = 6;
+const VISIBLE_EMOJI_COUNT = 3;
+const MAX_VISIBLE_EMOJI_COUNT = 11;
 const EMOJI_PAGE_UNIT = 20;
 
 const EmojiBox = ({ recipientId }) => {
@@ -23,17 +23,18 @@ const EmojiBox = ({ recipientId }) => {
       }),
     [recipientId],
   );
-  const { isLoading, isError, data, refetch, updateState } =
-    useFetchData(fetchReactions);
+  const { isLoading, isError, data, refetch } = useFetchData(fetchReactions);
   const [reactionError, setReactionError] = useState({
     isError: false,
     error: null,
   });
-  const pageRef = useRef(1);
 
   const reactionData = data?.results || [];
   const visibleReactionList = reactionData.slice(0, VISIBLE_EMOJI_COUNT);
-  const invisibleReactionList = reactionData.slice(VISIBLE_EMOJI_COUNT);
+  const invisibleReactionList = reactionData.slice(
+    VISIBLE_EMOJI_COUNT,
+    MAX_VISIBLE_EMOJI_COUNT,
+  );
 
   const catchError = (fetchFn) => {
     setReactionError({
@@ -49,32 +50,6 @@ const EmojiBox = ({ recipientId }) => {
       return null;
     });
   };
-
-  const handleUpdate = useCallback(async () => {
-    if (!data?.next) return;
-
-    const nextPageData = await catchError(() =>
-      fetchReactions({
-        recipientId,
-        offset: pageRef.current++ * EMOJI_PAGE_UNIT,
-      }),
-    );
-
-    if (nextPageData !== null) {
-      updateState((prev) => {
-        // 중복 ID 제거를 위해 Set 사용
-        const existingIds = new Set(prev.results.map((item) => item.id));
-        const uniqueNewResults = nextPageData.results.filter(
-          (item) => !existingIds.has(item.id),
-        );
-
-        return {
-          ...nextPageData,
-          results: [...prev.results, ...uniqueNewResults],
-        };
-      });
-    }
-  }, [fetchReactions, recipientId, updateState, data?.next]);
 
   const handleRetryRequest = useCallback(() => {
     refetch({ recipientId, next: data?.next });
@@ -117,8 +92,6 @@ const EmojiBox = ({ recipientId }) => {
         <EmojiListButton
           isLoading={isLoading}
           isError={isError || reactionError.isError}
-          onUpdate={handleUpdate}
-          next={data?.next}
           onRetryRequest={handleRetryRequest}
           invisibleReactionList={invisibleReactionList}
         />

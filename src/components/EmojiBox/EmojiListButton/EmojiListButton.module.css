@@ -60,8 +60,11 @@
   color: var(--color-gray-500);
 }
 
-.wrapper p {
-  font-size: 1rem;
+.wrapper .transparentEmoji {
+  font-size: 4rem;
+}
+.wrapper .emptyDescription {
+  font-size: var(--font-size-20);
 }
 
 .wrapper .retryButton {
@@ -77,6 +80,10 @@
   .emojiDropdown {
     width: 15rem;
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .badge:nth-child(n + 7) {
+    display: none;
   }
 }
 

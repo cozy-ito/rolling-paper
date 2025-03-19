@@ -110,11 +110,7 @@ const PostItemPage = () => {
           selectedItemsToDelete={selectedItemsToDelete}
         />
       </div>
-      <div
-        className={clsx(styles.messageContainer, {
-          [styles.block]: isError || isEmptyMessage,
-        })}
-      >
+      <div className={styles.messageContainer}>
         <AsyncStateRenderer
           isLoading={isLoading}
           isError={isError || messageError.isError}
@@ -127,6 +123,11 @@ const PostItemPage = () => {
             <ErrorDisplay onRetry={handleRefreshMessages} />
           </AsyncStateRenderer.Error>
           <AsyncStateRenderer.Empty>
+            <RollingPaperCard
+              type="add"
+              id={recipientId}
+              className={styles.emptyAddCard}
+            />
             <EmptyDisplay />
           </AsyncStateRenderer.Empty>
           <AsyncStateRenderer.Content>
@@ -164,7 +165,7 @@ const ErrorDisplay = ({ onRetry }) => (
 );
 
 const EmptyDisplay = () => (
-  <div className={styles.errorMessageWrapper}>
+  <div className={clsx(styles.errorMessageWrapper, styles.emptyMessage)}>
     <img src={EmptyPaperplane} alt="보라색 종이비행기" />
     <p>받은 메시지가 없습니다.</p>
   </div>

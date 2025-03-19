@@ -34,18 +34,6 @@
 
 /* Mobile (Max 767px) */
 @media (max-width: 767px) {
-  .emojiBox .emojiHiddenList {
-    top: 2.5rem;
-    width: 12.5rem;
-    min-height: 6.125rem;
-    max-height: 9.375rem;
-    padding: 1rem;
-  }
-
-  .emojiBox .emojiHiddenList ul {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .emojiBox .badge {
     font-size: 0.875rem;
     padding: 0.25rem 0.5rem;
