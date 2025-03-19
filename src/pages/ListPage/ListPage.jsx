@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +11,11 @@ import styles from "./ListPage.module.css";
 
 const ListPage = () => {
   const navigate = useNavigate();
+
+  // 페이지가 마운트될 때 스크롤을 최상단으로 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // 한 번에 보여줄 카드 개수
   const itemsToShow = 4;
