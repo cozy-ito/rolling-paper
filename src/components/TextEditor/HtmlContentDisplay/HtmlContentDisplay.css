@@ -1,25 +1,27 @@
 .ql-align-right {
   text-align: right;
 }
+
 .ql-align-center {
   text-align: center;
 }
+
 .ql-align-justify {
   text-align: justify;
 }
 
-ol {
+.quill-content ol {
   list-style-type: decimal;
 }
 
-li[data-list] {
+.quill-content li[data-list] {
   margin-left: 1rem;
 }
 
-li[data-list="ordered"] {
+.quill-content li[data-list="ordered"] {
   list-style-type: decimal;
 }
 
-li[data-list="bullet"] {
+.quill-content li[data-list="bullet"] {
   list-style-type: disc;
 }
