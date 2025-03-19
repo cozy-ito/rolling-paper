@@ -47,11 +47,11 @@ const PostItemPageModeButtons = ({ recipientId, isEditPage }) => {
   };
 
   const handleClickChangeEditmode = () => {
-    navigate(getPostItemURL(recipientId, "edit"));
+    navigate(getPostItemURL(recipientId, "edit"), { replace: true });
   };
 
   const handleClickCancelEdit = () => {
-    navigate(getPostItemURL(recipientId));
+    navigate(getPostItemURL(recipientId), { replace: true });
   };
 
   return (
