@@ -4,7 +4,7 @@
 <br>협업 노션: <https://ito-dev.notion.site/2-6-197e6a3d27348055a455d2746ddd9bcb>
 
 
-# 📅 개발기간: 2025. 03. 06 ~ 2025. 03. 21
+## 📅 개발기간: 2025. 03. 06 ~ 2025. 03. 21
 ![Image](https://github.com/user-attachments/assets/9a18294b-f763-434c-8746-aaae2cc37ab8)
 
 
