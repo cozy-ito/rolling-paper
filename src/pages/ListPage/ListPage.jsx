@@ -205,6 +205,7 @@ const ListPage = () => {
           >
             {recentData.map((recipient) => {
               const hexColor = getHexColor(recipient.backgroundColor);
+              const backgroundImageURL = recipient.backgroundImageURL;
               const dynamicProfileImages =
                 recipient.recentMessages?.map((msg) => (
                   <img
@@ -224,6 +225,7 @@ const ListPage = () => {
                 <div className={styles.card} key={recipient.id}>
                   <div className={styles.cardSnapScroll}>
                     <CardList
+                      backgroundImageURL={backgroundImageURL}
                       backgroundColor={hexColor}
                       profileSection={dynamicProfileImages}
                       totalUsers={recipient.messageCount}
