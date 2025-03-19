@@ -14,9 +14,10 @@
 
 .cardList {
   display: flex;
-  transition: transform 0.5s ease-in-out;
+  transition: transform 1s ease-in-out;
   will-change: transform;
   align-items: stretch; /* 높이가 변해도 유연하게 적용되도록 설정 */
+  opacity: 1;
 }
 
 .card {

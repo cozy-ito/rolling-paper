@@ -101,24 +101,24 @@ const ListPage = () => {
   // 인기 섹션 좌우 이동 핸들러
   const handlePopularPrev = () => {
     if (popularIndex > 0) {
-      setPopularIndex(popularIndex - 1);
+      setPopularIndex(popularIndex - 4); // 카드 이동 개수
     }
   };
   const handlePopularNext = () => {
     if (popularIndex + itemsToShow < popularData.length) {
-      setPopularIndex(popularIndex + 1);
+      setPopularIndex(popularIndex + 4); // 카드 이동 개수
     }
   };
 
   // 최근 섹션 좌우 이동 핸들러
   const handleRecentPrev = () => {
     if (recentIndex > 0) {
-      setRecentIndex(recentIndex - 1);
+      setRecentIndex(recentIndex - 4); // 카드 이동 개수
     }
   };
   const handleRecentNext = () => {
     if (recentIndex + itemsToShow < recentData.length) {
-      setRecentIndex(recentIndex + 1);
+      setRecentIndex(recentIndex + 4); // 카드 이동 개수
     }
   };
 
