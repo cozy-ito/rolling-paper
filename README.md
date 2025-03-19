@@ -1,21 +1,21 @@
 # 📬 Rolling
 > 코드잇 스프린트 - 프론트엔드 14기 6팀
-개발기간: 2025. 03. 06 ~ 2025. 03. 21
+<br>개발기간: 2025. 03. 06 ~ 2025. 03. 21
 <br>배포 URL: 
-협업 노션: <https://ito-dev.notion.site/2-6-197e6a3d27348055a455d2746ddd9bcb>
+<br>협업 노션: <https://ito-dev.notion.site/2-6-197e6a3d27348055a455d2746ddd9bcb>
 
 <br>
 
 ## 🚀 프로젝트 소개
 - 친구, 동료들이 롤링페이퍼를 온라인으로 쉽게 작성할 수 있도록 만든 서비스입니다
-	- 간편한 UI로 쉽고 빠르게 롤링페이퍼를 만들 수 있습니다
-    - 다양한 이모지 기능을 통해 감정을 표현할 수 있습니다
-
+  - 다양한 이모지 기능을 통해 감정을 표현할 수 있습니다
+  - 간편한 UI로 쉽고 빠르게 롤링페이퍼를 만들 수 있습니다
+   
 <br>
 
 ## 💁🏻 팀원 소개
-| <img src="이미지URL1" width="100"> | <img src="![image]![image](https://github.com/user-attachments/assets/743579ce-4129-44a9-8a97-daec087080ea)" width="100"> | <img src="이미지URL3" width="100"> | <img src="이미지URL4" width="100"> | <img src="이미지URL4" width="100"> |
-|------|------|------|------|
+| <a href="https://github.com/rachelchoi11"><img src="이미지URL1" width="100"></a> | <a href="https://github.com/zeon0xx0"><img src="이미지URL2" width="100"></a> | <a href="https://github.com/jeonghwanJay"><img src="이미지URL3" width="100"></a> | <a href="https://github.com/cozy-ito"><img src="이미지URL4" width="100"></a> | <a href="https://github.com/kwonjin2"><img src="이미지URL5" width="100"></a> |
+|------|------|------|------|------|
 | **[FE] [최혜윤](https://github.com/rachelchoi11)** | **[FE] [조지현](https://github.com/zeon0xx0)** | **[FE] [지정환](https://github.com/jeonghwanJay)** | **[FE] [진성진](https://github.com/cozy-ito)** | **[FE] [최권진](https://github.com/kwonjin2)** |
 
 <br>
@@ -78,6 +78,7 @@
 - 롤링 페이퍼 카드를 클릭하면 해당 롤링페이퍼 상세 페이지로 이동할 수 있습니다
 
 ### 3. 롤링페이퍼 만들기 페이지
+![Image](https://github.com/user-attachments/assets/1a4b6073-e659-42dc-9c83-0cee21026850)
 - [컬러] 토글을 선택하면 배경색을 선택할 수 있고, [이미지] 토글을 선택하면 업로드할 이미지를 선택할 수 있습니다
 - 받는 사람의 이름을 입력하지 않을 경우 [생성하기] 버튼은 비활성화 상태가 됩니다
 - [생성하기] 버튼을 누르면 롤링 페이퍼가 생성되고 생성된 롤링 페이퍼 페이지로 이동할 수 있습니다
@@ -96,6 +97,7 @@
 	- [페이지 삭제하기] 버튼을 누르면 롤링페이퍼 목록 페이지로 이동합니다 
   
 ### 6. 롤링페이퍼 메시지 보내기 페이지
+![Image](https://github.com/user-attachments/assets/7a06445d-a00b-4834-966a-c4940aeb755e)
 - 보내는 사람 이름을 입력합니다 (입력할 수 있는 글자는 최대 20자)
 - 프로필 버튼을 클릭하여 원하는 이미지로 프로필을 선택할 수 있습니다 
 - 관계를 선택하여 지인, 가족 등의 관계를 표시할 수 있습니다
@@ -105,4 +107,5 @@
 - 이후 생성된 롤링페이퍼 페이지의 헤더와 롤링페이퍼 목록 페이지의 롤링페이퍼에서 현재까지 작성된 메시지 개수를 실시간으로 확인할 수 있습니다 
   
 ### 7. 404 에러 페이지
+![Image](https://github.com/user-attachments/assets/8570b24c-89dd-4ff6-b896-4416ad50dd8b)
 - 존재하지 않은 url에 접근했을 경우 해당 페이지가 보여집니다 
