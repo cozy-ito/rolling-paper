@@ -17,7 +17,7 @@ const Modal = ({
 }) => {
   if (!isModalOpen) return null;
   return (
-    <div className={clsx(styles.modalOverlay, styles[font])} onClick={onClose}>
+    <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <div className={styles.modalHeaderUserInfo}>
@@ -33,7 +33,9 @@ const Modal = ({
           <p className={styles.date}>{date}</p>
         </div>
         <hr className={styles.divider} />
-        <div className={styles.bodyText}>{bodyText}</div>
+        <div className={clsx(styles.bodyText, styles[FONT_MAP[font]])}>
+          {bodyText}
+        </div>
         <button onClick={onClose} className={styles.button}>
           확인
         </button>
